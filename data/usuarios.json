@@ -1,0 +1,47 @@
+[
+    {
+        "nome": "miguel",
+        "sobrenome": "teixeira",
+        "cpf": "043.224.890-01",
+        "telefone": "(51) 99929-8592",
+        "email": "guelpohlmann@gmail.com",
+        "senha": "$2y$10$x.vLEcwao\/FakjOKZkKZNuHjKNGB6Q\/u6\/q9x8n2E98hqTTEbAMXG",
+        "data": "2025-08-07 19:10:50"
+    },
+    {
+        "nome": "MARIA",
+        "sobrenome": "POHLMANN",
+        "cpf": "043.224.890-01",
+        "telefone": "(51) 99929-8592",
+        "email": "guelpohlmann@gmail.com",
+        "senha": "$2y$10$fAFMxcFuNO5ZUEnY2Nyiw.gFUqYBxbCj\/UGx8QQjvzmcLCpoGtWjO",
+        "data": "2025-08-07 19:12:23"
+    },
+    {
+        "nome": "MARIA",
+        "sobrenome": "POHLMANN",
+        "cpf": "043.224.890-01",
+        "telefone": "(51) 99929-8592",
+        "email": "guelpohlmann@gmail.com",
+        "senha": "$2y$10$4MmTXd9EYlZsD8i2aSryaelB8HWKdjpMSTxIFthOiSoz\/2OR7szHm",
+        "data": "2025-08-07 19:14:12"
+    },
+    {
+        "nome": "MARIA",
+        "sobrenome": "POHLMANN",
+        "cpf": "043.224.890-01",
+        "telefone": "(51) 99929-8592",
+        "email": "guelpohlmann@gmail.com",
+        "senha": "$2y$10$pnDVYcDbABkGGkT17jd7WekblbpavFHxy6FuoCVmBt40nG11Z42x6",
+        "data": "2025-08-07 19:25:38"
+    },
+    {
+        "nome": "MARIA",
+        "sobrenome": "POHLMANN",
+        "cpf": "043.224.890-01",
+        "telefone": "(51) 99929-8592",
+        "email": "guelpohlmann@gmail.com",
+        "senha": "$2y$10$\/JJDRsOhwznZwHmv6jfxuuBoVgXeikCW4ZmvOMrQkQzP5wncdZD1S",
+        "data": "2025-08-11 12:32:25"
+    }
+]
