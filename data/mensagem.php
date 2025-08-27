@@ -1,12 +1,15 @@
 <?php
 /**
- * Processamento de mensagens de contato
+ * Processamento de mensagens de contato (compatibilidade com sistema antigo)
+ * NOTA: Este arquivo é mantido para compatibilidade. O novo sistema usa ContactController.php
  */
+
+// Incluir sistema de inicialização
+require_once __DIR__ . '/../includes/init.php';
 
 // Verificar se é uma requisição POST
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    header('Location: ../index.php');
-    exit;
+    redirect('index.php');
 }
 
 // Capturar dados do formulário
@@ -52,9 +55,11 @@ if (file_exists($arquivo_mensagens)) {
 $mensagens[] = $mensagem;
 
 // Salvar todas as mensagens
-file_put_contents($arquivo_mensagens, json_encode($mensagens, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
-
-// Redirecionar com sucesso
-header('Location: ../index.php?success=mensagem_enviada');
-exit;
+if (file_put_contents($arquivo_mensagens, json_encode($mensagens, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE))) {
+    // Redirecionar com sucesso
+    redirect('index.php#contact', 'Mensagem enviada com sucesso! Entraremos em contato em breve.', 'success');
+} else {
+    // Redirecionar com erro
+    redirect('index.php#contact', 'Erro ao enviar mensagem. Tente novamente.', 'error');
+}
 ?>
