@@ -1,7 +1,36 @@
+<?php
+/**
+ * Página de Casas Disponíveis
+ */
 
-   
+// Incluir arquivo de inicialização do sistema
+require_once __DIR__ . '/includes/init.php';
 
+// Verificar mensagens flash
+$flash = getFlashMessage();
 
+// Aqui pode ser implementada lógica para buscar casas do banco de dados
+// Por exemplo:
+/*
+try {
+    $stmt = $pdo->prepare("
+        SELECT p.*, pi.filename as image_filename 
+        FROM properties p 
+        LEFT JOIN property_images pi ON p.id = pi.property_id AND pi.is_primary = 1
+        WHERE p.status = 'available'
+        ORDER BY p.created_at DESC
+    ");
+    $stmt->execute();
+    $properties = $stmt->fetchAll();
+} catch (Exception $e) {
+    error_log("Error fetching properties: " . $e->getMessage());
+    $properties = [];
+}
+*/
+
+// Para manter compatibilidade com o sistema atual, usar dados estáticos
+$properties = [];
+?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -58,7 +87,16 @@
 
 </head>
 <body>
-     <section id="lancamentos" class="section">
+    <!-- Mensagens Flash -->
+    <?php if ($flash): ?>
+        <div class="alert alert-<?php echo $flash['type'] === 'success' ? 'success' : ($flash['type'] === 'error' ? 'danger' : 'info'); ?> alert-dismissible fade show position-fixed" 
+             style="top: 80px; right: 20px; z-index: 9999; max-width: 400px;">
+            <?php echo htmlspecialchars($flash['message']); ?>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    <?php endif; ?>
+
+    <section id="lancamentos" class="section">
         <div class="container mb-4">
 
         </div>
