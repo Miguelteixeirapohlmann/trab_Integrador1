@@ -111,6 +111,51 @@ $csrf_token = generateCSRFToken();
     <link href="css/styles.css" rel="stylesheet" />
 </head>
 <body>
+    <!-- Navigation-->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top py-3" id="mainNav">
+        <div class="container px-4 px-lg-5">
+            <a class="navbar-brand" href="#Tela_Inicial">Tela Inicial</a>
+            <button class="navbar-toggler navbar-toggler-right" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav ms-auto my-2 my-lg-0">
+                    <li class="nav-item"><a class="nav-link" href="alugar.php">Alugar</a></li>
+                    <li class="nav-item"><a class="nav-link" href="compra.php">Compra</a></li>
+                    <li class="nav-item"><a class="nav-link" href="index.php#services">Descobrir</a></li>
+                    <li class="nav-item"><a class="nav-link" href="index.php#Final">Ajuda</a></li>
+                    <li class="nav-item"><a class="nav-link" href="agendar_visita.php">Agendar Visita</a></li>
+                    
+                    <?php if ($auth->isLoggedIn()): ?>
+                        <?php $currentUser = $auth->getCurrentUser(); ?>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <?php if (!empty($currentUser['avatar'])): ?>
+                                    <img src="<?php echo asset('uploads/' . $currentUser['avatar']); ?>" alt="Avatar" class="rounded-circle me-1" style="width: 24px; height: 24px;">
+                                <?php endif; ?>
+                                <?php echo htmlspecialchars($currentUser['first_name']); ?>
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item" href="views/auth/profile.php">Meu Perfil</a></li>
+                                <?php if ($auth->hasRole('admin')): ?>
+                                    <li><a class="dropdown-item" href="views/admin/dashboard.php">Painel Admin</a></li>
+                                <?php endif; ?>
+                                <?php if ($auth->hasRole('broker')): ?>
+                                    <li><a class="dropdown-item" href="views/properties/manage.php">Meus Imóveis</a></li>
+                                <?php endif; ?>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="views/auth/logout.php">Sair</a></li>
+                            </ul>
+                        </li>
+                    <?php else: ?>
+                        <li class="nav-item"><a class="nav-link" href="Login.php">Login</a></li>
+                        <li class="nav-item"><a class="nav-link" href="Cadastro.php">Cadastro</a></li>
+                    <?php endif; ?>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
     <div class="container mt-5" style="max-width: 500px;">
         <!-- Mensagens Flash -->
         <?php if ($flash): ?>

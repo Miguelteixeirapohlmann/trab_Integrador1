@@ -1,6 +1,6 @@
 <?php
 /**
- * Página de Aluguel
+ * Página de Compra
  */
 
 // Incluir arquivo de inicialização do sistema
@@ -14,7 +14,7 @@ $flash = getFlashMessage();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tela de Aluguel - <?php echo APP_NAME; ?></title>
+    <title>Tela de Compra - <?php echo APP_NAME; ?></title>
     <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
     <!-- Ícones do Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
@@ -33,13 +33,13 @@ $flash = getFlashMessage();
      <!-- Navigation-->
     <nav class="navbar navbar-expand-lg navbar-light fixed-top py-3" id="mainNav">
         <div class="container px-4 px-lg-5">
-            <a class="navbar-brand" href="#Tela_Inicial">Tela Inicial</a>
+            <a class="navbar-brand" href="index.php">Tela Inicial</a>
             <button class="navbar-toggler navbar-toggler-right" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarResponsive">
                 <ul class="navbar-nav ms-auto my-2 my-lg-0">
-                    <li class="nav-item"><a class="nav-link" href="alugar.php">Alugar</a></li>
+                    <li class="nav-item"><a class="nav-link" href="alugar_new.php">Alugar</a></li>
                     <li class="nav-item"><a class="nav-link" href="Compra.php">Compra</a></li>
                     <li class="nav-item"><a class="nav-link" href="index.php#services">Descobrir</a></li>
                     <li class="nav-item"><a class="nav-link" href="index.php#Final">Ajuda</a></li>
@@ -80,38 +80,38 @@ $flash = getFlashMessage();
         <div class="container px-4 px-lg-5 h-100">
             <div class="row gx-4 gx-lg-5 h-100 align-items-center justify-content-center text-center">
                 <div class="col-lg-8 align-self-end">
-                    <h1 class="text-white font-weight-bold">Aluguel de Imóveis</h1>
+                    <h1 class="text-white font-weight-bold">Compra de Imóveis</h1>
                     <hr class="divider" />
                 </div>
                 <div class="col-lg-8 align-self-baseline">
-                    <p class="text-white-75 mb-5">Encontre o lar ideal para você e sua família. Preencha o formulário abaixo para iniciar o processo de locação.</p>
+                    <p class="text-white-75 mb-5">Realize o sonho da casa própria com segurança e tranquilidade. Preencha o formulário abaixo para iniciar o processo de compra.</p>
                 </div>
             </div>
         </div>
     </header>
 
-    <!-- Formulário de Aluguel -->
-    <section class="page-section" id="aluguel-form">
+    <!-- Formulário de Compra -->
+    <section class="page-section" id="compra-form">
         <div class="container px-4 px-lg-5">
             <div class="row gx-4 gx-lg-5 justify-content-center">
                 <div class="col-lg-8 col-xl-6 text-center">
-                    <h2 class="mt-0">Documentos para Locação</h2>
+                    <h2 class="mt-0">Documentos para Compra</h2>
                     <hr class="divider" />
-                    <p class="text-muted mb-5">Para alugar seu imóvel ideal, precisamos dos seguintes documentos:</p>
+                    <p class="text-muted mb-5">Para finalizar a compra do seu imóvel, precisamos dos seguintes documentos:</p>
                 </div>
             </div>
             
             <div class="row gx-4 gx-lg-5 justify-content-center">
                 <div class="col-lg-8">
                     <div class="card shadow-lg border-0">
-                        <div class="card-header bg-success text-white text-center">
-                            <h4 class="mb-0"><i class="fas fa-key me-2"></i>Formulário de Locação</h4>
+                        <div class="card-header bg-primary text-white text-center">
+                            <h4 class="mb-0"><i class="fas fa-home me-2"></i>Formulário de Compra</h4>
                         </div>
                         <div class="card-body p-4">
-                            <form id="aluguelForm" method="POST">
+                            <form id="compraForm" method="POST">
                                 <!-- Dados Pessoais -->
                                 <div class="mb-4">
-                                    <h5 class="text-success mb-3"><i class="fas fa-user me-2"></i>Dados Pessoais</h5>
+                                    <h5 class="text-primary mb-3"><i class="fas fa-user me-2"></i>Dados Pessoais</h5>
                                     <div class="row">
                                         <div class="col-md-6 mb-3">
                                             <label for="nome" class="form-label">Nome Completo <span class="text-danger">*</span></label>
@@ -136,7 +136,7 @@ $flash = getFlashMessage();
 
                                 <!-- Documentos Necessários -->
                                 <div class="mb-4">
-                                    <h5 class="text-success mb-3"><i class="fas fa-file-alt me-2"></i>Documentos Necessários</h5>
+                                    <h5 class="text-primary mb-3"><i class="fas fa-file-alt me-2"></i>Documentos Necessários</h5>
                                     <div class="row">
                                         <div class="col-md-6 mb-3">
                                             <label for="rg" class="form-label">RG</label>
@@ -154,57 +154,22 @@ $flash = getFlashMessage();
                                         </div>
                                     </div>
                                     <div class="mb-3">
-                                        <label for="endereco-atual" class="form-label">Endereço Atual</label>
-                                        <textarea class="form-control" id="endereco-atual" name="endereco_atual" rows="3" placeholder="Rua, número, bairro, cidade, CEP..."></textarea>
+                                        <label for="endereco" class="form-label">Endereço Completo</label>
+                                        <textarea class="form-control" id="endereco" name="endereco" rows="3" placeholder="Rua, número, bairro, cidade, CEP..."></textarea>
                                     </div>
                                 </div>
 
                                 <!-- Informações Financeiras -->
                                 <div class="mb-4">
-                                    <h5 class="text-success mb-3"><i class="fas fa-dollar-sign me-2"></i>Informações Financeiras</h5>
+                                    <h5 class="text-primary mb-3"><i class="fas fa-dollar-sign me-2"></i>Informações Financeiras</h5>
                                     <div class="row">
                                         <div class="col-md-6 mb-3">
-                                            <label for="renda-mensal" class="form-label">Renda Mensal</label>
-                                            <input type="text" class="form-control form-control-lg" id="renda-mensal" name="renda_mensal" placeholder="R$ 0,00">
+                                            <label for="renda" class="form-label">Renda Mensal</label>
+                                            <input type="text" class="form-control form-control-lg" id="renda" name="renda" placeholder="R$ 0,00">
                                         </div>
                                         <div class="col-md-6 mb-3">
                                             <label for="profissao" class="form-label">Profissão</label>
                                             <input type="text" class="form-control form-control-lg" id="profissao" name="profissao">
-                                        </div>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="empresa" class="form-label">Empresa/Local de Trabalho</label>
-                                        <input type="text" class="form-control form-control-lg" id="empresa" name="empresa">
-                                    </div>
-                                </div>
-
-                                <!-- Tipo de Garantia -->
-                                <div class="mb-4">
-                                    <h5 class="text-success mb-3"><i class="fas fa-shield-alt me-2"></i>Tipo de Garantia</h5>
-                                    <div class="row">
-                                        <div class="col-md-4 mb-2">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="garantia" id="fiador" value="fiador">
-                                                <label class="form-check-label" for="fiador">
-                                                    Fiador
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4 mb-2">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="garantia" id="seguro-fianca" value="seguro-fianca">
-                                                <label class="form-check-label" for="seguro-fianca">
-                                                    Seguro Fiança
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4 mb-2">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="garantia" id="caucao" value="caucao">
-                                                <label class="form-check-label" for="caucao">
-                                                    Caução
-                                                </label>
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -214,24 +179,18 @@ $flash = getFlashMessage();
                                     <h5 class="text-info mb-3"><i class="fas fa-clipboard-list me-2"></i>Documentos Obrigatórios</h5>
                                     <div class="alert alert-info">
                                         <ul class="mb-0">
+                                            <li>Declaração de Imposto de Renda (3 últimos anos)</li>
                                             <li>Comprovante de residência atualizado</li>
-                                            <li>Comprovantes de renda (3 últimos holerites ou extratos bancários)</li>
-                                            <li>Referências pessoais e comerciais</li>
+                                            <li>Comprovantes de renda (holerites, extratos bancários)</li>
+                                            <li>Certidão de estado civil</li>
                                             <li>Certidão negativa do SPC/SERASA</li>
-                                            <li>Dados do fiador (se aplicável)</li>
                                         </ul>
                                     </div>
                                 </div>
 
-                                <!-- Observações -->
-                                <div class="mb-4">
-                                    <label for="observacoes" class="form-label">Observações Adicionais</label>
-                                    <textarea class="form-control" id="observacoes" name="observacoes" rows="4" placeholder="Alguma informação adicional que gostaria de compartilhar..."></textarea>
-                                </div>
-
                                 <!-- Botões -->
                                 <div class="d-flex justify-content-center align-items-center gap-3 mt-4">
-                                    <button type="submit" class="btn btn-success btn-lg px-5">
+                                    <button type="submit" class="btn btn-primary btn-lg px-5">
                                         <i class="fas fa-paper-plane me-2"></i>Enviar Solicitação
                                     </button>
                                     <button type="reset" class="btn btn-outline-secondary btn-lg px-5">
@@ -246,11 +205,9 @@ $flash = getFlashMessage();
         </div>
     </section>
 
-    <footer class="bg-light py-5">
-        <div class="container px-4 px-lg-5">
-            <div class="small text-center text-muted">Copyright &copy; 2025 - Company Miguel</div>
-        </div>
-    </footer>
+     <footer class="bg-light py-5">
+            <div class="container px-4 px-lg-5"><div class="small text-center text-muted">Copyright &copy; 2025 - Company Miguel</div></div>
+        </footer>
 
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

@@ -137,15 +137,15 @@ $csrf_token = generateCSRFToken();
         <div class="container px-4 px-lg-5 h-100">
             <div class="row gx-4 gx-lg-5 h-100 align-items-center justify-content-center text-center">
                 <div class="col-lg-8 align-self-end">
-                    <h1 class="text-white font-weight-bold">Encontre a casa dos seus sonhos</h1>
+                    <h1 class="text-white font-weight-bold" style="font-size: 3.5rem;">Encontre a casa dos seus sonhos</h1>
                     <hr class="divider" />
                 </div>
                 <div class="col-lg-8 align-self-baseline">
-                    <p class="text-white-75 mb-5">
-                        Plataforma completa para compra, venda e aluguel de imóveis. 
-                        Encontre casas, apartamentos, e imóveis dos seus sonhos de forma segura e eficiente.
+                    <p class="text-white-75 mb-5" style="font-size: 1.4rem; line-height: 1.6;">
+                        Especialistas em venda e aluguel de casas. 
+                        Encontre a casa perfeita para você e sua família de forma segura e eficiente. 
+                        Temos as melhores opções do mercado imobiliário.
                     </p>
-                    <a class="btn btn-primary btn-xl" href="casas_disponiveis.php">Explorar Imóveis</a>
                 </div>
             </div>
         </div>
@@ -211,8 +211,8 @@ $csrf_token = generateCSRFToken();
         <div class="container-fluid p-0">
             <div class="row g-0">
                 <div class="col-lg-4 col-sm-6">
-                    <a class="portfolio-box" href="imgs/foto1.jpeg" title="Casa Jardim das Flores">
-                        <img class="img-fluid" src="imgs/foto1.jpeg" alt="..." />
+                    <a class="portfolio-box" href="imgs/Casa1/Casa1.1.jpg" title="Casa Jardim das Flores">
+                        <img class="img-fluid" src="imgs/Casa1/Casa1.1.jpg" alt="..." style="width: 100%; height: 350px; object-fit: cover; object-position: center;" />
                         <div class="portfolio-box-caption">
                             <div class="project-category text-white-50">Categoria</div>
                             <div class="project-name">Casa para venda</div>
@@ -220,8 +220,8 @@ $csrf_token = generateCSRFToken();
                     </a>
                 </div>
                 <div class="col-lg-4 col-sm-6">
-                    <a class="portfolio-box" href="imgs/foto2.jpg" title="Casa Vista Alegre">
-                        <img class="img-fluid" src="imgs/foto2.jpg" alt="..." />
+                    <a class="portfolio-box" href="imgs/Casa2/Casa2.0.jpg" title="Casa Vista Alegre">
+                        <img class="img-fluid" src="imgs/Casa2/Casa2.0.jpg" alt="..." style="width: 100%; height: 350px; object-fit: cover; object-position: center;" />
                         <div class="portfolio-box-caption">
                             <div class="project-category text-white-50">Categoria</div>
                             <div class="project-name">Casa para venda</div>
@@ -229,8 +229,8 @@ $csrf_token = generateCSRFToken();
                     </a>
                 </div>
                 <div class="col-lg-4 col-sm-6">
-                    <a class="portfolio-box" href="imgs/foto3.jpg" title="Casa Solar dos Pássaros">
-                        <img class="img-fluid" src="imgs/foto3.jpg" alt="..." />
+                    <a class="portfolio-box" href="imgs/Casa3/Casa3.3.jpg" title="Casa Solar dos Pássaros">
+                        <img class="img-fluid" src="imgs/Casa3/Casa3.3.jpg" alt="..." style="width: 100%; height: 350px; object-fit: cover; object-position: center;" />
                         <div class="portfolio-box-caption">
                             <div class="project-category text-white-50">Categoria</div>
                             <div class="project-name">Casa para venda</div>
@@ -238,8 +238,8 @@ $csrf_token = generateCSRFToken();
                     </a>
                 </div>
                 <div class="col-lg-4 col-sm-6">
-                    <a class="portfolio-box" href="imgs/foto4.jpg" title="Casa Bela Vista">
-                        <img class="img-fluid" src="imgs/foto4.jpg" alt="..." />
+                    <a class="portfolio-box" href="imgs/Casa4/Casa4.4.jpg" title="Casa Bela Vista">
+                        <img class="img-fluid" src="imgs/Casa4/Casa4.4.jpg" alt="..." style="width: 100%; height: 350px; object-fit: cover; object-position: center;" />
                         <div class="portfolio-box-caption">
                             <div class="project-category text-white-50">Categoria</div>
                             <div class="project-name">Casa para venda</div>
@@ -247,8 +247,8 @@ $csrf_token = generateCSRFToken();
                     </a>
                 </div>
                 <div class="col-lg-4 col-sm-6">
-                    <a class="portfolio-box" href="imgs/foto5.jpg" title="Casa do Gabriel">
-                        <img class="img-fluid" src="imgs/foto5.jpg" alt="..." />
+                    <a class="portfolio-box" href="imgs/Casa5/Casa5.0.jpg" title="Casa do Gabriel">
+                        <img class="img-fluid" src="imgs/Casa5/Casa5.0.jpg" alt="..." style="width: 100%; height: 350px; object-fit: cover; object-position: center;" />
                         <div class="portfolio-box-caption">
                             <div class="project-category text-white-50">Categoria</div>
                             <div class="project-name">Casa para venda</div>
@@ -256,8 +256,35 @@ $csrf_token = generateCSRFToken();
                     </a>
                 </div>
                 <div class="col-lg-4 col-sm-6">
-                    <a class="portfolio-box" href="imgs/casa6.jpg" title="Casa Nova Esperança">
-                        <img class="img-fluid" src="imgs/casa6.jpg" alt="..." />
+                    <a class="portfolio-box" href="imgs/Casa6/Casa6.0.jpg" title="Casa Nova Esperança">
+                        <img class="img-fluid" src="imgs/Casa6/Casa6.0.jpg" alt="..." style="width: 100%; height: 350px; object-fit: cover; object-position: center;" />
+                        <div class="portfolio-box-caption p-3">
+                            <div class="project-category text-white-50">Categoria</div>
+                            <div class="project-name">Casa para venda</div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-lg-4 col-sm-6">
+                    <a class="portfolio-box" href="imgs/Casa7/Casa7.0.jpg" title="Casa Nova Esperança">
+                        <img class="img-fluid" src="imgs/Casa7/Casa7.0.jpg" alt="..." style="width: 100%; height: 350px; object-fit: cover; object-position: center;" />
+                        <div class="portfolio-box-caption p-3">
+                            <div class="project-category text-white-50">Categoria</div>
+                            <div class="project-name">Casa para venda</div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-lg-4 col-sm-6">
+                    <a class="portfolio-box" href="imgs/Casa8/Casa8.0.jpg" title="Casa Nova Esperança">
+                        <img class="img-fluid" src="imgs/Casa8/Casa8.0.jpg" alt="..." style="width: 100%; height: 350px; object-fit: cover; object-position: center;" />
+                        <div class="portfolio-box-caption p-3">
+                            <div class="project-category text-white-50">Categoria</div>
+                            <div class="project-name">Casa para venda</div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-lg-4 col-sm-6">
+                    <a class="portfolio-box" href="imgs/Casa9/Casa9.0.jpg" title="Casa Nova Esperança">
+                        <img class="img-fluid" src="imgs/Casa9/Casa9.0.jpg" alt="..." style="width: 100%; height: 350px; object-fit: cover; object-position: center;" />
                         <div class="portfolio-box-caption p-3">
                             <div class="project-category text-white-50">Categoria</div>
                             <div class="project-name">Casa para venda</div>
@@ -281,7 +308,7 @@ $csrf_token = generateCSRFToken();
         <div class="container px-4 px-lg-5 text-center">
             <h2 class="mb-4">Casas para Alugar</h2>
             <p class="mb-5">Encontre a casa perfeita para alugar com as melhores condições do mercado.</p>
-            <a class="btn btn-primary btn-xl" href="alugar.php">Ver Casas para Alugar</a>
+            <a class="btn btn-primary btn-xl" href="casas_disponiveis.php">Ver Casas para Alugar</a>
         </div>
     </section>
 

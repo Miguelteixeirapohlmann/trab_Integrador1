@@ -89,6 +89,217 @@
     display: block;
     margin: 0 auto;
 }
+
+/* Estilos responsivos para carrossel de imagens das casas */
+.carousel-item img {
+    width: 100% !important;
+    height: 400px !important;
+    object-fit: cover !important;
+    object-position: center !important;
+    border-radius: 0.375rem;
+    display: block !important;
+}
+
+/* Garante que o container do carrossel tenha altura fixa */
+.carousel-inner {
+    height: 400px !important;
+    overflow: hidden;
+}
+
+/* Container do carrossel */
+.carousel {
+    height: 400px !important;
+    overflow: hidden;
+}
+
+/* Responsividade para tablets */
+@media (max-width: 768px) {
+    .carousel-item img {
+        height: 300px !important;
+    }
+    
+    .carousel-inner {
+        height: 300px !important;
+    }
+    
+    .carousel {
+        height: 300px !important;
+    }
+    
+    .carousel-indicators {
+        bottom: 10px;
+    }
+    
+    .carousel-control-prev,
+    .carousel-control-next {
+        width: 8%;
+    }
+}
+
+/* Responsividade para celulares */
+@media (max-width: 576px) {
+    .carousel-item img {
+        height: 250px !important;
+    }
+    
+    .carousel-inner {
+        height: 250px !important;
+    }
+    
+    .carousel {
+        height: 250px !important;
+    }
+    
+    .carousel-indicators button {
+        width: 8px;
+        height: 8px;
+        margin: 0 2px;
+    }
+    
+    .carousel-control-prev-icon,
+    .carousel-control-next-icon {
+        width: 15px;
+        height: 15px;
+    }
+}
+
+/* Para telas muito pequenas */
+@media (max-width: 400px) {
+    .carousel-item img {
+        height: 200px !important;
+    }
+    
+    .carousel-inner {
+        height: 200px !important;
+    }
+    
+    .carousel {
+        height: 200px !important;
+    }
+}
+
+/* Força todas as imagens do carrossel a terem exatamente o mesmo tamanho */
+.carousel-item {
+    height: inherit;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Remove qualquer margem ou padding que possa afetar o tamanho */
+.carousel-item img {
+    margin: 0;
+    padding: 0;
+    flex-shrink: 0;
+    min-width: 100%;
+    min-height: 100%;
+}
+
+/* Adiciona regras mais específicas para uniformizar completamente as imagens */
+.carousel {
+    overflow: hidden;
+}
+
+.carousel .carousel-inner,
+.carousel .carousel-item {
+    border-radius: 0.375rem;
+}
+
+/* Força dimensões exatas e proporções uniformes */
+.carousel-item img {
+    aspect-ratio: 16/9 !important;
+    object-fit: cover !important;
+    object-position: center center !important;
+    width: 100% !important;
+    height: 100% !important;
+    max-width: none !important;
+    max-height: none !important;
+    min-width: 100% !important;
+    min-height: 100% !important;
+}
+
+/* Força posicionamento absoluto para controle total */
+.carousel-item {
+    position: relative !important;
+    height: inherit !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    overflow: hidden !important;
+}
+
+/* Melhora a transição entre slides */
+.carousel-item {
+    transition: transform 0.6s ease-in-out;
+}
+
+.carousel-fade .carousel-item {
+    opacity: 0;
+    transition-property: opacity;
+    transform: none;
+}
+
+.carousel-fade .carousel-item.active {
+    opacity: 1;
+}
+
+/* Força uniformidade absoluta em todas as imagens do carrossel */
+div[id^="carouselCasa"] .carousel-item img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    object-position: center !important;
+    display: block !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    outline: none !important;
+    vertical-align: top !important;
+}
+
+/* Remove qualquer espaçamento extra */
+div[id^="carouselCasa"] .carousel-inner,
+div[id^="carouselCasa"] .carousel-item {
+    margin: 0 !important;
+    padding: 0 !important;
+    line-height: 0 !important;
+}
+
+/* Melhora a performance das imagens */
+.carousel-item img {
+    transform: translateZ(0);
+    will-change: transform;
+    backface-visibility: hidden;
+}
+
+/* Garante que as imagens se ajustem perfeitamente em diferentes resoluções */
+@media (min-width: 1200px) {
+    .carousel-item img {
+        height: 450px !important;
+    }
+    
+    .carousel-inner {
+        height: 450px !important;
+    }
+    
+    .carousel {
+        height: 450px !important;
+    }
+}
+
+@media (min-width: 1400px) {
+    .carousel-item img {
+        height: 500px !important;
+    }
+    
+    .carousel-inner {
+        height: 500px !important;
+    }
+    
+    .carousel {
+        height: 500px !important;
+    }
+}
 /* Centraliza todo o conteúdo da página */
 body, html {
   text-align: center !important;
@@ -11164,4 +11375,38 @@ header.masthead h1, header.masthead .h1 {
 
 strong {
   font-weight: 900;
+}
+
+/* Força o texto do menu de navegação para preto */
+.navbar .navbar-brand,
+.navbar .nav-link {
+  color: #000000 !important;
+}
+
+.navbar .nav-link:hover,
+.navbar .nav-link:focus {
+  color: #333333 !important;
+}
+
+/* Força todas as imagens do portfolio a terem o mesmo tamanho */
+#portfolio .portfolio-box img {
+  width: 100% !important;
+  height: 350px !important;
+  object-fit: cover !important;
+  object-position: center !important;
+  display: block !important;
+}
+
+/* Responsividade para tablets */
+@media (max-width: 768px) {
+  #portfolio .portfolio-box img {
+    height: 250px !important;
+  }
+}
+
+/* Responsividade para celulares */
+@media (max-width: 576px) {
+  #portfolio .portfolio-box img {
+    height: 200px !important;
+  }
 }

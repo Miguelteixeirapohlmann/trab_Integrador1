@@ -96,7 +96,7 @@ class Auth {
             // Criar usuário
             $stmt = $this->pdo->prepare("
                 INSERT INTO users (first_name, last_name, email, password, cpf, phone, user_type, status, verification_token) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, 'pending', ?)
+                VALUES (?, ?, ?, ?, ?, ?, ?, 'active', ?)
             ");
             
             $verification_token = bin2hex(random_bytes(32));
