@@ -53,11 +53,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['agendar_visita'])) {
             $hoje = new DateTime();
             if (!$data_visita || $data_visita < $hoje) {
                 $errors[] = 'Data da visita deve ser futura.';
+            } else {
+                // Verificar se é domingo (0 = domingo)
+                $diaSemana = (int)$data_visita->format('w');
+                if ($diaSemana === 0) {
+                    $errors[] = 'Visitas não são realizadas aos domingos.';
+                }
+                
+                // Verificar se é sábado e horário após 11:00
+                if ($diaSemana === 6 && !empty($horario)) {
+                    $horariosPermitidosSabado = ['07:00', '08:00', '09:00', '10:00', '11:00'];
+                    if (!in_array($horario, $horariosPermitidosSabado)) {
+                        $errors[] = 'Aos sábados, as visitas são realizadas apenas até 11:00.';
+                    }
+                }
             }
         }
         
         if (empty($horario)) {
             $errors[] = 'Horário da visita é obrigatório.';
+        } else {
+            // Validar horários disponíveis
+            $horariosDisponiveis = ['07:00', '08:00', '09:00', '10:00', '11:00', '14:00', '15:00', '16:00', '17:00'];
+            if (!in_array($horario, $horariosDisponiveis)) {
+                $errors[] = 'Horário inválido selecionado.';
+            }
         }
         
         if (!empty($errors)) {
@@ -140,20 +160,20 @@ $casas_disponiveis = [
     <nav class="navbar navbar-expand-lg navbar-light fixed-top py-3" id="mainNav" style="background-color: white;">
         <div class="container px-4 px-lg-5">
             <a class="navbar-brand" href="index.php">
-                <i class="bi bi-house-door me-2"></i>Real Estate
+                <i class="bi bi-house-door me-2">Tela inicial</i>
             </a>
             <button class="navbar-toggler navbar-toggler-right" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarResponsive">
                 <ul class="navbar-nav ms-auto my-2 my-lg-0">
-                    <li class="nav-item"><a class="nav-link" href="index.php">Início</a></li>
+                    <li class="nav-item"><a class="nav-link" href="alugar.php">Alugar</a></li>
                     <li class="nav-item"><a class="nav-link" href="casas_disponiveis.php">Imóveis</a></li>
-                    <li class="nav-item"><a class="nav-link" href="index.php#contact">Contato</a></li>
+                    <li class="nav-item"><a class="nav-link" href="index.php#contact">Ajuda</a></li>
                     <?php if ($auth->isLoggedIn()): ?>
                         <li class="nav-item"><a class="nav-link" href="logout.php">Sair</a></li>
                     <?php else: ?>
-                        <li class="nav-item"><a class="nav-link" href="Login.php">Login</a></li>
+                        <li class="nav-item"><a class="nav-link" href="compra.php">comprar</a></li>
                     <?php endif; ?>
                 </ul>
             </div>
@@ -251,6 +271,8 @@ $casas_disponiveis = [
                                     <div class="form-floating mb-3">
                                         <select class="form-select" id="horarioVisita" name="horarioVisita" required>
                                             <option value="" disabled <?php echo empty($horario) ? 'selected' : ''; ?>>Selecione o horário</option>
+                                            <option value="07:00" <?php echo (isset($horario) && $horario === '07:00') ? 'selected' : ''; ?>>07:00</option>
+                                            <option value="08:00" <?php echo (isset($horario) && $horario === '08:00') ? 'selected' : ''; ?>>08:00</option>
                                             <option value="09:00" <?php echo (isset($horario) && $horario === '09:00') ? 'selected' : ''; ?>>09:00</option>
                                             <option value="10:00" <?php echo (isset($horario) && $horario === '10:00') ? 'selected' : ''; ?>>10:00</option>
                                             <option value="11:00" <?php echo (isset($horario) && $horario === '11:00') ? 'selected' : ''; ?>>11:00</option>
@@ -291,7 +313,7 @@ $casas_disponiveis = [
     <footer class="bg-light py-4 mt-5">
         <div class="container px-4 px-lg-5">
             <div class="small text-center text-muted">
-                Copyright &copy; 2025 - <?php echo APP_NAME; ?>
+                Copyright &copy; 2025 - Company Miguel
             </div>
         </div>
     </footer>
@@ -301,6 +323,86 @@ $casas_disponiveis = [
     <script>
         // Configurar data mínima para hoje
         document.getElementById('dataVisita').min = new Date().toISOString().split('T')[0];
+        
+        // Função para verificar se a data é domingo
+        function isDomingo(dateString) {
+            const date = new Date(dateString + 'T00:00:00');
+            return date.getDay() === 0; // 0 = domingo
+        }
+        
+        // Função para verificar se a data é sábado
+        function isSabado(dateString) {
+            const date = new Date(dateString + 'T00:00:00');
+            return date.getDay() === 6; // 6 = sábado
+        }
+        
+        // Validação da data - bloquear domingo
+        document.getElementById('dataVisita').addEventListener('change', function(e) {
+            const selectedDate = e.target.value;
+            
+            if (isDomingo(selectedDate)) {
+                alert('Desculpe, não realizamos visitas aos domingos. Por favor, escolha outro dia.');
+                e.target.value = '';
+                return;
+            }
+            
+            // Atualizar horários conforme o dia selecionado
+            updateHorarios(selectedDate);
+        });
+        
+        // Função para atualizar os horários disponíveis
+        function updateHorarios(dateString) {
+            const horarioSelect = document.getElementById('horarioVisita');
+            const currentValue = horarioSelect.value;
+            
+            // Limpar opções atuais (exceto a primeira)
+            while (horarioSelect.children.length > 1) {
+                horarioSelect.removeChild(horarioSelect.lastChild);
+            }
+            
+            let horarios = [];
+            
+            if (isSabado(dateString)) {
+                // Sábado: apenas até 11:00
+                horarios = [
+                    { value: '07:00', text: '07:00' },
+                    { value: '08:00', text: '08:00' },
+                    { value: '09:00', text: '09:00' },
+                    { value: '10:00', text: '10:00' },
+                    { value: '11:00', text: '11:00' }
+                ];
+            } else {
+                // Outros dias: horários normais
+                horarios = [
+                    { value: '07:00', text: '07:00' },
+                    { value: '08:00', text: '08:00' },
+                    { value: '09:00', text: '09:00' },
+                    { value: '10:00', text: '10:00' },
+                    { value: '11:00', text: '11:00' },
+                    { value: '14:00', text: '14:00' },
+                    { value: '15:00', text: '15:00' },
+                    { value: '16:00', text: '16:00' },
+                    { value: '17:00', text: '17:00' }
+                ];
+            }
+            
+            // Adicionar as opções de horário
+            horarios.forEach(function(horario) {
+                const option = document.createElement('option');
+                option.value = horario.value;
+                option.textContent = horario.text;
+                if (currentValue === horario.value) {
+                    option.selected = true;
+                }
+                horarioSelect.appendChild(option);
+            });
+            
+            // Se era sábado e o horário selecionado era após 11:00, limpar seleção
+            if (isSabado(dateString) && currentValue && 
+                ['14:00', '15:00', '16:00', '17:00'].includes(currentValue)) {
+                horarioSelect.value = '';
+            }
+        }
         
         // Validação adicional no frontend
         document.getElementById('clienteTelefone').addEventListener('input', function(e) {
@@ -312,6 +414,26 @@ $casas_disponiveis = [
                     value = value.replace(/(\d{2})(\d{4})(\d{4})/, '($1) $2-$3');
                 }
                 e.target.value = value;
+            }
+        });
+        
+        // Validação final no submit
+        document.querySelector('form').addEventListener('submit', function(e) {
+            const selectedDate = document.getElementById('dataVisita').value;
+            
+            if (isDomingo(selectedDate)) {
+                e.preventDefault();
+                alert('Não é possível agendar visitas aos domingos.');
+                return false;
+            }
+            
+            if (isSabado(selectedDate)) {
+                const selectedTime = document.getElementById('horarioVisita').value;
+                if (['14:00', '15:00', '16:00', '17:00'].includes(selectedTime)) {
+                    e.preventDefault();
+                    alert('Aos sábados, as visitas são realizadas apenas até 11:00.');
+                    return false;
+                }
             }
         });
     </script>

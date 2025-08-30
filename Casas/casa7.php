@@ -7,6 +7,8 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
     <link href="../css/styles.css?v=20250829" rel="stylesheet">
     <style>
+        /* Ajuste para navbar fixa sem espaço em branco extra */
+        body { padding-top: 72px; }
         .navbar {
             background-color: #000000 !important;
         }
@@ -17,6 +19,10 @@
         .navbar .nav-link:hover {
             color: #cccccc !important;
         }
+        
+    /* Estilos mínimos para manter a imagem estável */
+    #carouselCasa7 .carousel-inner { height: 400px; overflow: hidden; }
+    #carouselCasa7 .carousel-item img { width: 100%; height: 400px; object-fit: cover; object-position: center; }
     </style>
 </head>
 <body>
@@ -40,20 +46,10 @@
         </div>
     </nav>
     
-    <div class="container py-5 mt-5">tml>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Casa Bela Vista</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
-    <link href="../css/styles.css?v=20250829" rel="stylesheet">
-</head>
-<body>
-    <div class="container py-5">
+    <div class="container py-4">
         <div class="row align-items-center">
             <div class="col-md-6 mb-4 mb-md-0">
-                <!-- Carrossel de Imagens -->
+                <!-- Carrossel de Imagens (com indicadores) -->
                 <div id="carouselCasa7" class="carousel slide" data-bs-interval="false" data-bs-touch="false" data-bs-keyboard="false">
                     <div class="carousel-indicators">
                         <button type="button" data-bs-target="#carouselCasa7" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
@@ -154,8 +150,8 @@
                     Casa prática, com quintal, área de serviço e garagem. Bairro residencial e bem localizado.
                 </p>
                 <div class="d-flex gap-3">
-                    <a href="../Compra.html" class="btn btn-success">Compra</a>
-                    <a href="../alugar.html" class="btn btn-primary">Alugar</a>
+                    <a href="../Compra.php" class="btn btn-success">Compra</a>
+                    <a href="../alugar.php" class="btn btn-primary">Alugar</a>
                 </div>
             </div>
         </div>

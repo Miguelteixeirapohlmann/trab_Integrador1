@@ -17,6 +17,43 @@
         .navbar .nav-link:hover {
             color: #cccccc !important;
         }
+        
+    /* Estilos mínimos para manter a imagem estável */
+    #carouselCasa3 .carousel-inner { 
+        height: 400px; 
+        overflow: hidden; 
+        background-color: #000;
+        position: relative;
+    }
+    #carouselCasa3 .carousel-item { 
+        height: 400px;
+        background-color: #000;
+        position: absolute;
+        width: 100%;
+        top: 0;
+        left: 0;
+        transition: none !important;
+        transform: none !important;
+    }
+    #carouselCasa3 .carousel-item.active {
+        position: relative;
+    }
+    #carouselCasa3 .carousel-item img { 
+        width: 100%; 
+        height: 400px; 
+        object-fit: cover; 
+        object-position: center;
+        display: block;
+        background-color: #000;
+    }
+    /* Remover todas as transições do Bootstrap */
+    #carouselCasa3 .carousel-item-next,
+    #carouselCasa3 .carousel-item-prev,
+    #carouselCasa3 .carousel-item-start,
+    #carouselCasa3 .carousel-item-end {
+        transition: none !important;
+        transform: none !important;
+    }
     </style>
 </head>
 <body>
@@ -43,7 +80,7 @@
     <div class="container py-5 mt-5">
         <div class="row align-items-center">
             <div class="col-md-6 mb-4 mb-md-0">
-                <!-- Carrossel de Imagens -->
+                <!-- Carrossel de Imagens (com indicadores) -->
                 <div id="carouselCasa3" class="carousel slide" data-bs-interval="false" data-bs-touch="false" data-bs-keyboard="false">
                     <div class="carousel-indicators">
                         <button type="button" data-bs-target="#carouselCasa3" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
@@ -120,8 +157,8 @@
                     Casa moderna, com varanda, área gourmet, jardim e garagem. Bairro planejado, seguro e com ótima infraestrutura.
                 </p>
                 <div class="d-flex gap-3">
-                    <a href="../Compra.html" class="btn btn-success">Compra</a>
-                    <a href="../alugar.html" class="btn btn-primary">Alugar</a>
+                    <a href="../Compra.php" class="btn btn-success">Compra</a>
+                    <a href="../alugar.php" class="btn btn-primary">Alugar</a>
                 </div>
             </div>
         </div>

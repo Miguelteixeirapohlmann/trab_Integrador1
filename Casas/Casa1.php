@@ -17,6 +17,43 @@
         .navbar .nav-link:hover {
             color: #cccccc !important;
         }
+        
+    /* Estilos mínimos para manter a imagem estável */
+    #carouselCasa1 .carousel-inner { 
+        height: 400px; 
+        overflow: hidden; 
+        background-color: #000;
+        position: relative;
+    }
+    #carouselCasa1 .carousel-item { 
+        height: 400px;
+        background-color: #000;
+        position: absolute;
+        width: 100%;
+        top: 0;
+        left: 0;
+        transition: none !important;
+        transform: none !important;
+    }
+    #carouselCasa1 .carousel-item.active {
+        position: relative;
+    }
+    #carouselCasa1 .carousel-item img { 
+        width: 100%; 
+        height: 400px; 
+        object-fit: cover; 
+        object-position: center;
+        display: block;
+        background-color: #000;
+    }
+    /* Remover todas as transições do Bootstrap */
+    #carouselCasa1 .carousel-item-next,
+    #carouselCasa1 .carousel-item-prev,
+    #carouselCasa1 .carousel-item-start,
+    #carouselCasa1 .carousel-item-end {
+        transition: none !important;
+        transform: none !important;
+    }
     </style>
 </head>
 <body>
@@ -43,7 +80,7 @@
     <div class="container py-5 mt-5">
         <div class="row align-items-center">
             <div class="col-md-6 mb-4 mb-md-0">
-                <!-- Carrossel de Imagens -->
+                <!-- Carrossel de Imagens (com indicadores) -->
                 <div id="carouselCasa1" class="carousel slide" data-bs-interval="false" data-bs-touch="false" data-bs-keyboard="false">
                     <div class="carousel-indicators">
                         <button type="button" data-bs-target="#carouselCasa1" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
@@ -59,41 +96,73 @@
                     </div>
                     <div class="carousel-inner rounded shadow" style="height: 400px; overflow: hidden;">
                         <div class="carousel-item active">
-                            <img src="../imgs/Casa1/Casa1.0.jpg" class="d-block w-100" alt="Casa Realengo - Foto 1" style="width: 100%; height: 400px; object-fit: cover; object-position: center;">
+                            <img src="../imgs/Casa1/Casa1.0.jpg" class="d-block w-100" alt="Casa Realengo - Foto 1" 
+                                 style="width: 100%; height: 400px; object-fit: cover; object-position: center;"
+                                 onerror="console.error('Erro ao carregar: Casa1.0.jpg'); this.style.display='none';"
+                                 onload="console.log('Carregada: Casa1.0.jpg');">
                         </div>
                         <div class="carousel-item">
-                            <img src="../imgs/Casa1/Casa1.1.jpg" class="d-block w-100" alt="Casa Realengo - Foto 2" style="width: 100%; height: 400px; object-fit: cover; object-position: center;">
+                            <img src="../imgs/Casa1/Casa1.1.jpg" class="d-block w-100" alt="Casa Realengo - Foto 2" 
+                                 style="width: 100%; height: 400px; object-fit: cover; object-position: center;"
+                                 onerror="console.error('Erro ao carregar: Casa1.1.jpg'); this.style.display='none';"
+                                 onload="console.log('Carregada: Casa1.1.jpg');">
                         </div>
                         <div class="carousel-item">
-                            <img src="../imgs/Casa1/Casa1.2.jpg" class="d-block w-100" alt="Casa Realengo - Foto 3" style="width: 100%; height: 400px; object-fit: cover; object-position: center;">
+                            <img src="../imgs/Casa1/Casa1.2.jpg" class="d-block w-100" alt="Casa Realengo - Foto 3" 
+                                 style="width: 100%; height: 400px; object-fit: cover; object-position: center;"
+                                 onerror="console.error('Erro ao carregar: Casa1.2.jpg'); this.style.display='none';"
+                                 onload="console.log('Carregada: Casa1.2.jpg');">
                         </div>
                         <div class="carousel-item">
-                            <img src="../imgs/Casa1/Casa1.3.jpg" class="d-block w-100" alt="Casa Realengo - Foto 4" style="width: 100%; height: 400px; object-fit: cover; object-position: center;">
+                            <img src="../imgs/Casa1/Casa1.3.jpg" class="d-block w-100" alt="Casa Realengo - Foto 4" 
+                                 style="width: 100%; height: 400px; object-fit: cover; object-position: center;"
+                                 onerror="console.error('Erro ao carregar: Casa1.3.jpg'); this.style.display='none';"
+                                 onload="console.log('Carregada: Casa1.3.jpg');">
                         </div>
                         <div class="carousel-item">
-                            <img src="../imgs/Casa1/Casa1.4.jpg" class="d-block w-100" alt="Casa Realengo - Foto 5" style="width: 100%; height: 400px; object-fit: cover; object-position: center;">
+                            <img src="../imgs/Casa1/Casa1.4.jpg" class="d-block w-100" alt="Casa Realengo - Foto 5" 
+                                 style="width: 100%; height: 400px; object-fit: cover; object-position: center;"
+                                 onerror="console.error('Erro ao carregar: Casa1.4.jpg'); this.style.display='none';"
+                                 onload="console.log('Carregada: Casa1.4.jpg');">
                         </div>
                         <div class="carousel-item">
-                            <img src="../imgs/Casa1/Casa1.5.jpg" class="d-block w-100" alt="Casa Realengo - Foto 6" style="width: 100%; height: 400px; object-fit: cover; object-position: center;">
+                            <img src="../imgs/Casa1/Casa1.5.jpg" class="d-block w-100" alt="Casa Realengo - Foto 6" 
+                                 style="width: 100%; height: 400px; object-fit: cover; object-position: center;"
+                                 onerror="console.error('Erro ao carregar: Casa1.5.jpg'); this.style.display='none';"
+                                 onload="console.log('Carregada: Casa1.5.jpg');">
                         </div>
                         <div class="carousel-item">
-                            <img src="../imgs/Casa1/Casa1.6.jpg" class="d-block w-100" alt="Casa Realengo - Foto 7" style="width: 100%; height: 400px; object-fit: cover; object-position: center;">
+                            <img src="../imgs/Casa1/Casa1.6.jpg" class="d-block w-100" alt="Casa Realengo - Foto 7" 
+                                 style="width: 100%; height: 400px; object-fit: cover; object-position: center;"
+                                 onerror="console.error('Erro ao carregar: Casa1.6.jpg'); this.style.display='none';"
+                                 onload="console.log('Carregada: Casa1.6.jpg');">
                         </div>
                         <div class="carousel-item">
-                            <img src="../imgs/Casa1/Casa1.7.jpg" class="d-block w-100" alt="Casa Realengo - Foto 8" style="width: 100%; height: 400px; object-fit: cover; object-position: center;">
+                            <img src="../imgs/Casa1/Casa1.7.jpg" class="d-block w-100" alt="Casa Realengo - Foto 8" 
+                                 style="width: 100%; height: 400px; object-fit: cover; object-position: center;"
+                                 onerror="console.error('Erro ao carregar: Casa1.7.jpg'); this.style.display='none';"
+                                 onload="console.log('Carregada: Casa1.7.jpg');">
                         </div>
                         <div class="carousel-item">
-                            <img src="../imgs/Casa1/Casa1.8.jpg" class="d-block w-100" alt="Casa Realengo - Foto 9" style="width: 100%; height: 400px; object-fit: cover; object-position: center;">
+                            <img src="../imgs/Casa1/Casa1.8.jpg" class="d-block w-100" alt="Casa Realengo - Foto 9" 
+                                 style="width: 100%; height: 400px; object-fit: cover; object-position: center;"
+                                 onerror="console.error('Erro ao carregar: Casa1.8.jpg'); this.style.display='none';"
+                                 onload="console.log('Carregada: Casa1.8.jpg');">
                         </div>
                         <div class="carousel-item">
-                            <img src="../imgs/Casa1/Casa1.9.jpg" class="d-block w-100" alt="Casa Realengo - Foto 10" style="width: 100%; height: 400px; object-fit: cover; object-position: center;">
+                            <img src="../imgs/Casa1/Casa1.9.jpg" class="d-block w-100" alt="Casa Realengo - Foto 10" 
+                                 style="width: 100%; height: 400px; object-fit: cover; object-position: center;"
+                                 onerror="console.error('Erro ao carregar: Casa1.9.jpg'); this.style.display='none';"
+                                 onload="console.log('Carregada: Casa1.9.jpg');">
                         </div>
                     </div>
-                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+
+                    <!-- Controles de navegação -->
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselCasa1" data-bs-slide="prev">
                         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                         <span class="visually-hidden">Anterior</span>
                     </button>
-                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+                    <button class="carousel-control-next" type="button" data-bs-target="#carouselCasa1" data-bs-slide="next">
                         <span class="carousel-control-next-icon" aria-hidden="true"></span>
                         <span class="visually-hidden">Próximo</span>
                     </button>

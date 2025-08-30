@@ -219,6 +219,30 @@ $properties = [];
             opacity: 1 !important;
         }
         
+        /* Transições instantâneas para todos os carrosséis */
+        .carousel-inner {
+            background-color: #000;
+        }
+        
+        .carousel-item {
+            transition: none !important;
+            transform: none !important;
+            background-color: #000;
+        }
+        
+        .carousel-item-next,
+        .carousel-item-prev,
+        .carousel-item-start,
+        .carousel-item-end {
+            transition: none !important;
+            transform: none !important;
+        }
+        
+        .carousel-img-fixed {
+            display: block;
+            background-color: #000;
+        }
+        
         .section-title {
             font-size: 2.5rem;
             font-weight: 700;
