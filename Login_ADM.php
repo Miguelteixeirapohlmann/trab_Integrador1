@@ -8,14 +8,7 @@ require_once __DIR__ . '/includes/init.php';
 
 // Se usuário já estiver logado, redirecionar
 if ($auth->isLoggedIn()) {
-    $user = $auth->getCurrentUser();
-    if ($user['user_type'] === 'admin') {
-        redirect('views/admin/dashboard.php');
-    } elseif ($user['user_type'] === 'broker') {
-        redirect('views/properties/manage.php');
-    } else {
-        redirect('index.php');
-    }
+    redirect('index.php');
 }
 
 // Verificar mensagens flash
@@ -128,15 +121,15 @@ $csrf_token = generateCSRFToken();
                                 <?php echo htmlspecialchars($currentUser['first_name']); ?>
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" href="views/auth/profile.php">Meu Perfil</a></li>
+                                <li><a class="dropdown-item" href="perfil.php">Meu Perfil</a></li>
                                 <?php if ($auth->hasRole('admin')): ?>
                                     <li><a class="dropdown-item" href="views/admin/dashboard.php">Painel Admin</a></li>
                                 <?php endif; ?>
                                 <?php if ($auth->hasRole('broker')): ?>
-                                    <li><a class="dropdown-item" href="views/properties/manage.php">Meus Imóveis</a></li>
+                                    <li><a class="dropdown-item" href="meus_imoveis.php">Meus Imóveis</a></li>
                                 <?php endif; ?>
                                 <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="views/auth/logout.php">Sair</a></li>
+                                <li><a class="dropdown-item" href="logout.php">Sair</a></li>
                             </ul>
                         </li>
                     <?php else: ?>

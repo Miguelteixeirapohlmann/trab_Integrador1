@@ -341,6 +341,18 @@ function getFlashMessage() {
 }
 
 /**
+ * Definir mensagem flash
+ */
+function setFlashMessage($message, $type = 'info') {
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
+    
+    $_SESSION['flash_message'] = $message;
+    $_SESSION['flash_type'] = $type;
+}
+
+/**
  * Debug helper
  */
 function dd($data) {

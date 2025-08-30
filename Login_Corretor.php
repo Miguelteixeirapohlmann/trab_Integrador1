@@ -9,13 +9,7 @@ require_once __DIR__ . '/includes/init.php';
 // Se usuário já estiver logado, redirecionar
 if ($auth->isLoggedIn()) {
     $user = $auth->getCurrentUser();
-    if ($user['user_type'] === 'admin') {
-        redirect('views/admin/dashboard.php');
-    } elseif ($user['user_type'] === 'broker') {
-        redirect('views/properties/manage.php');
-    } else {
-        redirect('index.php');
-    }
+    redirect('index.php');
 }
 
 // Verificar mensagens flash
@@ -68,7 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login_form'])) {
                 } else {
                     // Login bem-sucedido
                     $_SESSION['tentativas_login'] = 0; // Reset tentativas
-                    redirect('views/properties/manage.php', 'Login de corretor realizado com sucesso!', 'success');
+                    redirect('index.php', 'Login de corretor realizado com sucesso!', 'success');
                 }
             } else {
                 // Incrementar tentativas
@@ -127,12 +121,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login_form'])) {
                                 <?php echo htmlspecialchars($currentUser['first_name']); ?>
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" href="views/auth/profile.php">Meu Perfil</a></li>
+                                <li><a class="dropdown-item" href="perfil.php">Meu Perfil</a></li>
                                 <?php if ($auth->hasRole('admin')): ?>
                                     <li><a class="dropdown-item" href="views/admin/dashboard.php">Painel Admin</a></li>
                                 <?php endif; ?>
                                 <?php if ($auth->hasRole('broker')): ?>
-                                    <li><a class="dropdown-item" href="views/properties/manage.php">Gerenciar Imóveis</a></li>
+                                    <li><a class="dropdown-item" href="meus_imoveis.php">Meus Imóveis</a></li>
                                 <?php endif; ?>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" href="logout.php">Sair</a></li>
@@ -213,7 +207,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login_form'])) {
 
                     <!-- Botões de submissão -->
                     <div class="d-grid gap-2 mb-4">
-                        <button type="submit" class="btn btn-info btn-lg text-white">
+                        <button type="submit" class="btn btn-info btn-lg text-white" href="index.php">
                             <i class="fas fa-sign-in-alt me-2"></i>Entrar como Corretor
                         </button>
                     </div>

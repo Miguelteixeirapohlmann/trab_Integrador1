@@ -1,10 +1,14 @@
 <?php
 /**
- * Página de Casas Disponíveis
+ * Página de Casas Disponíveis - Requer autenticação
  */
 
 // Incluir arquivo de inicialização do sistema
 require_once __DIR__ . '/includes/init.php';
+
+// Verificar se o usuário está logado
+$auth->requireLogin('Login.php');
+$current_user = $auth->getCurrentUser();
 
 // Verificar mensagens flash
 $flash = getFlashMessage();
@@ -281,23 +285,15 @@ $properties = [];
 </head>
 <body>
     <!-- Navigation-->
-    <nav class="navbar navbar-expand-lg navbar-light fixed-top py-3" id="mainNav">
-        <div class="container px-4 px-lg-5">
-            <a class="navbar-brand" href="index.php">Tela Inicial</a>
-            <button class="navbar-toggler navbar-toggler-right" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarResponsive">
-                <ul class="navbar-nav ms-auto my-2 my-lg-0">
-                    <li class="nav-item"><a class="nav-link" href="alugar.php">Alugar</a></li>
-                    <li class="nav-item"><a class="nav-link" href="Compra.php">Compra</a></li>
-                    <li class="nav-item"><a class="nav-link" href="index.php#services">Descobrir</a></li>
-                    <li class="nav-item"><a class="nav-link" href="index.php#Final">Ajuda</a></li>
-                    <li class="nav-item"><a class="nav-link" href="agendar_visita.php">Agendar Visita</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+    <?php
+    require_once __DIR__ . '/includes/navbar.php';
+    renderNavbar($current_user, 'casas_disponiveis');
+    ?>
+
+    <?php 
+    require_once __DIR__ . '/includes/user_info.php';
+    renderUserInfo($current_user); 
+    ?>
 
     <!-- Hero Section -->
     <header class="hero-section">

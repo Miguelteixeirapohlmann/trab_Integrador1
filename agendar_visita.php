@@ -1,10 +1,14 @@
 <?php
 /**
- * Página de Agendamento de Visitas
+ * Página de Agendamento de Visitas - Requer autenticação
  */
 
 // Incluir arquivo de inicialização do sistema
 require_once __DIR__ . '/includes/init.php';
+
+// Verificar se o usuário está logado
+$auth->requireLogin('Login.php');
+$current_user = $auth->getCurrentUser();
 
 // Verificar mensagens flash
 $flash = getFlashMessage();
@@ -157,31 +161,18 @@ $casas_disponiveis = [
 </head>
 <body>
     <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-light fixed-top py-3" id="mainNav" style="background-color: white;">
-        <div class="container px-4 px-lg-5">
-            <a class="navbar-brand" href="index.php">
-                <i class="bi bi-house-door me-2">Tela inicial</i>
-            </a>
-            <button class="navbar-toggler navbar-toggler-right" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarResponsive">
-                <ul class="navbar-nav ms-auto my-2 my-lg-0">
-                    <li class="nav-item"><a class="nav-link" href="alugar.php">Alugar</a></li>
-                    <li class="nav-item"><a class="nav-link" href="casas_disponiveis.php">Imóveis</a></li>
-                    <li class="nav-item"><a class="nav-link" href="index.php#contact">Ajuda</a></li>
-                    <?php if ($auth->isLoggedIn()): ?>
-                        <li class="nav-item"><a class="nav-link" href="logout.php">Sair</a></li>
-                    <?php else: ?>
-                        <li class="nav-item"><a class="nav-link" href="compra.php">comprar</a></li>
-                    <?php endif; ?>
-                </ul>
-            </div>
-        </div>
-    </nav>
+    <?php
+    require_once __DIR__ . '/includes/navbar.php';
+    renderNavbar($current_user, 'agendar_visita');
+    ?>
+
+    <?php 
+    require_once __DIR__ . '/includes/user_info.php';
+    renderUserInfo($current_user); 
+    ?>
 
     <!-- Main Content -->
-    <div class="container my-5" style="padding-top: 100px;">
+    <div class="container my-5" style="padding-top: 40px;">
         <!-- Mensagens Flash -->
         <?php if ($flash): ?>
             <div class="alert alert-<?php echo $flash['type'] === 'success' ? 'success' : ($flash['type'] === 'error' ? 'danger' : 'info'); ?> alert-dismissible fade show">
@@ -222,14 +213,14 @@ $casas_disponiveis = [
                                 <div class="col-md-6">
                                     <div class="form-floating mb-3">
                                         <input type="text" class="form-control" id="clienteNome" name="clienteNome" 
-                                               placeholder="Seu nome" required value="<?php echo htmlspecialchars($nome ?? ''); ?>">
+                                               placeholder="Seu nome" required value="<?php echo htmlspecialchars($nome ?? $current_user['first_name'] . ' ' . $current_user['last_name']); ?>"><?php echo $current_user ? ' readonly' : ''; ?>
                                         <label for="clienteNome">Nome Completo</label>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-floating mb-3">
                                         <input type="email" class="form-control" id="clienteEmail" name="clienteEmail" 
-                                               placeholder="seu@email.com" required value="<?php echo htmlspecialchars($email ?? ''); ?>">
+                                               placeholder="seu@email.com" required value="<?php echo htmlspecialchars($email ?? $current_user['email']); ?>"<?php echo $current_user ? ' readonly' : ''; ?>>
                                         <label for="clienteEmail">Email</label>
                                     </div>
                                 </div>
@@ -239,7 +230,7 @@ $casas_disponiveis = [
                                 <div class="col-md-6">
                                     <div class="form-floating mb-3">
                                         <input type="tel" class="form-control" id="clienteTelefone" name="clienteTelefone" 
-                                               placeholder="(11) 99999-9999" required value="<?php echo htmlspecialchars($telefone ?? ''); ?>">
+                                               placeholder="(11) 99999-9999" required value="<?php echo htmlspecialchars($telefone ?? $current_user['phone'] ?? ''); ?>">
                                         <label for="clienteTelefone">Telefone</label>
                                     </div>
                                 </div>

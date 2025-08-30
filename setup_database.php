@@ -38,7 +38,7 @@ try {
     echo "<div class='success'>✅ Arquivo SQL carregado</div>";
     
     // Dividir o SQL em comandos individuais
-    $sql_commands = explode(';', $sql);
+    $sql_commands = preg_split('/;\s*[\r\n]/m', $sql, -1, PREG_SPLIT_NO_EMPTY);
     
     $success_count = 0;
     $error_count = 0;
@@ -47,17 +47,33 @@ try {
         $command = trim($command);
         
         // Pular comandos vazios e comentários
-        if (empty($command) || strpos($command, '--') === 0) {
+        if (empty($command) || strpos($command, '--') === 0 || strpos($command, 'SET FOREIGN_KEY_CHECKS') !== false) {
             continue;
         }
         
         try {
+            // Para comandos DROP TABLE, ignorar erros de tabela não existente
+            if (strpos($command, 'DROP TABLE') !== false) {
+                try {
+                    $pdo->exec($command);
+                    echo "<div class='warning'>🗑️ Tabela removida (se existia)</div>";
+                } catch (PDOException $e) {
+                    // Ignorar erro de tabela não encontrada
+                    if (strpos($e->getMessage(), "doesn't exist") === false) {
+                        throw $e;
+                    }
+                }
+                continue;
+            }
+            
             $pdo->exec($command);
             $success_count++;
             
             // Mostrar apenas comandos importantes
             if (strpos($command, 'CREATE DATABASE') !== false) {
                 echo "<div class='success'>✅ Banco de dados 'real_estate' criado</div>";
+            } elseif (strpos($command, 'USE real_estate') !== false) {
+                echo "<div class='success'>✅ Banco de dados 'real_estate' selecionado</div>";
             } elseif (strpos($command, 'CREATE TABLE') !== false) {
                 preg_match('/CREATE TABLE\s+(\w+)/', $command, $matches);
                 if (isset($matches[1])) {
@@ -81,7 +97,8 @@ try {
             }
             
             $error_count++;
-            echo "<div class='error'>❌ Erro: " . htmlspecialchars($error_message) . "</div>";
+            echo "<div class='error'>❌ Erro em comando: " . substr($command, 0, 50) . "...</div>";
+            echo "<div class='error'>   Detalhes: " . htmlspecialchars($error_message) . "</div>";
         }
     }
     

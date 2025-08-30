@@ -1,13 +1,150 @@
 <?php
 /**
- * Página de Compra
+ * Página de Compra - Requer autenticação
  */
 
 // Incluir arquivo de inicialização do sistema
 require_once __DIR__ . '/includes/init.php';
 
+// Verificar se o usuário está logado
+$auth->requireLogin('Login.php');
+$current_user = $auth->getCurrentUser();
+
 // Verificar mensagens flash
 $flash = getFlashMessage();
+
+// Buscar propriedades disponíveis para venda
+$properties_stmt = $pdo->prepare("
+    SELECT p.id, p.title, p.price, p.address, p.neighborhood, p.city, p.bedrooms, p.bathrooms, p.area_sqm
+    FROM properties p 
+    WHERE p.status = 'active' AND (p.transaction_type = 'sale' OR p.transaction_type = 'both')
+    ORDER BY p.title
+");
+$properties_stmt->execute();
+$available_properties = $properties_stmt->fetchAll();
+
+// Buscar corretores disponíveis
+$brokers_stmt = $pdo->prepare("
+    SELECT b.id, u.first_name, u.last_name, b.company, b.specialties, b.years_experience, b.rating
+    FROM brokers b
+    JOIN users u ON b.user_id = u.id
+    WHERE u.status = 'active'
+    ORDER BY u.first_name, u.last_name
+");
+$brokers_stmt->execute();
+$available_brokers = $brokers_stmt->fetchAll();
+
+// Processar formulário de compra
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_compra'])) {
+    $errors = [];
+    
+    try {
+        // Validar dados do formulário
+        $property_id = intval($_POST['property_id'] ?? 0);
+        $broker_id = intval($_POST['broker_id'] ?? 0);
+        $nome = trim($_POST['nome'] ?? '');
+        $cpf = trim($_POST['cpf'] ?? '');
+        $email = trim($_POST['email'] ?? '');
+        $telefone = trim($_POST['telefone'] ?? '');
+        $rg = trim($_POST['rg'] ?? '');
+        $endereco = trim($_POST['endereco'] ?? '');
+        $profissao = trim($_POST['profissao'] ?? '');
+        $renda = floatval($_POST['renda'] ?? 0);
+        $valor_imovel = floatval($_POST['valor_imovel'] ?? 0);
+        $valor_entrada = floatval($_POST['valor_entrada'] ?? 0);
+        $forma_pagamento = trim($_POST['forma_pagamento'] ?? '');
+        $observacoes = trim($_POST['observacoes'] ?? '');
+        
+        // Validações básicas
+        if ($property_id <= 0) $errors[] = "Selecione uma propriedade";
+        if ($broker_id <= 0) $errors[] = "Selecione um corretor";
+        if (empty($nome)) $errors[] = "Nome completo é obrigatório";
+        if (empty($cpf)) $errors[] = "CPF é obrigatório";
+        if (empty($email)) $errors[] = "Email é obrigatório";
+        if (empty($telefone)) $errors[] = "Telefone é obrigatório";
+        if (empty($endereco)) $errors[] = "Endereço é obrigatório";
+        if (empty($profissao)) $errors[] = "Profissão é obrigatória";
+        if ($renda <= 0) $errors[] = "Renda mensal deve ser informada";
+        if ($valor_imovel <= 0) $errors[] = "Valor do imóvel deve ser informado";
+        if ($valor_entrada < 0) $errors[] = "Valor da entrada deve ser positivo";
+        if (empty($forma_pagamento)) $errors[] = "Forma de pagamento é obrigatória";
+        
+        // Validar email
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $errors[] = "Email inválido";
+        }
+        
+        // Validar se propriedade e corretor existem
+        if ($property_id > 0) {
+            $property_check = $pdo->prepare("SELECT id FROM properties WHERE id = ? AND status = 'active' AND (transaction_type = 'sale' OR transaction_type = 'both')");
+            $property_check->execute([$property_id]);
+            if (!$property_check->fetch()) {
+                $errors[] = "Propriedade selecionada não está disponível";
+            }
+        }
+        
+        if ($broker_id > 0) {
+            $broker_check = $pdo->prepare("SELECT b.id FROM brokers b JOIN users u ON b.user_id = u.id WHERE b.id = ? AND u.status = 'active'");
+            $broker_check->execute([$broker_id]);
+            if (!$broker_check->fetch()) {
+                $errors[] = "Corretor selecionado não está disponível";
+            }
+        }
+        
+        // Se não há erros, salvar no banco
+        if (empty($errors)) {
+            // Inserir registro de compra
+            $stmt = $pdo->prepare("
+                INSERT INTO property_purchases (
+                    property_id, buyer_id, seller_id, broker_id, purchase_price, 
+                    down_payment, payment_method, contract_date, status,
+                    buyer_income, buyer_profession, contract_terms, notes
+                ) VALUES (
+                    ?, ?, 1, ?, ?, ?, ?, NOW(), 'pending', ?, ?, ?, ?
+                )
+            ");
+            
+            $contract_terms = "Processo de compra iniciado através do site. Documentos e detalhes a serem validados na imobiliária.";
+            $notes = "Dados do comprador: Nome: $nome, CPF: $cpf, Email: $email, Telefone: $telefone, Endereço: $endereco" . 
+                    ($observacoes ? ", Observações: $observacoes" : "");
+            
+            $stmt->execute([
+                $property_id, // property_id
+                $current_user['id'], // buyer_id
+                $broker_id, // broker_id
+                $valor_imovel, // purchase_price
+                $valor_entrada, // down_payment
+                $forma_pagamento, // payment_method
+                $renda, // buyer_income
+                $profissao, // buyer_profession
+                $contract_terms, // contract_terms
+                $notes // notes
+            ]);
+                
+            // Mensagem de sucesso
+            setFlashMessage(
+                "<strong>Imóvel reservado com sucesso!</strong><br>" .
+                "Passe na nossa imobiliária para falar com nossos corretores e finalizar o processo de compra.<br>" .
+                "<strong>Endereço:</strong> Rua das Flores, 123 - Centro<br>" .
+                "<strong>Telefone:</strong> (51) 3333-4444<br>" .
+                "<strong>Horário:</strong> Segunda a Sexta das 8h às 18h",
+                "success"
+            );
+            
+            // Redirecionar para evitar reenvio do formulário
+            header("Location: Compra.php");
+            exit;
+        }
+        
+        if (!empty($errors)) {
+            setFlashMessage(implode("<br>", $errors), "danger");
+        }
+        
+    } catch (Exception $e) {
+        error_log("Erro ao processar compra: " . $e->getMessage());
+        setFlashMessage("Erro interno do sistema. Tente novamente mais tarde.", "danger");
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -30,50 +167,31 @@ $flash = getFlashMessage();
     <link href="css/styles.css" rel="stylesheet" />
 </head>
 <body>
-     <!-- Navigation-->
-    <nav class="navbar navbar-expand-lg navbar-light fixed-top py-3" id="mainNav">
-        <div class="container px-4 px-lg-5">
-            <a class="navbar-brand" href="index.php">Tela Inicial</a>
-            <button class="navbar-toggler navbar-toggler-right" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarResponsive">
-                <ul class="navbar-nav ms-auto my-2 my-lg-0">
-                    <li class="nav-item"><a class="nav-link" href="alugar_new.php">Alugar</a></li>
-                    <li class="nav-item"><a class="nav-link" href="Compra.php">Compra</a></li>
-                    <li class="nav-item"><a class="nav-link" href="index.php#services">Descobrir</a></li>
-                    <li class="nav-item"><a class="nav-link" href="index.php#Final">Ajuda</a></li>
-                    <li class="nav-item"><a class="nav-link" href="agendar_visita.php">Agendar Visita</a></li>
-                    
-                    <?php if ($auth->isLoggedIn()): ?>
-                        <?php $currentUser = $auth->getCurrentUser(); ?>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <?php if (!empty($currentUser['avatar'])): ?>
-                                    <img src="<?php echo asset('uploads/' . $currentUser['avatar']); ?>" alt="Avatar" class="rounded-circle me-1" style="width: 24px; height: 24px;">
-                                <?php endif; ?>
-                                <?php echo htmlspecialchars($currentUser['first_name']); ?>
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" href="views/auth/profile.php">Meu Perfil</a></li>
-                                <?php if ($auth->hasRole('admin')): ?>
-                                    <li><a class="dropdown-item" href="views/admin/dashboard.php">Painel Admin</a></li>
-                                <?php endif; ?>
-                                <?php if ($auth->hasRole('broker')): ?>
-                                    <li><a class="dropdown-item" href="views/properties/manage.php">Meus Imóveis</a></li>
-                                <?php endif; ?>
-                                <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="views/auth/logout.php">Sair</a></li>
-                            </ul>
-                        </li>
-                    <?php else: ?>
-                        <li class="nav-item"><a class="nav-link" href="Login.php">Login</a></li>
-                        <li class="nav-item"><a class="nav-link" href="Cadastro.php">Cadastro</a></li>
-                    <?php endif; ?>
-                </ul>
+    <!-- Navigation-->
+    <?php
+    require_once __DIR__ . '/includes/navbar.php';
+    renderNavbar($current_user, 'compra');
+    ?>
+
+    <?php
+    // Exibir barra de informações do usuário
+    require_once __DIR__ . '/includes/user_info.php';
+    renderUserInfo($current_user);
+    ?>
+
+    <?php if ($flash): ?>
+        <div class="container-fluid mt-3">
+            <div class="alert alert-<?php echo $flash['type']; ?> alert-dismissible fade show" role="alert">
+                <?php echo $flash['message']; ?>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
         </div>
-    </nav>
+    <?php endif; ?>
+
+    <?php 
+    require_once __DIR__ . '/includes/user_info.php';
+    renderUserInfo($current_user); 
+    ?>
 
     <!-- Hero Section -->
     <header class="masthead">
@@ -109,53 +227,103 @@ $flash = getFlashMessage();
                         </div>
                         <div class="card-body p-4">
                             <form id="compraForm" method="POST">
+                                <input type="hidden" name="submit_compra" value="1">
+                                
+                                <!-- Seleção de Propriedade e Corretor -->
+                                <div class="mb-4">
+                                    <h5 class="text-primary mb-3"><i class="fas fa-home me-2"></i>Seleção de Propriedade</h5>
+                                    <div class="row">
+                                        <div class="col-md-12 mb-3">
+                                            <label for="property_id" class="form-label">Escolha a Propriedade <span class="text-danger">*</span></label>
+                                            <select class="form-select form-select-lg" id="property_id" name="property_id" required onchange="updatePropertyPrice()">
+                                                <option value="">Selecione uma propriedade...</option>
+                                                <?php foreach ($available_properties as $property): ?>
+                                                    <option value="<?php echo $property['id']; ?>" data-price="<?php echo $property['price']; ?>">
+                                                        <?php echo htmlspecialchars($property['title']); ?> - 
+                                                        R$ <?php echo number_format($property['price'], 2, ',', '.'); ?> - 
+                                                        <?php echo $property['bedrooms']; ?>Q <?php echo $property['bathrooms']; ?>B - 
+                                                        <?php echo $property['area_sqm']; ?>m² - 
+                                                        <?php echo htmlspecialchars($property['neighborhood'] . ', ' . $property['city']); ?>
+                                                    </option>
+                                                <?php endforeach; ?>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Seleção de Corretor -->
+                                <div class="mb-4">
+                                    <h5 class="text-primary mb-3"><i class="fas fa-user-tie me-2"></i>Seleção de Corretor</h5>
+                                    <div class="row">
+                                        <div class="col-md-12 mb-3">
+                                            <label for="broker_id" class="form-label">Escolha o Corretor <span class="text-danger">*</span></label>
+                                            <select class="form-select form-select-lg" id="broker_id" name="broker_id" required>
+                                                <option value="">Selecione um corretor...</option>
+                                                <?php foreach ($available_brokers as $broker): ?>
+                                                    <option value="<?php echo $broker['id']; ?>">
+                                                        <?php echo htmlspecialchars($broker['first_name'] . ' ' . $broker['last_name']); ?>
+                                                        <?php if ($broker['company']): ?>
+                                                            - <?php echo htmlspecialchars($broker['company']); ?>
+                                                        <?php endif; ?>
+                                                        (<?php echo $broker['years_experience']; ?> anos de experiência)
+                                                        <?php if ($broker['rating'] > 0): ?>
+                                                            - ⭐ <?php echo number_format($broker['rating'], 1); ?>
+                                                        <?php endif; ?>
+                                                    </option>
+                                                <?php endforeach; ?>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                
                                 <!-- Dados Pessoais -->
                                 <div class="mb-4">
                                     <h5 class="text-primary mb-3"><i class="fas fa-user me-2"></i>Dados Pessoais</h5>
                                     <div class="row">
                                         <div class="col-md-6 mb-3">
                                             <label for="nome" class="form-label">Nome Completo <span class="text-danger">*</span></label>
-                                            <input type="text" class="form-control form-control-lg" id="nome" name="nome" required>
+                                            <input type="text" class="form-control form-control-lg" id="nome" name="nome" 
+                                                   value="<?php echo htmlspecialchars($current_user['first_name'] . ' ' . $current_user['last_name']); ?>" required>
                                         </div>
                                         <div class="col-md-6 mb-3">
                                             <label for="cpf" class="form-label">CPF <span class="text-danger">*</span></label>
-                                            <input type="text" class="form-control form-control-lg" id="cpf" name="cpf" placeholder="000.000.000-00" required>
+                                            <input type="text" class="form-control form-control-lg" id="cpf" name="cpf" 
+                                                   value="<?php echo htmlspecialchars($current_user['cpf'] ?? ''); ?>" 
+                                                   placeholder="000.000.000-00" required>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-6 mb-3">
                                             <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
-                                            <input type="email" class="form-control form-control-lg" id="email" name="email" required>
+                                            <input type="email" class="form-control form-control-lg" id="email" name="email" 
+                                                   value="<?php echo htmlspecialchars($current_user['email']); ?>" required>
                                         </div>
                                         <div class="col-md-6 mb-3">
                                             <label for="telefone" class="form-label">Telefone <span class="text-danger">*</span></label>
-                                            <input type="tel" class="form-control form-control-lg" id="telefone" name="telefone" placeholder="(00) 00000-0000" required>
+                                            <input type="tel" class="form-control form-control-lg" id="telefone" name="telefone" 
+                                                   value="<?php echo htmlspecialchars($current_user['phone'] ?? ''); ?>" 
+                                                   placeholder="(00) 00000-0000" required>
                                         </div>
                                     </div>
                                 </div>
 
-                                <!-- Documentos Necessários -->
+                                <!-- Documentos e Informações Adicionais -->
                                 <div class="mb-4">
-                                    <h5 class="text-primary mb-3"><i class="fas fa-file-alt me-2"></i>Documentos Necessários</h5>
+                                    <h5 class="text-primary mb-3"><i class="fas fa-file-alt me-2"></i>Informações Adicionais</h5>
                                     <div class="row">
                                         <div class="col-md-6 mb-3">
                                             <label for="rg" class="form-label">RG</label>
                                             <input type="text" class="form-control form-control-lg" id="rg" name="rg" placeholder="Número do RG">
                                         </div>
                                         <div class="col-md-6 mb-3">
-                                            <label for="estado-civil" class="form-label">Estado Civil</label>
-                                            <select class="form-select form-select-lg" id="estado-civil" name="estado_civil">
-                                                <option value="">Selecione...</option>
-                                                <option value="solteiro">Solteiro(a)</option>
-                                                <option value="casado">Casado(a)</option>
-                                                <option value="divorciado">Divorciado(a)</option>
-                                                <option value="viuvo">Viúvo(a)</option>
-                                            </select>
+                                            <label for="profissao" class="form-label">Profissão <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control form-control-lg" id="profissao" name="profissao" required>
                                         </div>
                                     </div>
                                     <div class="mb-3">
-                                        <label for="endereco" class="form-label">Endereço Completo</label>
-                                        <textarea class="form-control" id="endereco" name="endereco" rows="3" placeholder="Rua, número, bairro, cidade, CEP..."></textarea>
+                                        <label for="endereco" class="form-label">Endereço Completo <span class="text-danger">*</span></label>
+                                        <textarea class="form-control" id="endereco" name="endereco" rows="3" 
+                                                  placeholder="Rua, número, bairro, cidade, CEP..." required><?php echo htmlspecialchars($current_user['address'] ?? ''); ?></textarea>
                                     </div>
                                 </div>
 
@@ -164,34 +332,62 @@ $flash = getFlashMessage();
                                     <h5 class="text-primary mb-3"><i class="fas fa-dollar-sign me-2"></i>Informações Financeiras</h5>
                                     <div class="row">
                                         <div class="col-md-6 mb-3">
-                                            <label for="renda" class="form-label">Renda Mensal</label>
-                                            <input type="text" class="form-control form-control-lg" id="renda" name="renda" placeholder="R$ 0,00">
+                                            <label for="renda" class="form-label">Renda Mensal Bruta <span class="text-danger">*</span></label>
+                                            <input type="number" class="form-control form-control-lg" id="renda" name="renda" 
+                                                   step="0.01" min="0" placeholder="5000.00" required>
                                         </div>
                                         <div class="col-md-6 mb-3">
-                                            <label for="profissao" class="form-label">Profissão</label>
-                                            <input type="text" class="form-control form-control-lg" id="profissao" name="profissao">
+                                            <label for="valor_imovel" class="form-label">Valor do Imóvel Desejado <span class="text-danger">*</span></label>
+                                            <input type="number" class="form-control form-control-lg" id="valor_imovel" name="valor_imovel" 
+                                                   step="0.01" min="0" placeholder="200000.00" required>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="valor_entrada" class="form-label">Valor da Entrada</label>
+                                            <input type="number" class="form-control form-control-lg" id="valor_entrada" name="valor_entrada" 
+                                                   step="0.01" min="0" placeholder="40000.00">
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="forma_pagamento" class="form-label">Forma de Pagamento <span class="text-danger">*</span></label>
+                                            <select class="form-select form-select-lg" id="forma_pagamento" name="forma_pagamento" required>
+                                                <option value="">Selecione...</option>
+                                                <option value="financing">Financiamento Bancário</option>
+                                                <option value="cash">À Vista</option>
+                                                <option value="mixed">Misto (Entrada + Financiamento)</option>
+                                            </select>
                                         </div>
                                     </div>
                                 </div>
 
+                                <!-- Observações -->
+                                <div class="mb-4">
+                                    <label for="observacoes" class="form-label">Observações Adicionais</label>
+                                    <textarea class="form-control" id="observacoes" name="observacoes" rows="3" 
+                                              placeholder="Descreva suas preferências, necessidades especiais ou outras informações relevantes..."></textarea>
+                                </div>
+
                                 <!-- Lista de Documentos Required -->
                                 <div class="mb-4">
-                                    <h5 class="text-info mb-3"><i class="fas fa-clipboard-list me-2"></i>Documentos Obrigatórios</h5>
+                                    <h5 class="text-info mb-3"><i class="fas fa-clipboard-list me-2"></i>Documentos Necessários</h5>
                                     <div class="alert alert-info">
+                                        <p><strong>Você precisará apresentar os seguintes documentos na imobiliária:</strong></p>
                                         <ul class="mb-0">
-                                            <li>Declaração de Imposto de Renda (3 últimos anos)</li>
+                                            <li>RG e CPF (originais e cópias)</li>
+                                            <li>Comprovante de renda (3 últimos holerites)</li>
+                                            <li>Declaração de Imposto de Renda (2 últimos anos)</li>
                                             <li>Comprovante de residência atualizado</li>
-                                            <li>Comprovantes de renda (holerites, extratos bancários)</li>
                                             <li>Certidão de estado civil</li>
                                             <li>Certidão negativa do SPC/SERASA</li>
+                                            <li>Extratos bancários (3 últimos meses)</li>
                                         </ul>
                                     </div>
                                 </div>
 
                                 <!-- Botões -->
                                 <div class="d-flex justify-content-center align-items-center gap-3 mt-4">
-                                    <button type="submit" class="btn btn-primary btn-lg px-5">
-                                        <i class="fas fa-paper-plane me-2"></i>Enviar Solicitação
+                                    <button type="submit" class="btn btn-success btn-lg px-5">
+                                        <i class="fas fa-home me-2"></i>Solicitar Compra
                                     </button>
                                     <button type="reset" class="btn btn-outline-secondary btn-lg px-5">
                                         <i class="fas fa-redo me-2"></i>Limpar Formulário
@@ -213,5 +409,42 @@ $flash = getFlashMessage();
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/SimpleLightbox/2.1.0/simpleLightbox.min.js"></script>
     <script src="js/scripts.js"></script>
+    
+    <script>
+        // Função para atualizar o preço do imóvel automaticamente
+        function updatePropertyPrice() {
+            const propertySelect = document.getElementById('property_id');
+            const priceInput = document.getElementById('valor_imovel');
+            
+            if (propertySelect.value) {
+                const selectedOption = propertySelect.options[propertySelect.selectedIndex];
+                const price = selectedOption.getAttribute('data-price');
+                if (price) {
+                    priceInput.value = parseFloat(price).toFixed(2);
+                }
+            } else {
+                priceInput.value = '';
+            }
+        }
+
+        // Verificar se há mensagem de sucesso e limpar formulário
+        document.addEventListener('DOMContentLoaded', function() {
+            const alert = document.querySelector('.alert-success');
+            if (alert) {
+                // Limpar o formulário após sucesso
+                const form = document.getElementById('compraForm');
+                if (form) {
+                    // Resetar campos que não são pré-preenchidos
+                    const fieldsToReset = ['property_id', 'broker_id', 'rg', 'profissao', 'renda', 'valor_imovel', 'valor_entrada', 'forma_pagamento', 'observacoes'];
+                    fieldsToReset.forEach(fieldName => {
+                        const field = document.getElementById(fieldName);
+                        if (field) {
+                            field.value = '';
+                        }
+                    });
+                }
+            }
+        });
+    </script>
 </body>
 </html>

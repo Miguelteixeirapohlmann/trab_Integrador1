@@ -6,6 +6,8 @@ DROP TABLE IF EXISTS reviews;
 DROP TABLE IF EXISTS contact_messages;
 DROP TABLE IF EXISTS property_visits;
 DROP TABLE IF EXISTS user_favorites;
+DROP TABLE IF EXISTS property_rentals;
+DROP TABLE IF EXISTS property_purchases;
 DROP TABLE IF EXISTS property_images;
 DROP TABLE IF EXISTS properties;
 DROP TABLE IF EXISTS brokers;
@@ -156,6 +158,156 @@ CREATE TABLE user_favorites (
     UNIQUE KEY unique_user_property (user_id, property_id)
 );
 
+-- Tabela de compras/vendas de imóveis
+CREATE TABLE property_purchases (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    property_id INT NOT NULL,
+    buyer_id INT NOT NULL,
+    seller_id INT NOT NULL,
+    broker_id INT NOT NULL,
+    purchase_price DECIMAL(15,2) NOT NULL,
+    down_payment DECIMAL(15,2) NULL,
+    financing_amount DECIMAL(15,2) NULL,
+    financing_bank VARCHAR(255) NULL,
+    payment_method ENUM('cash', 'financing', 'mixed') DEFAULT 'financing',
+    contract_date DATE NOT NULL,
+    completion_date DATE NULL,
+    status ENUM('pending', 'approved', 'contracted', 'completed', 'cancelled') DEFAULT 'pending',
+    
+    -- Informações do comprador
+    buyer_income DECIMAL(12,2) NULL,
+    buyer_profession VARCHAR(255) NULL,
+    buyer_documents JSON NULL,
+    
+    -- Informações contratuais
+    contract_terms TEXT NULL,
+    special_conditions TEXT NULL,
+    commission_rate DECIMAL(5,2) DEFAULT 3.00,
+    commission_amount DECIMAL(12,2) NULL,
+    
+    -- Documentação
+    contract_file VARCHAR(500) NULL,
+    deed_file VARCHAR(500) NULL,
+    other_documents JSON NULL,
+    
+    -- Observações e histórico
+    notes TEXT NULL,
+    admin_notes TEXT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    
+    FOREIGN KEY (property_id) REFERENCES properties(id) ON DELETE CASCADE,
+    FOREIGN KEY (buyer_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (seller_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (broker_id) REFERENCES brokers(id) ON DELETE CASCADE,
+    INDEX idx_buyer_id (buyer_id),
+    INDEX idx_seller_id (seller_id),
+    INDEX idx_broker_id (broker_id),
+    INDEX idx_status (status),
+    INDEX idx_contract_date (contract_date)
+);
+
+-- Tabela de aluguéis de imóveis
+CREATE TABLE property_rentals (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    property_id INT NOT NULL,
+    tenant_id INT NOT NULL,
+    landlord_id INT NOT NULL,
+    broker_id INT NOT NULL,
+    monthly_rent DECIMAL(12,2) NOT NULL,
+    security_deposit DECIMAL(12,2) NOT NULL,
+    admin_fee DECIMAL(12,2) NULL,
+    rental_period_months INT NOT NULL DEFAULT 12,
+    start_date DATE NOT NULL,
+    end_date DATE NOT NULL,
+    status ENUM('pending', 'active', 'expired', 'terminated', 'cancelled') DEFAULT 'pending',
+    
+    -- Informações do inquilino
+    tenant_income DECIMAL(12,2) NULL,
+    tenant_profession VARCHAR(255) NULL,
+    tenant_references JSON NULL,
+    tenant_documents JSON NULL,
+    
+    -- Termos do contrato
+    contract_terms TEXT NULL,
+    special_conditions TEXT NULL,
+    pets_allowed BOOLEAN DEFAULT FALSE,
+    smoking_allowed BOOLEAN DEFAULT FALSE,
+    subletting_allowed BOOLEAN DEFAULT FALSE,
+    
+    -- Informações financeiras
+    commission_rate DECIMAL(5,2) DEFAULT 8.33,
+    commission_amount DECIMAL(12,2) NULL,
+    late_fee_rate DECIMAL(5,2) DEFAULT 2.00,
+    
+    -- Documentação
+    contract_file VARCHAR(500) NULL,
+    inventory_file VARCHAR(500) NULL,
+    other_documents JSON NULL,
+    
+    -- Renovação automática
+    auto_renewal BOOLEAN DEFAULT FALSE,
+    renewal_terms TEXT NULL,
+    
+    -- Observações e histórico
+    notes TEXT NULL,
+    admin_notes TEXT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    
+    FOREIGN KEY (property_id) REFERENCES properties(id) ON DELETE CASCADE,
+    FOREIGN KEY (tenant_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (landlord_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (broker_id) REFERENCES brokers(id) ON DELETE CASCADE,
+    INDEX idx_tenant_id (tenant_id),
+    INDEX idx_landlord_id (landlord_id),
+    INDEX idx_broker_id (broker_id),
+    INDEX idx_status (status),
+    INDEX idx_start_date (start_date),
+    INDEX idx_end_date (end_date)
+);
+
+-- Tabela de pagamentos (para aluguéis e compras)
+CREATE TABLE payments (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    rental_id INT NULL,
+    purchase_id INT NULL,
+    payer_id INT NOT NULL,
+    amount DECIMAL(12,2) NOT NULL,
+    payment_type ENUM('rent', 'security_deposit', 'admin_fee', 'down_payment', 'installment', 'commission', 'late_fee', 'other') NOT NULL,
+    payment_method ENUM('cash', 'bank_transfer', 'credit_card', 'debit_card', 'check', 'pix') NOT NULL,
+    due_date DATE NOT NULL,
+    payment_date DATE NULL,
+    status ENUM('pending', 'paid', 'overdue', 'cancelled', 'refunded') DEFAULT 'pending',
+    
+    -- Informações da transação
+    transaction_id VARCHAR(255) NULL,
+    payment_reference VARCHAR(255) NULL,
+    bank_slip_code VARCHAR(255) NULL,
+    
+    -- Observações
+    description TEXT NULL,
+    notes TEXT NULL,
+    admin_notes TEXT NULL,
+    
+    -- Comprovantes
+    receipt_file VARCHAR(500) NULL,
+    
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    
+    FOREIGN KEY (rental_id) REFERENCES property_rentals(id) ON DELETE CASCADE,
+    FOREIGN KEY (purchase_id) REFERENCES property_purchases(id) ON DELETE CASCADE,
+    FOREIGN KEY (payer_id) REFERENCES users(id) ON DELETE CASCADE,
+    INDEX idx_rental_id (rental_id),
+    INDEX idx_purchase_id (purchase_id),
+    INDEX idx_payer_id (payer_id),
+    INDEX idx_due_date (due_date),
+    INDEX idx_payment_date (payment_date),
+    INDEX idx_status (status),
+    INDEX idx_payment_type (payment_type)
+);
+
 -- Tabela de agendamentos de visitas
 CREATE TABLE property_visits (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -261,8 +413,51 @@ VALUES
 (4, 'CRECI-11111', 'Costa Negócios Imobiliários', '["Casas de luxo", "Terrenos"]', 12, '["Português"]');
 
 -- Inserir algumas propriedades de exemplo
-INSERT INTO properties (broker_id, title, description, property_type, transaction_type, price, area_sqm, bedrooms, bathrooms, garage_spaces, address, neighborhood, city, state, zip_code, status) 
+INSERT INTO properties (broker_id, title, description, property_type, transaction_type, price, rent_price, area_sqm, bedrooms, bathrooms, garage_spaces, address, neighborhood, city, state, zip_code, status) 
 VALUES 
-(1, 'Casa Jardim das Flores', 'Bela casa em localização privilegiada com amplo jardim e acabamentos de primeira qualidade.', 'house', 'sale', 220000.00, 180.50, 3, 2, 2, 'Rua das Flores, 123', 'Jardim das Flores', 'Porto Alegre', 'RS', '91234-567', 'active'),
-(2, 'Apartamento Vista Alegre', 'Apartamento moderno com vista panorâmica, próximo ao centro da cidade.', 'apartment', 'both', 310000.00, 120.00, 2, 2, 1, 'Av. Vista Alegre, 456', 'Vista Alegre', 'Porto Alegre', 'RS', '91345-678', 'active'),
-(3, 'Casa Bela Vista', 'Casa espaçosa ideal para famílias, com quintal amplo e churrasqueira.', 'house', 'sale', 199000.00, 200.00, 4, 3, 2, 'Rua Bela Vista, 789', 'Bela Vista', 'Canoas', 'RS', '92123-456', 'active');
+(1, 'Casa Jardim das Flores', 'Bela casa em localização privilegiada com amplo jardim e acabamentos de primeira qualidade.', 'house', 'sale', 220000.00, NULL, 180.50, 3, 2, 2, 'Rua das Flores, 123', 'Jardim das Flores', 'Porto Alegre', 'RS', '91234-567', 'active'),
+(2, 'Apartamento Vista Alegre', 'Apartamento moderno com vista panorâmica, próximo ao centro da cidade.', 'apartment', 'both', 310000.00, 2500.00, 120.00, 2, 2, 1, 'Av. Vista Alegre, 456', 'Vista Alegre', 'Porto Alegre', 'RS', '91345-678', 'active'),
+(3, 'Casa Bela Vista', 'Casa espaçosa ideal para famílias, com quintal amplo e churrasqueira.', 'house', 'sale', 199000.00, NULL, 200.00, 4, 3, 2, 'Rua Bela Vista, 789', 'Bela Vista', 'Canoas', 'RS', '92123-456', 'active'),
+(1, 'Casa para Aluguel Centro', 'Casa disponível para locação no centro da cidade, totalmente mobiliada.', 'house', 'rent', NULL, 1800.00, 140.00, 3, 2, 1, 'Rua do Centro, 321', 'Centro', 'Porto Alegre', 'RS', '90000-000', 'active'),
+(2, 'Apartamento Cobertura', 'Cobertura duplex com terraço e vista panorâmica da cidade.', 'apartment', 'sale', 450000.00, NULL, 250.00, 4, 3, 2, 'Rua dos Altos, 987', 'Moinhos de Vento', 'Porto Alegre', 'RS', '91000-000', 'active');
+
+-- Inserir alguns usuários clientes para os exemplos
+INSERT INTO users (first_name, last_name, email, password, user_type, status, email_verified, phone, cpf) 
+VALUES 
+('Carlos', 'Oliveira', 'carlos.oliveira@gmail.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'user', 'active', TRUE, '51987654321', '123.456.789-01'),
+('Ana', 'Ferreira', 'ana.ferreira@gmail.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'user', 'active', TRUE, '51876543210', '234.567.890-12'),
+('Roberto', 'Lima', 'roberto.lima@gmail.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'user', 'active', TRUE, '51765432109', '345.678.901-23'),
+('Patrícia', 'Souza', 'patricia.souza@gmail.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'user', 'active', TRUE, '51654321098', '456.789.012-34');
+
+-- Inserir exemplos de compras
+INSERT INTO property_purchases (property_id, buyer_id, seller_id, broker_id, purchase_price, down_payment, financing_amount, financing_bank, payment_method, contract_date, status, buyer_income, buyer_profession, commission_rate, commission_amount, contract_terms, notes) 
+VALUES 
+(1, 5, 2, 1, 220000.00, 44000.00, 176000.00, 'Banco do Brasil', 'financing', '2024-01-15', 'completed', 8000.00, 'Engenheiro', 3.00, 6600.00, 'Contrato de compra e venda com financiamento habitacional.', 'Primeira casa do cliente, processo tranquilo.'),
+(3, 6, 4, 3, 199000.00, 60000.00, 139000.00, 'Caixa Econômica Federal', 'financing', '2024-02-20', 'contracted', 7500.00, 'Professora', 3.00, 5970.00, 'Compra à vista com financiamento complementar.', 'Cliente muito satisfeita com a escolha.'),
+(5, 7, 1, 2, 450000.00, 135000.00, 315000.00, 'Banco Santander', 'financing', '2024-03-10', 'pending', 15000.00, 'Médico', 3.50, 15750.00, 'Cobertura de luxo, financiamento especial.', 'Aguardando aprovação final do banco.');
+
+-- Inserir exemplos de aluguéis
+INSERT INTO property_rentals (property_id, tenant_id, landlord_id, broker_id, monthly_rent, security_deposit, admin_fee, rental_period_months, start_date, end_date, status, tenant_income, tenant_profession, commission_rate, commission_amount, contract_terms, pets_allowed, notes) 
+VALUES 
+(2, 8, 3, 2, 2500.00, 5000.00, 500.00, 12, '2024-01-01', '2024-12-31', 'active', 6000.00, 'Analista de Sistemas', 8.33, 2500.00, 'Contrato de locação residencial de 12 meses.', TRUE, 'Inquilino pontual, permite animais pequenos.'),
+(4, 5, 2, 1, 1800.00, 3600.00, 360.00, 24, '2024-02-15', '2026-02-14', 'active', 4500.00, 'Engenheiro', 8.33, 1500.00, 'Locação por 24 meses com desconto no aluguel.', FALSE, 'Casa mobiliada, contrato longo prazo.');
+
+-- Inserir exemplos de pagamentos
+INSERT INTO payments (rental_id, purchase_id, payer_id, amount, payment_type, payment_method, due_date, payment_date, status, description, transaction_id) 
+VALUES 
+-- Pagamentos de aluguel
+(1, NULL, 8, 2500.00, 'rent', 'pix', '2024-01-05', '2024-01-03', 'paid', 'Aluguel Janeiro/2024 - Apartamento Vista Alegre', 'PIX20240103001'),
+(1, NULL, 8, 2500.00, 'rent', 'pix', '2024-02-05', '2024-02-02', 'paid', 'Aluguel Fevereiro/2024 - Apartamento Vista Alegre', 'PIX20240202001'),
+(1, NULL, 8, 2500.00, 'rent', 'bank_transfer', '2024-03-05', NULL, 'pending', 'Aluguel Março/2024 - Apartamento Vista Alegre', NULL),
+(2, NULL, 5, 1800.00, 'rent', 'bank_transfer', '2024-02-15', '2024-02-14', 'paid', 'Aluguel Fevereiro/2024 - Casa Centro', 'TED20240214001'),
+(2, NULL, 5, 1800.00, 'rent', 'bank_transfer', '2024-03-15', NULL, 'pending', 'Aluguel Março/2024 - Casa Centro', NULL),
+
+-- Pagamentos de compra
+(NULL, 1, 5, 44000.00, 'down_payment', 'bank_transfer', '2024-01-15', '2024-01-15', 'paid', 'Entrada - Casa Jardim das Flores', 'TED20240115001'),
+(NULL, 1, 5, 1500.00, 'installment', 'bank_transfer', '2024-02-15', '2024-02-15', 'paid', 'Parcela 1/120 - Financiamento Casa Jardim', 'DEB20240215001'),
+(NULL, 2, 6, 60000.00, 'down_payment', 'bank_transfer', '2024-02-20', '2024-02-20', 'paid', 'Entrada - Casa Bela Vista', 'TED20240220001'),
+(NULL, 3, 7, 135000.00, 'down_payment', 'bank_transfer', '2024-03-10', NULL, 'pending', 'Entrada - Cobertura Moinhos de Vento', NULL),
+
+-- Comissões
+(NULL, 1, 1, 6600.00, 'commission', 'bank_transfer', '2024-01-30', '2024-01-30', 'paid', 'Comissão venda Casa Jardim das Flores', 'COM20240130001'),
+(1, NULL, 2, 2500.00, 'commission', 'bank_transfer', '2024-01-10', '2024-01-10', 'paid', 'Comissão locação Apartamento Vista Alegre', 'COM20240110001');
