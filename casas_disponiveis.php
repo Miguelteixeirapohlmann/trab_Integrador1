@@ -47,7 +47,7 @@ $properties = [];
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="css/styles.css" rel="stylesheet">
+    <link href="css/styles.css?v=20250829" rel="stylesheet">
     <style>
         .hero-section {
             background: linear-gradient(135deg, #ff7b00 0%, #ff9500 100%);
@@ -78,18 +78,12 @@ $properties = [];
             border-radius: 15px;
             overflow: hidden;
             box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-            transition: all 0.3s ease;
             height: 100%;
             background: white;
         }
         
-        .property-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
-        }
-        
-        .property-card:hover .carousel-img-fixed {
-            transform: scale(1.05);
+        .property-card .carousel-img-fixed {
+            transition: transform 0.3s ease;
         }
         
         .card-body {
@@ -166,20 +160,63 @@ $properties = [];
         
         .carousel-control-prev,
         .carousel-control-next {
-            width: 40px;
-            height: 40px;
-            background-color: rgba(0,0,0,0.5);
-            border-radius: 50%;
-            top: 50%;
-            transform: translateY(-50%);
+            width: 45px !important;
+            height: 45px !important;
+            background-color: rgba(0,0,0,0.7) !important;
+            border-radius: 50% !important;
+            top: 50% !important;
+            transform: translateY(-50%) !important;
+            border: none !important;
+            opacity: 0.8 !important;
+            transition: all 0.3s ease !important;
+        }
+        
+        .carousel-control-prev:hover,
+        .carousel-control-next:hover {
+            background-color: rgba(255, 123, 0, 0.9) !important;
+            opacity: 1 !important;
         }
         
         .carousel-control-prev {
-            left: 10px;
+            left: 10px !important;
         }
         
         .carousel-control-next {
-            right: 10px;
+            right: 10px !important;
+        }
+        
+        .carousel-control-prev-icon,
+        .carousel-control-next-icon {
+            width: 20px !important;
+            height: 20px !important;
+        }
+        
+        .carousel-indicators {
+            bottom: 15px !important;
+            margin-bottom: 0 !important;
+            z-index: 10 !important;
+        }
+        
+        .carousel-indicators button {
+            width: 12px !important;
+            height: 12px !important;
+            border-radius: 50% !important;
+            margin: 0 4px !important;
+            border: 2px solid rgba(255, 255, 255, 0.8) !important;
+            background-color: transparent !important;
+            opacity: 0.7 !important;
+            transition: all 0.3s ease !important;
+        }
+        
+        .carousel-indicators button.active {
+            background-color: #ff7b00 !important;
+            border-color: #ff7b00 !important;
+            opacity: 1 !important;
+        }
+        
+        .carousel-indicators button:hover {
+            background-color: rgba(255, 123, 0, 0.7) !important;
+            opacity: 1 !important;
         }
         
         .section-title {
@@ -204,7 +241,7 @@ $properties = [];
         
         @media (max-width: 768px) {
             .carousel-img-fixed {
-                height: 200px;
+                height: 300px;
             }
             
             .hero-section {
@@ -270,6 +307,12 @@ $properties = [];
                         <label class="form-label fw-bold">Tipo de Negócio:</label>
                         <div class="d-flex gap-4 justify-content-center">
                             <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="tipo" id="todos" value="todos" <?php if(!isset($_GET['tipo']) || $_GET['tipo']==='todos') echo 'checked'; ?>>
+                                <label class="form-check-label fw-semibold" for="todos">
+                                    Todos
+                                </label>
+                            </div>
+                            <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="radio" name="tipo" id="aluguel" value="aluguel" <?php if(isset($_GET['tipo']) && $_GET['tipo']==='aluguel') echo 'checked'; ?>>
                                 <label class="form-check-label fw-semibold" for="aluguel">
                                     Aluguel
@@ -325,7 +368,7 @@ $properties = [];
             // Array de casas
             $casas = [
                 [
-                    'imgs' => ['imgs/Casa1/Casa1.1.jpg', 'imgs/Casa1/Casa1.0.jpg','imgs/Casa1/Casa1.2.jpg','imgs/Casa1/Casa1.3.jpg','imgs/Casa1/Casa1.4.jpg','imgs/Casa1/Casa1.5.jpg','imgs/Casa1/Casa1.6.jpg','imgs/Casa1/Casa1.7.jpg','imgs/Casa1/Casa1.8.jpg','imgs/Casa1/Casa1.9.jpg'],
+                    'imgs' => ['imgs/Casa1/Casa1.0.jpg', 'imgs/Casa1/Casa1.1.jpg', 'imgs/Casa1/Casa1.2.jpg', 'imgs/Casa1/Casa1.3.jpg', 'imgs/Casa1/Casa1.4.jpg', 'imgs/Casa1/Casa1.5.jpg', 'imgs/Casa1/Casa1.6.jpg', 'imgs/Casa1/Casa1.7.jpg', 'imgs/Casa1/Casa1.8.jpg', 'imgs/Casa1/Casa1.9.jpg'],
                     'titulo' => 'Casa em Santo Antônio da Patrulha',
                     'venda' => 'R$ 5.200.000,00',
                     'aluguel' => 'R$ 1.000.000,00 ao Mês',
@@ -346,7 +389,7 @@ $properties = [];
                     'link' => 'Casas/Casa3.php'
                 ],
                 [
-                    'imgs' => ['imgs/Casa4/Casa4.4.jpg', 'imgs/Casa4/Casa4.2.jpg', 'imgs/Casa4/Casa4.0.jpg', 'imgs/Casa4/Casa4.3.jpg', 'imgs/Casa4/Casa4.5.jpg', 'imgs/Casa4/Casa4.6.jpg', 'imgs/Casa4/Casa4.7.jpg', 'imgs/Casa4/Casa4.8.jpg', 'imgs/Casa4/Casa4.9.jpg'],
+                    'imgs' => ['imgs/Casa4/Casa4.0.jpg', 'imgs/Casa4/Casa4.2.jpg', 'imgs/Casa4/Casa4.3.jpg', 'imgs/Casa4/Casa4.4.jpg', 'imgs/Casa4/Casa4.5.jpg', 'imgs/Casa4/Casa4.6.jpg', 'imgs/Casa4/Casa4.7.jpg', 'imgs/Casa4/Casa4.8.jpg', 'imgs/Casa4/Casa4.9.jpg'],
                     'titulo' => 'Casa em Taquara Rua Mundo Novo',
                     'venda' => 'R$ 170.000,00',
                     'aluguel' => 'R$ 1.700,00 ao Mês',
@@ -367,7 +410,7 @@ $properties = [];
                     'link' => 'Casas/Casa6.php'
                 ],
                 [
-                    'imgs' => ['imgs/Casa7/Casa7.0.jpg', 'imgs/Casa7/Casa7.1.jpg', 'imgs/Casa7/Casa7.2.jpg', 'imgs/Casa7/Casa7.3.jpg', 'imgs/Casa7/Casa7.4.jpg'],
+                    'imgs' => ['imgs/Casa7/Casa7.0.jpg', 'imgs/Casa7/Casa7.1.jpg', 'imgs/Casa7/Casa7.2.jpg', 'imgs/Casa7/Casa7.3.jpg', 'imgs/Casa7/Casa7.4.jpg', 'imgs/Casa7/Casa7.5.jpg', 'imgs/Casa7/Casa7.6.jpg', 'imgs/Casa7/Casa7.7.jpg', 'imgs/Casa7/Casa7.8.jpg', 'imgs/Casa7/Casa7.9.jpg', 'imgs/Casa7/Casa7.10.jpg', 'imgs/Casa7/Casa7.11.jpg', 'imgs/Casa7/Casa7.12.jpg', 'imgs/Casa7/Casa7.13.jpg', 'imgs/Casa7/Casa7.14.jpg', 'imgs/Casa7/Casa7.15.jpg'],
                     'titulo' => 'Casa em Taquara Santa Terezinha',
                     'venda' => 'R$ 650.000,00',
                     'aluguel' => 'R$ 1.500,00 ao Mês',
@@ -381,7 +424,7 @@ $properties = [];
                     'link' => 'Casas/Casa8.php'
                 ],
                 [
-                    'imgs' => ['imgs/casa9/Casa9.0.jpg', 'imgs/casa9/Casa9.1.jpg', 'imgs/casa9/Casa9.2.jpg', 'imgs/casa9/Casa9.3.jpg', 'imgs/casa9/Casa9.4.jpg'],
+                    'imgs' => ['imgs/Casa9/Casa9.0.jpg', 'imgs/Casa9/Casa9.1.jpg', 'imgs/Casa9/Casa9.2.jpg', 'imgs/Casa9/Casa9.3.jpg', 'imgs/Casa9/Casa9.4.jpg', 'imgs/Casa9/Casa9.5.jpg', 'imgs/Casa9/Casa9.6.jpg', 'imgs/Casa9/Casa9.7.jpg', 'imgs/Casa9/Casa9.8.jpg', 'imgs/Casa9/Casa9.9.jpg'],
                     'titulo' => 'Casa em Taquara - São Francisco',
                     'venda' => 'R$ 450.000,00',
                     'aluguel' => null,
@@ -389,17 +432,33 @@ $properties = [];
                 ],
             ];
 
-            $tipo = $_GET['tipo'] ?? 'ambos';
+            $tipo = $_GET['tipo'] ?? 'todos';
             $casas_filtradas = array_filter($casas, function($casa) use ($tipo) {
                 if ($tipo === 'aluguel') {
-                    return !empty($casa['aluguel']) && is_null($casa['venda']);
+                    // Só casas que têm aluguel e NÃO têm venda
+                    return !is_null($casa['aluguel']) && is_null($casa['venda']);
                 } elseif ($tipo === 'venda') {
-                    return !empty($casa['venda']) && is_null($casa['aluguel']);
+                    // Só casas que têm venda e NÃO têm aluguel
+                    return !is_null($casa['venda']) && is_null($casa['aluguel']);
                 } elseif ($tipo === 'ambos') {
-                    return !empty($casa['aluguel']) && !empty($casa['venda']);
+                    // Casas que têm TANTO venda quanto aluguel
+                    return !is_null($casa['aluguel']) && !is_null($casa['venda']);
                 }
+                // Para 'todos' ou qualquer outro valor, mostrar todas as casas
                 return true;
             });
+            ?>
+            
+            <!-- Debug das casas filtradas -->
+            <?php 
+            echo "<!-- Debug: Tipo de filtro = " . $tipo . " -->\n";
+            echo "<!-- Debug: Total de casas filtradas = " . count($casas_filtradas) . " -->\n";
+            foreach($casas_filtradas as $index => $casa) {
+                echo "<!-- Debug: Casa " . $index . " = " . $casa['titulo'] . " com " . count($casa['imgs']) . " imagens -->\n";
+                foreach($casa['imgs'] as $imgIndex => $img) {
+                    echo "<!--   Imagem " . $imgIndex . ": " . $img . " -->\n";
+                }
+            }
             ?>
             
             <?php if (empty($casas_filtradas)): ?>
@@ -412,27 +471,42 @@ $properties = [];
                 </div>
             <?php else: ?>
                 <div class="row g-4">
-                    <?php foreach ($casas_filtradas as $i => $casa): ?>
+                    <?php 
+                    $carouselId = 0; // Contador único para evitar conflitos de ID
+                    foreach ($casas_filtradas as $casa): 
+                    ?>
                         <div class="col-lg-4 col-md-6">
                             <div class="card property-card">
                                 <div class="position-relative overflow-hidden">
-                                    <div id="carouselCasa<?php echo $i; ?>" class="carousel slide" data-bs-interval="false">
+                                    <!-- Carrossel sempre ativo para todas as casas -->
+                                    <div id="carouselCasa<?php echo $carouselId; ?>" class="carousel slide" data-bs-interval="false" data-bs-touch="false" data-bs-keyboard="false">
                                         <div class="carousel-inner">
                                             <?php foreach ($casa['imgs'] as $j => $img): ?>
                                                 <div class="carousel-item<?php if ($j === 0) echo ' active'; ?>">
-                                                    <img src="<?php echo $img; ?>" alt="<?php echo htmlspecialchars($casa['titulo']); ?>" class="d-block w-100 carousel-img-fixed">
+                                                    <img src="<?php echo $img; ?>" alt="<?php echo htmlspecialchars($casa['titulo']); ?> - Imagem <?php echo $j + 1; ?>" class="d-block w-100 carousel-img-fixed" loading="lazy" 
+                                                         onerror="console.log('Erro: <?php echo $img; ?>')" 
+                                                         onload="console.log('OK: <?php echo $img; ?>')">
                                                 </div>
                                             <?php endforeach; ?>
                                         </div>
+                                        
                                         <?php if (count($casa['imgs']) > 1): ?>
-                                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselCasa<?php echo $i; ?>" data-bs-slide="prev">
+                                            <!-- Controles de navegação -->
+                                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselCasa<?php echo $carouselId; ?>" data-bs-slide="prev">
                                                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                                                 <span class="visually-hidden">Anterior</span>
                                             </button>
-                                            <button class="carousel-control-next" type="button" data-bs-target="#carouselCasa<?php echo $i; ?>" data-bs-slide="next">
+                                            <button class="carousel-control-next" type="button" data-bs-target="#carouselCasa<?php echo $carouselId; ?>" data-bs-slide="next">
                                                 <span class="carousel-control-next-icon" aria-hidden="true"></span>
                                                 <span class="visually-hidden">Próximo</span>
                                             </button>
+                                            
+                                            <!-- Indicadores -->
+                                            <div class="carousel-indicators">
+                                                <?php foreach ($casa['imgs'] as $j => $img): ?>
+                                                    <button type="button" data-bs-target="#carouselCasa<?php echo $carouselId; ?>" data-bs-slide-to="<?php echo $j; ?>" <?php if ($j === 0) echo 'class="active" aria-current="true"'; ?> aria-label="Slide <?php echo $j + 1; ?>"></button>
+                                                <?php endforeach; ?>
+                                            </div>
                                         <?php endif; ?>
                                     </div>
                                     
@@ -482,7 +556,9 @@ $properties = [];
                                 </div>
                             </div>
                         </div>
-                    <?php endforeach; ?>
+                    <?php 
+                    $carouselId++; // Incrementar o ID único
+                    endforeach; ?>
                 </div>
             <?php endif; ?>
         </div>
@@ -497,5 +573,25 @@ $properties = [];
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="js/scripts.js"></script>
+    
+    <script>
+        // JavaScript simplificado - deixar Bootstrap gerenciar os carrosséis
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🔄 Casas Disponíveis: Página carregada');
+            
+            setTimeout(function() {
+                const carousels = document.querySelectorAll('.carousel');
+                console.log('📸 Total de carrosséis encontrados: ' + carousels.length);
+                
+                carousels.forEach(function(carousel, index) {
+                    const slides = carousel.querySelectorAll('.carousel-item');
+                    const carouselId = carousel.id;
+                    console.log('🎠 Carrossel ' + index + ' (' + carouselId + '): ' + slides.length + ' slides');
+                });
+                
+                console.log('✅ Carrosséis prontos para uso! Clique nas setas ou indicadores.');
+            }, 500);
+        });
+    </script>
 </body>
 </html>

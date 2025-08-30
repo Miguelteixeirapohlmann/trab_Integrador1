@@ -5,8 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Casa Jardim das Flores</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
-    <link href="../css/styles.css" rel="stylesheet">
+    <link href="../css/styles.css?v=20250829" rel="stylesheet">
     <style>
+        /* Ajuste para navbar fixa sem espaço em branco extra */
+        body { padding-top: 72px; }
         .navbar {
             background-color: #000000 !important;
         }
@@ -17,6 +19,10 @@
         .navbar .nav-link:hover {
             color: #cccccc !important;
         }
+        
+    /* Estilos mínimos para manter a imagem estável */
+    #carouselExampleIndicators .carousel-inner { height: 400px; overflow: hidden; }
+    #carouselExampleIndicators .carousel-item img { width: 100%; height: 400px; object-fit: cover; object-position: center; }
     </style>
 </head>
 <body>
@@ -40,56 +46,86 @@
         </div>
     </nav>
     
-    <div class="container py-5 mt-5">
+    <div class="container py-4">
         <div class="row align-items-center">
             <div class="col-md-6 mb-4 mb-md-0">
-                <!-- Carrossel de Imagens -->
-                <div id="carouselCasa4" class="carousel slide">
+                <!-- Carrossel de Imagens (com indicadores) -->
+                <div id="carouselExampleIndicators" class="carousel slide" data-bs-interval="false" data-bs-touch="false" data-bs-keyboard="false">
+                    <!-- Indicadores -->
                     <div class="carousel-indicators">
-                        <button type="button" data-bs-target="#carouselCasa4" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-                        <button type="button" data-bs-target="#carouselCasa4" data-bs-slide-to="1" aria-label="Slide 2"></button>
-                        <button type="button" data-bs-target="#carouselCasa4" data-bs-slide-to="2" aria-label="Slide 3"></button>
-                        <button type="button" data-bs-target="#carouselCasa4" data-bs-slide-to="3" aria-label="Slide 4"></button>
-                        <button type="button" data-bs-target="#carouselCasa4" data-bs-slide-to="4" aria-label="Slide 5"></button>
-                        <button type="button" data-bs-target="#carouselCasa4" data-bs-slide-to="5" aria-label="Slide 6"></button>
-                        <button type="button" data-bs-target="#carouselCasa4" data-bs-slide-to="6" aria-label="Slide 7"></button>
-                        <button type="button" data-bs-target="#carouselCasa4" data-bs-slide-to="7" aria-label="Slide 8"></button>
-                        <button type="button" data-bs-target="#carouselCasa4" data-bs-slide-to="8" aria-label="Slide 9"></button>
+                        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="3" aria-label="Slide 4"></button>
+                        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="4" aria-label="Slide 5"></button>
+                        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="5" aria-label="Slide 6"></button>
+                        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="6" aria-label="Slide 7"></button>
+                        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="7" aria-label="Slide 8"></button>
+                        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="8" aria-label="Slide 9"></button>
                     </div>
                     <div class="carousel-inner rounded shadow" style="height: 400px; overflow: hidden;">
                         <div class="carousel-item active">
-                            <img src="../imgs/Casa4/Casa4.0.jpg" class="d-block w-100" alt="Casa Jardim das Flores - Foto 1" style="width: 100%; height: 400px; object-fit: cover; object-position: center;">
+                            <img src="../imgs/Casa4/Casa4.0.jpg" class="d-block w-100" alt="Casa Jardim das Flores - Foto 1" 
+                                 style="width: 100%; height: 400px; object-fit: cover; object-position: center;"
+                                 onerror="console.error('Erro ao carregar: Casa4.0.jpg'); this.style.display='none';"
+                                 onload="console.log('Carregada: Casa4.0.jpg');">
                         </div>
                         <div class="carousel-item">
-                            <img src="../imgs/Casa4/Casa4.2.jpg" class="d-block w-100" alt="Casa Jardim das Flores - Foto 2" style="width: 100%; height: 400px; object-fit: cover; object-position: center;">
+                            <img src="../imgs/Casa4/Casa4.2.jpg" class="d-block w-100" alt="Casa Jardim das Flores - Foto 2" 
+                                 style="width: 100%; height: 400px; object-fit: cover; object-position: center;"
+                                 onerror="console.error('Erro ao carregar: Casa4.2.jpg'); this.style.display='none';"
+                                 onload="console.log('Carregada: Casa4.2.jpg');">
                         </div>
                         <div class="carousel-item">
-                            <img src="../imgs/Casa4/Casa4.3.jpg" class="d-block w-100" alt="Casa Jardim das Flores - Foto 3" style="width: 100%; height: 400px; object-fit: cover; object-position: center;">
+                            <img src="../imgs/Casa4/Casa4.3.jpg" class="d-block w-100" alt="Casa Jardim das Flores - Foto 3" 
+                                 style="width: 100%; height: 400px; object-fit: cover; object-position: center;"
+                                 onerror="console.error('Erro ao carregar: Casa4.3.jpg'); this.style.display='none';"
+                                 onload="console.log('Carregada: Casa4.3.jpg');">
                         </div>
                         <div class="carousel-item">
-                            <img src="../imgs/Casa4/Casa4.4.jpg" class="d-block w-100" alt="Casa Jardim das Flores - Foto 4" style="width: 100%; height: 400px; object-fit: cover; object-position: center;">
+                            <img src="../imgs/Casa4/Casa4.4.jpg" class="d-block w-100" alt="Casa Jardim das Flores - Foto 4" 
+                                 style="width: 100%; height: 400px; object-fit: cover; object-position: center;"
+                                 onerror="console.error('Erro ao carregar: Casa4.4.jpg'); this.style.display='none';"
+                                 onload="console.log('Carregada: Casa4.4.jpg');">
                         </div>
                         <div class="carousel-item">
-                            <img src="../imgs/Casa4/Casa4.5.jpg" class="d-block w-100" alt="Casa Jardim das Flores - Foto 5" style="width: 100%; height: 400px; object-fit: cover; object-position: center;">
+                            <img src="../imgs/Casa4/Casa4.5.jpg" class="d-block w-100" alt="Casa Jardim das Flores - Foto 5" 
+                                 style="width: 100%; height: 400px; object-fit: cover; object-position: center;"
+                                 onerror="console.error('Erro ao carregar: Casa4.5.jpg'); this.style.display='none';"
+                                 onload="console.log('Carregada: Casa4.5.jpg');">
                         </div>
                         <div class="carousel-item">
-                            <img src="../imgs/Casa4/Casa4.6.jpg" class="d-block w-100" alt="Casa Jardim das Flores - Foto 6" style="width: 100%; height: 400px; object-fit: cover; object-position: center;">
+                            <img src="../imgs/Casa4/Casa4.6.jpg" class="d-block w-100" alt="Casa Jardim das Flores - Foto 6" 
+                                 style="width: 100%; height: 400px; object-fit: cover; object-position: center;"
+                                 onerror="console.error('Erro ao carregar: Casa4.6.jpg'); this.style.display='none';"
+                                 onload="console.log('Carregada: Casa4.6.jpg');">
                         </div>
                         <div class="carousel-item">
-                            <img src="../imgs/Casa4/Casa4.7.jpg" class="d-block w-100" alt="Casa Jardim das Flores - Foto 7" style="width: 100%; height: 400px; object-fit: cover; object-position: center;">
+                            <img src="../imgs/Casa4/Casa4.7.jpg" class="d-block w-100" alt="Casa Jardim das Flores - Foto 7" 
+                                 style="width: 100%; height: 400px; object-fit: cover; object-position: center;"
+                                 onerror="console.error('Erro ao carregar: Casa4.7.jpg'); this.style.display='none';"
+                                 onload="console.log('Carregada: Casa4.7.jpg');">
                         </div>
                         <div class="carousel-item">
-                            <img src="../imgs/Casa4/Casa4.8.jpg" class="d-block w-100" alt="Casa Jardim das Flores - Foto 8" style="width: 100%; height: 400px; object-fit: cover; object-position: center;">
+                            <img src="../imgs/Casa4/Casa4.8.jpg" class="d-block w-100" alt="Casa Jardim das Flores - Foto 8" 
+                                 style="width: 100%; height: 400px; object-fit: cover; object-position: center;"
+                                 onerror="console.error('Erro ao carregar: Casa4.8.jpg'); this.style.display='none';"
+                                 onload="console.log('Carregada: Casa4.8.jpg');">
                         </div>
                         <div class="carousel-item">
-                            <img src="../imgs/Casa4/Casa4.9.jpg" class="d-block w-100" alt="Casa Jardim das Flores - Foto 9" style="width: 100%; height: 400px; object-fit: cover; object-position: center;">
+                            <img src="../imgs/Casa4/Casa4.9.jpg" class="d-block w-100" alt="Casa Jardim das Flores - Foto 9" 
+                                 style="width: 100%; height: 400px; object-fit: cover; object-position: center;"
+                                 onerror="console.error('Erro ao carregar: Casa4.9.jpg'); this.style.display='none';"
+                                 onload="console.log('Carregada: Casa4.9.jpg');">
                         </div>
                     </div>
-                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselCasa4" data-bs-slide="prev">
+
+                    <!-- Controles de navegação -->
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
                         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                         <span class="visually-hidden">Anterior</span>
                     </button>
-                    <button class="carousel-control-next" type="button" data-bs-target="#carouselCasa4" data-bs-slide="next">
+                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
                         <span class="carousel-control-next-icon" aria-hidden="true"></span>
                         <span class="visually-hidden">Próximo</span>
                     </button>
@@ -116,8 +152,8 @@
                     Casa charmosa, com jardim, varanda, área de lazer e garagem. Bairro familiar e arborizado.
                 </p>
                 <div class="d-flex gap-3">
-                    <a href="../Compra.html" class="btn btn-success">Compra</a>
-                    <a href="../alugar.html" class="btn btn-primary">Alugar</a>
+                    <a href="../Compra.php" class="btn btn-success">Compra</a>
+                    <a href="../alugar.php" class="btn btn-primary">Alugar</a>
                 </div>
             </div>
         </div>
@@ -128,5 +164,8 @@
         </div>
     </footer>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+    // Carrossel estático: sem autoplay, sem controles, sem indicadores
+    </script>
 </body>
 </html>

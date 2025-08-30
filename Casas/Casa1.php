@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Casa Realengo</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
-    <link href="../css/styles.css" rel="stylesheet">
+    <link href="../css/styles.css?v=20250829" rel="stylesheet">
     <style>
         .navbar {
             background-color: #000000 !important;
@@ -44,7 +44,7 @@
         <div class="row align-items-center">
             <div class="col-md-6 mb-4 mb-md-0">
                 <!-- Carrossel de Imagens -->
-                <div id="carouselCasa1" class="carousel slide">
+                <div id="carouselCasa1" class="carousel slide" data-bs-interval="false" data-bs-touch="false" data-bs-keyboard="false">
                     <div class="carousel-indicators">
                         <button type="button" data-bs-target="#carouselCasa1" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
                         <button type="button" data-bs-target="#carouselCasa1" data-bs-slide-to="1" aria-label="Slide 2"></button>
@@ -89,11 +89,11 @@
                             <img src="../imgs/Casa1/Casa1.9.jpg" class="d-block w-100" alt="Casa Realengo - Foto 10" style="width: 100%; height: 400px; object-fit: cover; object-position: center;">
                         </div>
                     </div>
-                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselCasa1" data-bs-slide="prev">
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
                         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                         <span class="visually-hidden">Anterior</span>
                     </button>
-                    <button class="carousel-control-next" type="button" data-bs-target="#carouselCasa1" data-bs-slide="next">
+                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
                         <span class="carousel-control-next-icon" aria-hidden="true"></span>
                         <span class="visually-hidden">Próximo</span>
                     </button>

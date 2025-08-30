@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Casa Recanto Verde</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
-    <link href="../css/styles.css" rel="stylesheet">
+    <link href="../css/styles.css?v=20250829" rel="stylesheet">
     <style>
         .navbar {
             background-color: #000000 !important;
@@ -47,14 +47,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Casa Solar dos Pássaros</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
-    <link href="../css/styles.css" rel="stylesheet">
+    <link href="../css/styles.css?v=20250829" rel="stylesheet">
 </head>
 <body>
     <div class="container py-5">
         <div class="row align-items-center">
             <div class="col-md-6 mb-4 mb-md-0">
                 <!-- Carrossel de Imagens -->
-                <div id="carouselCasa6" class="carousel slide">
+                <div id="carouselCasa6" class="carousel slide" data-bs-interval="false" data-bs-touch="false" data-bs-keyboard="false">
                     <div class="carousel-indicators">
                         <button type="button" data-bs-target="#carouselCasa6" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
                         <button type="button" data-bs-target="#carouselCasa6" data-bs-slide-to="1" aria-label="Slide 2"></button>

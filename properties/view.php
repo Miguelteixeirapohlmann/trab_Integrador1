@@ -36,7 +36,7 @@ ob_start();
 <div class="container-fluid p-0">
     <!-- Property Images Carousel -->
     <?php if (!empty($property['images'])): ?>
-    <div id="propertyCarousel" class="carousel slide" data-bs-ride="carousel">
+    <div id="propertyCarousel" class="carousel slide" data-bs-interval="false" data-bs-touch="false" data-bs-keyboard="false">
         <div class="carousel-inner">
             <?php foreach ($property['images'] as $index => $image): ?>
             <div class="carousel-item <?php echo $index === 0 ? 'active' : ''; ?>">

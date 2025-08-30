@@ -487,10 +487,10 @@ p {
 
 abbr[title] {
   -webkit-text-decoration: underline dotted;
-          text-decoration: underline dotted;
+    text-decoration: underline dotted;
   cursor: help;
   -webkit-text-decoration-skip-ink: none;
-          text-decoration-skip-ink: none;
+    text-decoration-skip-ink: none;
 }
 
 address {
@@ -797,6 +797,21 @@ summary {
 
 progress {
   vertical-align: baseline;
+}
+
+/* ---- Carousel global fix (Bootstrap compatibility) ----
+   Some earlier rules in this stylesheet forced all .carousel-item elements to display using flex,
+   which breaks Bootstrap's slide logic (only the active/transitioning items should be visible).
+   The rules below restore Bootstrap's expected behavior across the entire project. */
+.carousel .carousel-item { 
+  display: none !important; /* Let Bootstrap control visibility */
+}
+.carousel .carousel-item.active,
+.carousel .carousel-item-next,
+.carousel .carousel-item-prev,
+.carousel .carousel-item-start,
+.carousel .carousel-item-end {
+  display: block !important;
 }
 
 [hidden] {
@@ -1893,6 +1908,13 @@ progress {
     flex: 0 0 auto;
     width: auto;
   }
+/* ---- FINAL, HIGH-PRIORITY Bootstrap carousel visibility fix ---- */
+body .carousel .carousel-item { display: none !important; }
+body .carousel .carousel-item.active,
+body .carousel .carousel-item-next,
+body .carousel .carousel-item-prev,
+body .carousel .carousel-item-start,
+body .carousel .carousel-item-end { display: block !important; }
   .row-cols-xxl-1 > * {
     flex: 0 0 auto;
     width: 100%;
