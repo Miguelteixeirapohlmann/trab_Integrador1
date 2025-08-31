@@ -22,18 +22,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['agendar_visita'])) {
     if (!validateCSRFToken($_POST['csrf_token'] ?? '')) {
         $error_message = 'Token de segurança inválido.';
     } else {
-        // Capturar e sanitizar dados
-        $nome = trim($_POST['clienteNome'] ?? '');
-        $email = trim($_POST['clienteEmail'] ?? '');
-        $telefone = trim($_POST['clienteTelefone'] ?? '');
-        $casa = trim($_POST['casaSelect'] ?? '');
-        $corretor = trim($_POST['corretorSelect'] ?? '');
-        $data = trim($_POST['dataVisita'] ?? '');
-        $horario = trim($_POST['horarioVisita'] ?? '');
-        $observacoes = trim($_POST['observacoes'] ?? '');
-        
-        // Validações
-        $errors = [];
+        // Verificar se o usuário logado tem email gmail.com
+        if (!str_ends_with($current_user['email'], '@gmail.com')) {
+            $error_message = 'Apenas usuários com email Gmail podem fazer agendamentos.';
+        } else {
+            // Capturar e sanitizar dados
+            $nome = trim($_POST['clienteNome'] ?? '');
+            $email = trim($_POST['clienteEmail'] ?? '');
+            $telefone = trim($_POST['clienteTelefone'] ?? '');
+            $casa = trim($_POST['casaSelect'] ?? '');
+            $corretor = trim($_POST['corretorSelect'] ?? '');
+            $data = trim($_POST['dataVisita'] ?? '');
+            $horario = trim($_POST['horarioVisita'] ?? '');
+            $observacoes = trim($_POST['observacoes'] ?? '');
+            
+            // Validações
+            $errors = [];
         
         if (empty($nome)) {
             $errors[] = 'Nome é obrigatório.';
@@ -54,7 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['agendar_visita'])) {
         if (empty($corretor)) {
             $errors[] = 'Selecione um corretor.';
         } else {
-            $corretores_validos = ['João Silva', 'Maria Santos', 'Pedro Costa'];
+            $corretores_validos = ['João borges', 'Maria Santos', 'Pedro Costa'];
             if (!in_array($corretor, $corretores_validos)) {
                 $errors[] = 'Corretor inválido selecionado.';
             }
@@ -98,48 +102,107 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['agendar_visita'])) {
             $error_message = implode('<br>', $errors);
         } else {
             // Preparar dados para salvamento
-            $agendamento = [
-                'id' => uniqid(),
-                'nome' => htmlspecialchars($nome),
-                'email' => htmlspecialchars($email),
-                'telefone' => htmlspecialchars($telefone),
-                'casa' => htmlspecialchars($casa),
-                'corretor' => htmlspecialchars($corretor),
-                'data_visita' => $data,
-                'horario' => htmlspecialchars($horario),
-                'observacoes' => htmlspecialchars($observacoes),
-                'data_agendamento' => date('Y-m-d H:i:s'),
-                'status' => 'agendado'
-            ];
+            $agendamento_id = uniqid();
             
-            // Salvar no arquivo JSON (sistema de fallback)
-            $arquivo_agendamentos = __DIR__ . '/data/agendamentos.json';
-            
-            // Criar diretório se não existir
-            if (!is_dir(dirname($arquivo_agendamentos))) {
-                mkdir(dirname($arquivo_agendamentos), 0755, true);
-            }
-            
-            // Carregar agendamentos existentes
-            $agendamentos = [];
-            if (file_exists($arquivo_agendamentos)) {
-                $json = file_get_contents($arquivo_agendamentos);
-                $agendamentos = json_decode($json, true) ?: [];
-            }
-            
-            // Adicionar novo agendamento
-            $agendamentos[] = $agendamento;
-            
-            // Salvar
-            if (file_put_contents($arquivo_agendamentos, json_encode($agendamentos, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE))) {
-                $success_message = 'Visita agendada com sucesso! Entraremos em contato para confirmar.';
+            try {
+                // Verificar se o ID já existe no banco (evitar duplicação)
+                $check_stmt = $pdo->prepare("SELECT id FROM agendamentos WHERE id = ?");
+                $check_stmt->execute([$agendamento_id]);
                 
-                // Limpar campos após sucesso
-                $nome = $email = $telefone = $casa = $corretor = $data = $horario = $observacoes = '';
-            } else {
-                $error_message = 'Erro ao agendar visita. Tente novamente.';
+                if ($check_stmt->fetch()) {
+                    // Se o ID já existir, gerar um novo
+                    $agendamento_id = uniqid() . '_' . time();
+                }
+                
+                // Salvar no banco de dados
+                $stmt = $pdo->prepare("
+                    INSERT INTO agendamentos (id, nome, email, telefone, casa, corretor, data_visita, horario, observacoes, data_agendamento, status) 
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                ");
+                
+                $result = $stmt->execute([
+                    $agendamento_id,
+                    $nome,
+                    $email,
+                    $telefone,
+                    $casa,
+                    $corretor,
+                    $data,
+                    $horario,
+                    $observacoes,
+                    date('Y-m-d H:i:s'),
+                    'agendado'
+                ]);
+                
+                if ($result) {
+                    // Redirecionar para tela inicial após sucesso
+                    setFlashMessage('Visita agendada com sucesso! Entraremos em contato para confirmar.', 'success');
+                    header('Location: index.php');
+                    exit;
+                } else {
+                    $error_message = 'Erro ao agendar visita. Tente novamente.';
+                }
+                
+            } catch (PDOException $e) {
+                error_log("Erro ao salvar agendamento no banco: " . $e->getMessage());
+                
+                // Sistema de fallback: salvar no arquivo JSON se o banco falhar
+                $agendamento = [
+                    'id' => $agendamento_id,
+                    'nome' => htmlspecialchars($nome),
+                    'email' => htmlspecialchars($email),
+                    'telefone' => htmlspecialchars($telefone),
+                    'casa' => htmlspecialchars($casa),
+                    'corretor' => htmlspecialchars($corretor),
+                    'data_visita' => $data,
+                    'horario' => htmlspecialchars($horario),
+                    'observacoes' => htmlspecialchars($observacoes),
+                    'data_agendamento' => date('Y-m-d H:i:s'),
+                    'status' => 'agendado'
+                ];
+                
+                $arquivo_agendamentos = __DIR__ . '/data/agendamentos.json';
+                
+                // Criar diretório se não existir
+                if (!is_dir(dirname($arquivo_agendamentos))) {
+                    mkdir(dirname($arquivo_agendamentos), 0755, true);
+                }
+                
+                // Carregar agendamentos existentes
+                $agendamentos = [];
+                if (file_exists($arquivo_agendamentos)) {
+                    $json = file_get_contents($arquivo_agendamentos);
+                    $agendamentos = json_decode($json, true) ?: [];
+                }
+                
+                // Verificar se o agendamento já existe (evitar duplicação)
+                $existe = false;
+                foreach ($agendamentos as $ag) {
+                    if ($ag['id'] === $agendamento_id) {
+                        $existe = true;
+                        break;
+                    }
+                }
+                
+                // Adicionar apenas se não existir
+                if (!$existe) {
+                    $agendamentos[] = $agendamento;
+                    
+                    // Salvar como fallback
+                    if (file_put_contents($arquivo_agendamentos, json_encode($agendamentos, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE))) {
+                        // Redirecionar para tela inicial após sucesso (mesmo em modo fallback)
+                        setFlashMessage('Visita agendada com sucesso! (Salvo em modo de contingência)', 'warning');
+                        header('Location: index.php');
+                        exit;
+                    } else {
+                        $error_message = 'Erro ao agendar visita. Tente novamente.';
+                    }
+                } else {
+                    $error_message = 'Este agendamento já foi registrado. Tente novamente.';
+                }
             }
         }
+        } // Fechamento do else para verificação do gmail
     }
 }
 
@@ -148,15 +211,15 @@ $csrf_token = generateCSRFToken();
 
 // Lista de casas disponíveis
 $casas_disponiveis = [
-    'Casa Realengo',
-    'Casa Alto Rolantinho',
-    'Casa Alpha Ville',
-    'Casa Jardim das Flores',
-    'Casa Vista Alegre',
-    'Casa Solar dos Pássaros',
-    'Casa Bela Vista',
-    'Casa do Gabriel',
-    'Casa Nova Esperança'
+    'Casa em Santo Antônio da Patrulha',
+    'Casa em Taquara',
+    'Casa Em Taquara Alto Padrão',
+    'Casa em Taquara Rua Mundo Novo',
+    'Casa em Taquara Flores da Cunha',
+    'Casa em Parobé',
+    'Casa em Taquara Santa Terezinha',
+    'Casa em Taquara rua Alvarino Lacerda Filho',
+    'Casa em Taquara - São Francisco'
 ];
 ?>
 <!DOCTYPE html>
@@ -184,6 +247,17 @@ $casas_disponiveis = [
 
     <!-- Main Content -->
     <div class="container my-5" style="padding-top: 40px;">
+        
+        <!-- Verificação do email Gmail -->
+        <?php if (!str_ends_with($current_user['email'], '@gmail.com')): ?>
+            <div class="alert alert-warning alert-dismissible fade show">
+                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                <strong>Atenção!</strong> Apenas usuários com email Gmail (@gmail.com) podem fazer agendamentos. 
+                Seu email atual: <strong><?php echo htmlspecialchars($current_user['email']); ?></strong>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        <?php endif; ?>
+        
         <!-- Mensagens Flash -->
         <?php if ($flash): ?>
             <div class="alert alert-<?php echo $flash['type'] === 'success' ? 'success' : ($flash['type'] === 'error' ? 'danger' : 'info'); ?> alert-dismissible fade show">
@@ -216,6 +290,19 @@ $casas_disponiveis = [
                         </h2>
                     </div>
                     <div class="card-body">
+                        <?php if (!str_ends_with($current_user['email'], '@gmail.com')): ?>
+                            <div class="alert alert-danger">
+                                <i class="bi bi-x-circle-fill me-2"></i>
+                                <strong>Formulário Bloqueado!</strong> Este formulário está disponível apenas para usuários com email Gmail (@gmail.com).
+                            </div>
+                            <div class="text-center">
+                                <p class="text-muted">Para fazer agendamentos, você precisa:</p>
+                                <ol class="text-muted text-start" style="max-width: 400px; margin: 0 auto;">
+                                    <li>Criar uma conta com email Gmail</li>
+                                    <li>Ou alterar seu email atual para um Gmail</li>
+                                </ol>
+                            </div>
+                        <?php else: ?>
                         <form method="POST" action="">
                             <input type="hidden" name="csrf_token" value="<?php echo $csrf_token; ?>">
                             <input type="hidden" name="agendar_visita" value="1">
@@ -264,13 +351,15 @@ $casas_disponiveis = [
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-floating mb-3">
-                                        <select class="form-select" id="corretorSelect" name="corretorSelect" required>
+                                        <select class="form-select" id="corretorSelect" name="corretorDisplay" required readonly disabled>
                                             <option value="" disabled <?php echo empty($corretor ?? '') ? 'selected' : ''; ?>>Selecione um corretor</option>
-                                            <option value="João Silva" <?php echo (isset($corretor) && $corretor === 'João Silva') ? 'selected' : ''; ?>>João Silva</option>
+                                            <option value="João borges" <?php echo (isset($corretor) && $corretor === 'João borges') ? 'selected' : ''; ?>>João borges</option>
                                             <option value="Maria Santos" <?php echo (isset($corretor) && $corretor === 'Maria Santos') ? 'selected' : ''; ?>>Maria Santos</option>
                                             <option value="Pedro Costa" <?php echo (isset($corretor) && $corretor === 'Pedro Costa') ? 'selected' : ''; ?>>Pedro Costa</option>
                                         </select>
-                                        <label for="corretorSelect">Corretor de Preferência</label>
+                                        <label for="corretorSelect">Corretor Designado (Automático)</label>
+                                        <!-- Campo hidden para garantir que o valor seja enviado -->
+                                        <input type="hidden" id="corretorHidden" name="corretorSelect" value="<?php echo htmlspecialchars($corretor ?? ''); ?>">
                                     </div>
                                 </div>
                             </div>
@@ -319,6 +408,7 @@ $casas_disponiveis = [
                                 </a>
                             </div>
                         </form>
+                        <?php endif; ?> <!-- Fim da verificação do email Gmail -->
                     </div>
                 </div>
             </div>
@@ -339,6 +429,40 @@ $casas_disponiveis = [
     <script>
         // Configurar data mínima para hoje
         document.getElementById('dataVisita').min = new Date().toISOString().split('T')[0];
+        
+        // Mapeamento casa -> corretor
+        // Casa 1-3 = João borges, Casa 4-6 = Maria Santos, Casa 7-9 = Pedro Costa
+        const casaCorretorMap = {
+            'Casa em Santo Antônio da Patrulha': 'João borges',        // Casa 1
+            'Casa em Taquara': 'João borges',                          // Casa 2  
+            'Casa Em Taquara Alto Padrão': 'João borges',              // Casa 3
+            'Casa em Taquara Rua Mundo Novo': 'Maria Santos',          // Casa 4
+            'Casa em Taquara Flores da Cunha': 'Maria Santos',         // Casa 5
+            'Casa em Parobé': 'Maria Santos',                          // Casa 6
+            'Casa em Taquara Santa Terezinha': 'Pedro Costa',          // Casa 7
+            'Casa em Taquara rua Alvarino Lacerda Filho': 'Pedro Costa', // Casa 8
+            'Casa em Taquara - São Francisco': 'Pedro Costa'           // Casa 9
+        };
+        
+        // Função para atualizar corretor baseado na casa selecionada
+        document.getElementById('casaSelect').addEventListener('change', function(e) {
+            const casaSelecionada = e.target.value;
+            const corretorSelect = document.getElementById('corretorSelect');
+            const corretorHidden = document.getElementById('corretorHidden');
+            
+            if (casaSelecionada && casaCorretorMap[casaSelecionada]) {
+                const corretorDesignado = casaCorretorMap[casaSelecionada];
+                corretorSelect.value = corretorDesignado;
+                corretorHidden.value = corretorDesignado; // Atualizar campo hidden também
+                
+                // Opcional: mostrar uma mensagem informativa
+                console.log(`Casa selecionada: ${casaSelecionada} -> Corretor: ${corretorDesignado}`);
+            } else {
+                // Se não houver mapeamento, limpar seleção de corretor
+                corretorSelect.value = '';
+                corretorHidden.value = '';
+            }
+        });
         
         // Função para verificar se a data é domingo
         function isDomingo(dateString) {

@@ -4,6 +4,7 @@ SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS system_logs;
 DROP TABLE IF EXISTS reviews;
 DROP TABLE IF EXISTS contact_messages;
+DROP TABLE IF EXISTS agendamentos;
 DROP TABLE IF EXISTS property_visits;
 DROP TABLE IF EXISTS user_favorites;
 DROP TABLE IF EXISTS property_rentals;
@@ -308,6 +309,28 @@ CREATE TABLE payments (
     INDEX idx_payment_type (payment_type)
 );
 
+-- Tabela de agendamentos de visitas (sistema de agendamentos)
+CREATE TABLE agendamentos (
+    id VARCHAR(50) PRIMARY KEY,
+    nome VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    telefone VARCHAR(20) NOT NULL,
+    casa VARCHAR(255) NOT NULL,
+    corretor VARCHAR(255) NOT NULL,
+    data_visita DATE NOT NULL,
+    horario TIME NOT NULL,
+    observacoes TEXT NULL,
+    data_agendamento TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    status ENUM('agendado', 'confirmado', 'concluido', 'cancelado') DEFAULT 'agendado',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    
+    INDEX idx_email (email),
+    INDEX idx_data_visita (data_visita),
+    INDEX idx_status (status),
+    INDEX idx_corretor (corretor)
+);
+
 -- Tabela de agendamentos de visitas
 CREATE TABLE property_visits (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -442,6 +465,14 @@ VALUES
 (2, 8, 3, 2, 2500.00, 5000.00, 500.00, 12, '2024-01-01', '2024-12-31', 'active', 6000.00, 'Analista de Sistemas', 8.33, 2500.00, 'Contrato de locação residencial de 12 meses.', TRUE, 'Inquilino pontual, permite animais pequenos.'),
 (4, 5, 2, 1, 1800.00, 3600.00, 360.00, 24, '2024-02-15', '2026-02-14', 'active', 4500.00, 'Engenheiro', 8.33, 1500.00, 'Locação por 24 meses com desconto no aluguel.', FALSE, 'Casa mobiliada, contrato longo prazo.');
 
+-- Inserir exemplos de agendamentos
+INSERT INTO agendamentos (id, nome, email, telefone, casa, corretor, data_visita, horario, observacoes, data_agendamento, status) 
+VALUES 
+('68b4838270277', 'Miguel Pohlmann', 'miguel@gmail.com', '(51) 99929-8592', 'Casa em Parobé', 'Maria Santos', '2025-09-03', '08:00:00', '', '2025-08-31 14:16:50', 'agendado'),
+('example001', 'Carlos Oliveira', 'carlos.oliveira@gmail.com', '(51) 98765-4321', 'Casa em Santo Antônio da Patrulha', 'João borges', '2025-09-05', '09:00:00', 'Interessado em financiamento', '2025-08-31 10:30:00', 'agendado'),
+('example002', 'Ana Ferreira', 'ana.ferreira@gmail.com', '(51) 87654-3210', 'Casa em Taquara Flores da Cunha', 'Maria Santos', '2025-09-06', '14:00:00', 'Primeira visita', '2025-08-31 11:45:00', 'confirmado'),
+('example003', 'Roberto Lima', 'roberto.lima@gmail.com', '(51) 76543-2109', 'Casa em Taquara Santa Terezinha', 'Pedro Costa', '2025-09-07', '16:00:00', 'Visita com a família', '2025-08-31 15:20:00', 'agendado');
+
 -- Inserir exemplos de pagamentos
 INSERT INTO payments (rental_id, purchase_id, payer_id, amount, payment_type, payment_method, due_date, payment_date, status, description, transaction_id) 
 VALUES 
@@ -461,3 +492,64 @@ VALUES
 -- Comissões
 (NULL, 1, 1, 6600.00, 'commission', 'bank_transfer', '2024-01-30', '2024-01-30', 'paid', 'Comissão venda Casa Jardim das Flores', 'COM20240130001'),
 (1, NULL, 2, 2500.00, 'commission', 'bank_transfer', '2024-01-10', '2024-01-10', 'paid', 'Comissão locação Apartamento Vista Alegre', 'COM20240110001');
+
+-- ========================================
+-- CONSULTAS ÚTEIS PARA O SISTEMA
+-- ========================================
+
+-- Consultas úteis para o sistema de agendamentos
+
+-- Buscar agendamentos por status
+-- SELECT * FROM agendamentos WHERE status = 'agendado';
+
+-- Buscar agendamentos por corretor
+-- SELECT * FROM agendamentos WHERE corretor = 'João borges';
+
+-- Buscar agendamentos por data
+-- SELECT * FROM agendamentos WHERE data_visita BETWEEN '2025-09-01' AND '2025-09-30';
+
+-- Buscar agendamentos por casa
+-- SELECT * FROM agendamentos WHERE casa LIKE '%Taquara%';
+
+-- Estatísticas de agendamentos por corretor
+-- SELECT corretor, COUNT(*) as total_agendamentos, 
+--        COUNT(CASE WHEN status = 'confirmado' THEN 1 END) as confirmados,
+--        COUNT(CASE WHEN status = 'concluido' THEN 1 END) as concluidos
+-- FROM agendamentos 
+-- GROUP BY corretor;
+
+-- Consultas úteis para propriedades e corretores
+
+-- Buscar propriedades disponíveis por corretor
+-- SELECT p.title, p.price, p.rent_price, u.first_name, u.last_name
+-- FROM properties p 
+-- JOIN brokers b ON p.broker_id = b.id
+-- JOIN users u ON b.user_id = u.id
+-- WHERE p.status = 'active';
+
+-- Relatório de vendas por corretor
+-- SELECT u.first_name, u.last_name, COUNT(pp.id) as total_vendas, SUM(pp.purchase_price) as valor_total
+-- FROM brokers b
+-- JOIN users u ON b.user_id = u.id
+-- LEFT JOIN property_purchases pp ON b.id = pp.broker_id AND pp.status = 'completed'
+-- GROUP BY b.id, u.first_name, u.last_name;
+
+-- Relatório de locações por corretor
+-- SELECT u.first_name, u.last_name, COUNT(pr.id) as total_locacoes, SUM(pr.monthly_rent) as renda_mensal_total
+-- FROM brokers b
+-- JOIN users u ON b.user_id = u.id
+-- LEFT JOIN property_rentals pr ON b.id = pr.broker_id AND pr.status = 'active'
+-- GROUP BY b.id, u.first_name, u.last_name;
+
+-- Buscar pagamentos em atraso
+-- SELECT p.*, u.first_name, u.last_name
+-- FROM payments p
+-- JOIN users u ON p.payer_id = u.id
+-- WHERE p.status = 'pending' AND p.due_date < CURDATE();
+
+-- Propriedades mais visualizadas
+-- SELECT title, views_count, favorites_count
+-- FROM properties 
+-- WHERE status = 'active'
+-- ORDER BY views_count DESC, favorites_count DESC
+-- LIMIT 10;

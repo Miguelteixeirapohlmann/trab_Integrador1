@@ -23,6 +23,100 @@ $properties_stmt = $pdo->prepare("
 $properties_stmt->execute();
 $available_properties = $properties_stmt->fetchAll();
 
+// Fallback para casas estáticas caso o banco esteja vazio
+if (empty($available_properties)) {
+    $available_properties = [
+        [
+            'id' => 'casa1',
+            'title' => 'Casa em Santo Antônio da Patrulha',
+            'price' => 5200000.00,
+            'address' => 'Santo Antônio da Patrulha',
+            'neighborhood' => 'Centro',
+            'city' => 'Santo Antônio da Patrulha',
+            'bedrooms' => 4,
+            'bathrooms' => 3,
+            'area_sqm' => 350
+        ],
+        [
+            'id' => 'casa3',
+            'title' => 'Casa Em Taquara Alto Padrão',
+            'price' => 3000000.00,
+            'address' => 'Taquara',
+            'neighborhood' => 'Alto Padrão',
+            'city' => 'Taquara',
+            'bedrooms' => 4,
+            'bathrooms' => 3,
+            'area_sqm' => 280
+        ],
+        [
+            'id' => 'casa4',
+            'title' => 'Casa em Taquara Rua Mundo Novo',
+            'price' => 170000.00,
+            'address' => 'Rua Mundo Novo',
+            'neighborhood' => 'Centro',
+            'city' => 'Taquara',
+            'bedrooms' => 3,
+            'bathrooms' => 2,
+            'area_sqm' => 150
+        ],
+        [
+            'id' => 'casa5',
+            'title' => 'Casa em Taquara Flores da Cunha',
+            'price' => 380000.00,
+            'address' => 'Flores da Cunha',
+            'neighborhood' => 'Flores da Cunha',
+            'city' => 'Taquara',
+            'bedrooms' => 3,
+            'bathrooms' => 2,
+            'area_sqm' => 180
+        ],
+        [
+            'id' => 'casa6',
+            'title' => 'Casa em Parobé',
+            'price' => 210000.00,
+            'address' => 'Parobé',
+            'neighborhood' => 'Centro',
+            'city' => 'Parobé',
+            'bedrooms' => 2,
+            'bathrooms' => 2,
+            'area_sqm' => 100
+        ],
+        [
+            'id' => 'casa7',
+            'title' => 'Casa em Taquara Santa Terezinha',
+            'price' => 650000.00,
+            'address' => 'Santa Terezinha',
+            'neighborhood' => 'Santa Terezinha',
+            'city' => 'Taquara',
+            'bedrooms' => 3,
+            'bathrooms' => 2,
+            'area_sqm' => 160
+        ],
+        [
+            'id' => 'casa8',
+            'title' => 'Casa em Taquara rua Alvarino Lacerda Filho',
+            'price' => 184900.00,
+            'address' => 'Rua Alvarino Lacerda Filho',
+            'neighborhood' => 'Centro',
+            'city' => 'Taquara',
+            'bedrooms' => 2,
+            'bathrooms' => 2,
+            'area_sqm' => 110
+        ],
+        [
+            'id' => 'casa9',
+            'title' => 'Casa em Taquara - São Francisco',
+            'price' => 450000.00,
+            'address' => 'São Francisco',
+            'neighborhood' => 'São Francisco',
+            'city' => 'Taquara',
+            'bedrooms' => 3,
+            'bathrooms' => 2,
+            'area_sqm' => 140
+        ]
+    ];
+}
+
 // Buscar corretores disponíveis
 $brokers_stmt = $pdo->prepare("
     SELECT b.id, u.first_name, u.last_name, b.company, b.specialties, b.years_experience, b.rating
@@ -33,6 +127,39 @@ $brokers_stmt = $pdo->prepare("
 ");
 $brokers_stmt->execute();
 $available_brokers = $brokers_stmt->fetchAll();
+
+// Fallback para corretores estáticos caso o banco esteja vazio
+if (empty($available_brokers)) {
+    $available_brokers = [
+        [
+            'id' => 'joao',
+            'first_name' => 'João',
+            'last_name' => 'borges',
+            'company' => 'Imobiliária Elite',
+            'specialties' => 'Residencial',
+            'years_experience' => 5,
+            'rating' => 4.8
+        ],
+        [
+            'id' => 'maria',
+            'first_name' => 'Maria',
+            'last_name' => 'Santos',
+            'company' => 'Imobiliária Elite',
+            'specialties' => 'Residencial',
+            'years_experience' => 7,
+            'rating' => 4.9
+        ],
+        [
+            'id' => 'pedro',
+            'first_name' => 'Pedro',
+            'last_name' => 'Costa',
+            'company' => 'Imobiliária Elite',
+            'specialties' => 'Residencial',
+            'years_experience' => 3,
+            'rating' => 4.7
+        ]
+    ];
+}
 
 // Processar formulário de compra
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_compra'])) {
@@ -239,11 +366,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_compra'])) {
                                                 <option value="">Selecione uma propriedade...</option>
                                                 <?php foreach ($available_properties as $property): ?>
                                                     <option value="<?php echo $property['id']; ?>" data-price="<?php echo $property['price']; ?>">
-                                                        <?php echo htmlspecialchars($property['title']); ?> - 
-                                                        R$ <?php echo number_format($property['price'], 2, ',', '.'); ?> - 
-                                                        <?php echo $property['bedrooms']; ?>Q <?php echo $property['bathrooms']; ?>B - 
-                                                        <?php echo $property['area_sqm']; ?>m² - 
-                                                        <?php echo htmlspecialchars($property['neighborhood'] . ', ' . $property['city']); ?>
+                                                        <?php echo htmlspecialchars($property['title']); ?>
                                                     </option>
                                                 <?php endforeach; ?>
                                             </select>
@@ -256,22 +379,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_compra'])) {
                                     <h5 class="text-primary mb-3"><i class="fas fa-user-tie me-2"></i>Seleção de Corretor</h5>
                                     <div class="row">
                                         <div class="col-md-12 mb-3">
-                                            <label for="broker_id" class="form-label">Escolha o Corretor <span class="text-danger">*</span></label>
-                                            <select class="form-select form-select-lg" id="broker_id" name="broker_id" required>
-                                                <option value="">Selecione um corretor...</option>
-                                                <?php foreach ($available_brokers as $broker): ?>
-                                                    <option value="<?php echo $broker['id']; ?>">
-                                                        <?php echo htmlspecialchars($broker['first_name'] . ' ' . $broker['last_name']); ?>
-                                                        <?php if ($broker['company']): ?>
-                                                            - <?php echo htmlspecialchars($broker['company']); ?>
-                                                        <?php endif; ?>
-                                                        (<?php echo $broker['years_experience']; ?> anos de experiência)
-                                                        <?php if ($broker['rating'] > 0): ?>
-                                                            - ⭐ <?php echo number_format($broker['rating'], 1); ?>
-                                                        <?php endif; ?>
-                                                    </option>
-                                                <?php endforeach; ?>
-                                            </select>
+                                            <label for="broker_display" class="form-label">Corretor Responsável</label>
+                                            <input type="text" class="form-control form-control-lg" id="broker_display" 
+                                                   placeholder="Será selecionado automaticamente..." readonly>
+                                            <input type="hidden" id="broker_id" name="broker_id" required>
                                         </div>
                                     </div>
                                 </div>
@@ -425,6 +536,87 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_compra'])) {
             } else {
                 priceInput.value = '';
             }
+        }
+
+        // Mapeamento casa -> corretor
+        // Casa 1-3 = João borges, Casa 4-6 = Maria Santos, Casa 7-9 = Pedro Costa
+        const casaCorretorMap = {
+            'Casa em Santo Antônio da Patrulha': 'joao',        // Casa 1
+            'Casa em Taquara': 'joao',                          // Casa 2  
+            'Casa Em Taquara Alto Padrão': 'joao',              // Casa 3
+            'Casa em Taquara Rua Mundo Novo': 'maria',          // Casa 4
+            'Casa em Taquara Flores da Cunha': 'maria',         // Casa 5
+            'Casa em Parobé': 'maria',                          // Casa 6
+            'Casa em Taquara Santa Terezinha': 'pedro',         // Casa 7
+            'Casa em Taquara rua Alvarino Lacerda Filho': 'pedro', // Casa 8
+            'Casa em Taquara - São Francisco': 'pedro'          // Casa 9
+        };
+
+        // Mapeamento casa -> corretor (nome completo para display)
+        const casaCorretorMapDisplay = {
+            'Casa em Santo Antônio da Patrulha': 'João borges',        // Casa 1
+            'Casa em Taquara': 'João borges',                          // Casa 2  
+            'Casa Em Taquara Alto Padrão': 'João borges',              // Casa 3
+            'Casa em Taquara Rua Mundo Novo': 'Maria Santos',          // Casa 4
+            'Casa em Taquara Flores da Cunha': 'Maria Santos',         // Casa 5
+            'Casa em Parobé': 'Maria Santos',                          // Casa 6
+            'Casa em Taquara Santa Terezinha': 'Pedro Costa',          // Casa 7
+            'Casa em Taquara rua Alvarino Lacerda Filho': 'Pedro Costa', // Casa 8
+            'Casa em Taquara - São Francisco': 'Pedro Costa'           // Casa 9
+        };
+
+        // Função para atualizar corretor baseado na casa selecionada
+        function updateBrokerFromProperty() {
+            const propertySelect = document.getElementById('property_id');
+            const brokerInput = document.getElementById('broker_id');
+            const brokerDisplay = document.getElementById('broker_display');
+            
+            if (propertySelect.value) {
+                const selectedOption = propertySelect.options[propertySelect.selectedIndex];
+                const propertyTitle = selectedOption.textContent.trim(); // Pegar só o título
+                
+                if (casaCorretorMap[propertyTitle]) {
+                    const corretorId = casaCorretorMap[propertyTitle];
+                    const corretorNome = casaCorretorMapDisplay[propertyTitle];
+                    
+                    brokerInput.value = corretorId;
+                    brokerDisplay.value = corretorNome;
+                    brokerDisplay.style.backgroundColor = '#e9f7ef';
+                    brokerDisplay.style.color = '#155724';
+                    
+                    console.log(`Casa selecionada: ${propertyTitle} -> Corretor: ${corretorNome}`);
+                } else {
+                    // Se não houver mapeamento, limpar campos
+                    brokerInput.value = '';
+                    brokerDisplay.value = 'Corretor não encontrado para esta casa';
+                    brokerDisplay.style.backgroundColor = '#f8d7da';
+                    brokerDisplay.style.color = '#721c24';
+                }
+            } else {
+                brokerInput.value = '';
+                brokerDisplay.value = '';
+                brokerDisplay.style.backgroundColor = '';
+                brokerDisplay.style.color = '';
+            }
+        }
+
+        // Atualizar a função updatePropertyPrice para também atualizar o corretor
+        function updatePropertyPrice() {
+            const propertySelect = document.getElementById('property_id');
+            const priceInput = document.getElementById('valor_imovel');
+            
+            if (propertySelect.value) {
+                const selectedOption = propertySelect.options[propertySelect.selectedIndex];
+                const price = selectedOption.getAttribute('data-price');
+                if (price) {
+                    priceInput.value = parseFloat(price).toFixed(2);
+                }
+            } else {
+                priceInput.value = '';
+            }
+            
+            // Também atualizar o corretor
+            updateBrokerFromProperty();
         }
 
         // Verificar se há mensagem de sucesso e limpar formulário
