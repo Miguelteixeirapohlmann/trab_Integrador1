@@ -144,21 +144,46 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['change_password'])) {
 <body id="page-top">
     <!-- Navigation -->
     <?php
-    require_once __DIR__ . '/includes/navbar.php';
-    renderNavbar($current_user, 'perfil');
+    // Navbar minimalista igual ao index-corretor.php
+    ?>
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top py-3" id="mainNav">
+        <div class="container px-4 px-lg-5">
+            <a class="navbar-brand" href="index-corretor.php">Tela Inicial</a>
+            <button class="navbar-toggler navbar-toggler-right" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav ms-auto my-2 my-lg-0">
+                    <?php if ($auth->isLoggedIn()): ?>
+                        <?php $currentUser = $auth->getCurrentUser(); ?>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <?php if (!empty($currentUser['avatar'])): ?>
+                                    <img src="<?php echo asset('uploads/' . $currentUser['avatar']); ?>" alt="Avatar" class="rounded-circle me-1" style="width: 24px; height: 24px;">
+                                <?php endif; ?>
+                                <?php echo htmlspecialchars($currentUser['first_name']); ?>
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item" href="perfil.php">Meu Perfil</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="logout.php">Sair</a></li>
+                            </ul>
+                        </li>
+                    <?php endif; ?>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <?php
     ?>
 
-    <?php
-    // Exibir barra de informações do usuário
-    require_once __DIR__ . '/includes/user_info.php';
-    renderUserInfo($current_user);
-    ?>
+
 
     <!-- Conteúdo Principal -->
     <section class="page-section">
         <div class="container px-4 px-lg-5">
             <?php if ($flash): ?>
-                <div class="alert alert-<?php echo $flash['type']; ?> alert-dismissible fade show" role="alert">
+                <div class="alert alert-<?php echo $flash['type']; ?> alert-dismissible fade show" role="alert" style="margin-top: 90px;">
                     <?php echo $flash['message']; ?>
                     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
@@ -168,11 +193,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['change_password'])) {
                 <div class="col-lg-8">
                     <!-- Cabeçalho -->
                     <div class="text-center mb-5">
-                        <h2 class="text-white mt-0">
+                        <h2 class="mt-0" style="color: orange;">
                             <i class="fas fa-user-circle me-2"></i>Meu Perfil
                         </h2>
                         <hr class="divider divider-light" />
-                        <p class="text-white-75 mb-4">
+                        <p class="mb-4" style="color: orange;">
                             Gerencie suas informações pessoais e configurações da conta
                         </p>
                     </div>

@@ -331,6 +331,36 @@ CREATE TABLE agendamentos (
     INDEX idx_corretor (corretor)
 );
 
+-- Tabela de compras realizadas por clientes (compra_cliente)
+CREATE TABLE compra_cliente (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    property_id INT NOT NULL,
+    corretor_id INT NOT NULL,
+    valor_total DECIMAL(15,2) NOT NULL,
+    valor_entrada DECIMAL(15,2) NULL,
+    valor_financiado DECIMAL(15,2) NULL,
+    banco_financiador VARCHAR(255) NULL,
+    forma_pagamento ENUM('avista', 'financiamento', 'consorcio', 'outro') DEFAULT 'avista',
+    data_compra DATE NOT NULL,
+    status ENUM('pendente', 'aprovada', 'concluida', 'cancelada') DEFAULT 'pendente',
+    observacoes TEXT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (property_id) REFERENCES properties(id) ON DELETE CASCADE,
+    FOREIGN KEY (corretor_id) REFERENCES brokers(id) ON DELETE CASCADE,
+    INDEX idx_user_id (user_id),
+    INDEX idx_property_id (property_id),
+    INDEX idx_corretor_id (corretor_id),
+    INDEX idx_status (status)
+);
+
+-- Exemplo de inserção de compra
+INSERT INTO compra_cliente (user_id, property_id, corretor_id, valor_total, valor_entrada, valor_financiado, banco_financiador, forma_pagamento, data_compra, status, observacoes)
+VALUES (5, 1, 1, 220000.00, 44000.00, 176000.00, 'Banco do Brasil', 'financiamento', '2024-01-15', 'concluida', 'Compra realizada com sucesso pelo cliente Carlos Oliveira.');
+
 -- Tabela de agendamentos de visitas
 CREATE TABLE property_visits (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -458,6 +488,10 @@ VALUES
 (1, 5, 2, 1, 220000.00, 44000.00, 176000.00, 'Banco do Brasil', 'financing', '2024-01-15', 'completed', 8000.00, 'Engenheiro', 3.00, 6600.00, 'Contrato de compra e venda com financiamento habitacional.', 'Primeira casa do cliente, processo tranquilo.'),
 (3, 6, 4, 3, 199000.00, 60000.00, 139000.00, 'Caixa Econômica Federal', 'financing', '2024-02-20', 'contracted', 7500.00, 'Professora', 3.00, 5970.00, 'Compra à vista com financiamento complementar.', 'Cliente muito satisfeita com a escolha.'),
 (5, 7, 1, 2, 450000.00, 135000.00, 315000.00, 'Banco Santander', 'financing', '2024-03-10', 'pending', 15000.00, 'Médico', 3.50, 15750.00, 'Cobertura de luxo, financiamento especial.', 'Aguardando aprovação final do banco.');
+
+-- Exemplo adicional de compra
+INSERT INTO property_purchases (property_id, buyer_id, seller_id, broker_id, purchase_price, down_payment, financing_amount, financing_bank, payment_method, contract_date, status, buyer_income, buyer_profession, commission_rate, commission_amount, contract_terms, notes)
+VALUES (2, 8, 3, 2, 310000.00, 62000.00, 248000.00, 'Itaú', 'financing', '2024-04-05', 'approved', 9000.00, 'Analista de Sistemas', 3.00, 9300.00, 'Contrato padrão com financiamento bancário.', 'Compra realizada sem intercorrências.');
 
 -- Inserir exemplos de aluguéis
 INSERT INTO property_rentals (property_id, tenant_id, landlord_id, broker_id, monthly_rent, security_deposit, admin_fee, rental_period_months, start_date, end_date, status, tenant_income, tenant_profession, commission_rate, commission_amount, contract_terms, pets_allowed, notes) 

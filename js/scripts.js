@@ -24,25 +24,7 @@ window.addEventListener('DOMContentLoaded', event => {
     };
 
     // Shrink the navbar 
-    navbarShrink();
 
-    // Shrink the navbar when page is scrolled
-    document.addEventListener('scroll', navbarShrink);
-
-    // Activate Bootstrap scrollspy on the main nav element
-    const mainNav = document.body.querySelector('#mainNav');
-    if (mainNav) {
-        new bootstrap.ScrollSpy(document.body, {
-            target: '#mainNav',
-            rootMargin: '0px 0px -40%',
-        });
-    };
-
-    // Collapse responsive navbar when toggler is visible
-    const navbarToggler = document.body.querySelector('.navbar-toggler');
-    const responsiveNavItems = [].slice.call(
-        document.querySelectorAll('#navbarResponsive .nav-link')
-    );
     responsiveNavItems.map(function (responsiveNavItem) {
         responsiveNavItem.addEventListener('click', () => {
             if (window.getComputedStyle(navbarToggler).display !== 'none') {
@@ -57,79 +39,45 @@ window.addEventListener('DOMContentLoaded', event => {
     });
 
 });
-let products = [
-    {
-        name: "Casa Realengo",
-        type: "casa",
-        price: 250000,
-        image: "imgs/Foto9.jpg"
-    },
-    {
-        name: "Casa Alto Rolantinho",
-        type: "casa",
-        price: 180000,
-        image: "imgs/foto8.jpg"
-    },
-    {
-        name: "Casa Alpha Ville",
-        type: "casa",
-        price: 150000,
-        image: "imgs/foto7.jpg"
-    },
-    {
-        name: "Casa Jardim das Flores",
-        type: "casa",
-        price: 220000,
-        image: "imgs/foto1.jpeg"
-    },
-    {
-        name: "Casa Vista Alegre",
-        type: "casa",
-        price: 310000,
-        image: "imgs/foto2.jpg"
-    },
-    {
-        name: "Casa Solar dos Pássaros",
-        type: "casa",
-        price: 275000,
-        image: "imgs/foto3.jpg"
-    },
-    {
-        name: "Casa Bela Vista",
-        type: "casa",
-        price: 199000,
-        image: "imgs/foto4.jpg"
-    },
-  {
-        name: "Casa do gabriel",
-        type: "casa",
-        price: 1,
-        image: "imgs/foto5.jpg"
-    },
-    {
-        name: "Casa Nova Esperança",
-        type: "casa",
-        price: 185000,
-        image: "imgs/casa6.jpg"
-    }
-];
 
-let editingIndex = null;
+
+    image: ["imgs/foto7.jpg"]
 function renderProducts() {
     const tbody = document.querySelector("#productsTable tbody");
     tbody.innerHTML = "";
     products.forEach((prod, idx) => {
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-            <td><img src="${prod.image}" class="product-img-preview" alt="${prod.name}"></td>
-            <td>${prod.name}</td>
-            <td>${prod.type.charAt(0).toUpperCase() + prod.type.slice(1)}</td>
-            <td>R$ ${prod.price.toFixed(2)}</td>
-            <td>
-                <button class="btn btn-primary btn-sm" onclick="editProduct(${idx})"><i class="fas fa-edit"></i> Editar</button>
-                <button class="btn btn-danger btn-sm" onclick="removeProduct(${idx})"><i class="fas fa-trash"></i> Remover</button>
-            </td>
-        `;
+                    const carouselId = `carousel-${idx}`;
+                    const tr = document.createElement("tr");
+                    tr.innerHTML = `
+                            <td style="min-width:120px;">
+                                    <div id="${carouselId}" class="carousel slide" data-bs-ride="carousel" style="width:100px">
+                                        <div class="carousel-inner">
+                                            ${prod.image.map((img, i) => `
+                                                <div class="carousel-item${i === 0 ? ' active' : ''}">
+                                                    <img src="${img}" class="d-block w-100" alt="${prod.name}" style="height:60px;object-fit:cover;">
+                                                </div>
+                                            `).join('')}
+                                        </div>
+                                        ${prod.image.length > 1 ? `
+                                        <button class="carousel-control-prev" type="button" data-bs-target="#${carouselId}" data-bs-slide="prev">
+                                            <span class="carousel-control-prev-icon" style="width:16px;height:16px" aria-hidden="true"></span>
+                                            <span class="visually-hidden">Anterior</span>
+                                        </button>
+                                        <button class="carousel-control-next" type="button" data-bs-target="#${carouselId}" data-bs-slide="next">
+                                            <span class="carousel-control-next-icon" style="width:16px;height:16px" aria-hidden="true"></span>
+                                            <span class="visually-hidden">Próximo</span>
+                                        </button>
+                                        ` : ''}
+                                    </div>
+                            </td>
+                            <td><a href="${prod.link}" target="_blank">${prod.name}</a></td>
+                            <td>${prod.type.charAt(0).toUpperCase() + prod.type.slice(1)}</td>
+                            <td>R$ ${prod.price.toFixed(2)}</td>
+                            <td>
+                                    <button class="btn btn-primary btn-sm" onclick="editProduct(${idx})"><i class="fas fa-edit"></i> Editar</button>
+                                    <button class="btn btn-danger btn-sm" onclick="removeProduct(${idx})"><i class="fas fa-trash"></i> Remover</button>
+                            </td>
+                    `;
         tbody.appendChild(tr);
     });
 }
@@ -149,27 +97,23 @@ document.getElementById("addProductForm").addEventListener("submit", function(e)
     const type = document.getElementById("productType").value;
     const price = parseFloat(document.getElementById("productPrice").value);
     const imageInput = document.getElementById("productImage");
-    let imageUrl = "";
-
-    // Preview local da imagem (não faz upload real)
-    if (imageInput.files && imageInput.files[0]) {
-        imageUrl = URL.createObjectURL(imageInput.files[0]);
+    let images = [];
+    if (imageInput.files && imageInput.files.length > 0) {
+        for (let i = 0; i < imageInput.files.length; i++) {
+            images.push(URL.createObjectURL(imageInput.files[i]));
+        }
     } else if (editingIndex !== null) {
-        // Se estiver editando e não mudou a imagem, mantém a antiga
-        imageUrl = products[editingIndex].image;
+        images = products[editingIndex].image;
     } else {
-        imageUrl = "img/placeholder.png";
+        images = ["img/placeholder.png"];
     }
 
     if (editingIndex !== null) {
-        // Atualiza o produto existente
-        products[editingIndex] = { name, type, price, image: imageUrl };
+        products[editingIndex] = { name, type, price, image: images };
         editingIndex = null;
-        // Volta o texto do botão para "Adicionar"
         document.querySelector('#addProductForm button[type="submit"]').innerHTML = '<i class="fas fa-plus"></i> Adicionar';
     } else {
-        // Adiciona novo produto
-        products.push({ name, type, price, image: imageUrl });
+        products.push({ name, type, price, image: images });
     }
     renderProducts();
     this.reset();

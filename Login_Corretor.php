@@ -10,7 +10,7 @@ require_once __DIR__ . '/includes/init.php';
 if ($auth->isLoggedIn()) {
     $user = $auth->getCurrentUser();
     if ($user['user_type'] === 'corretor') {
-        redirect('gerenciar_imoveis.php');
+        redirect('index-corretor.php');
     } else {
         redirect('index.php');
     }
@@ -66,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login_form'])) {
                 } else {
                     // Login bem-sucedido
                     $_SESSION['tentativas_login'] = 0; // Reset tentativas
-                    redirect('gerenciar_imoveis.php', 'Login de corretor realizado com sucesso!', 'success');
+                    redirect('index-corretor.php', 'Login de corretor realizado com sucesso!', 'success');
                 }
             } else {
                 // Incrementar tentativas
