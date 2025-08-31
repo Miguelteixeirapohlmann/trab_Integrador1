@@ -8,7 +8,12 @@ require_once __DIR__ . '/includes/init.php';
 
 // Se usuário já estiver logado, redirecionar
 if ($auth->isLoggedIn()) {
-    redirect('index.php');
+    $user = $auth->getCurrentUser();
+    if ($user['user_type'] === 'corretor') {
+        redirect('gerenciar_imoveis.php');
+    } else {
+        redirect('index.php');
+    }
 }
 
 // Verificar mensagens flash

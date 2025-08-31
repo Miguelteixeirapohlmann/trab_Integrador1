@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Casa Realengo</title>
+    <title>Casa em Santo Antônio da Patrulha</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
     <link href="../css/styles.css?v=20250829" rel="stylesheet">
     <style>
@@ -169,24 +169,26 @@
                 </div>
             </div>
             <div class="col-md-6">
-                <h1 class="mb-3">Casa Realengo</h1>
-                <h4 class="text-success mb-4">R$ 250.000,00</h4>
+                <h1 class="mb-3">Casa em Santo Antônio da Patrulha</h1>
+                <h4 class="text-success mb-4"> Compra R$ 5.200.000,00
+                    <span class="text-success mb-4"> Aluguel R$ 2.200.000,00</span>
+                </h4>
                 <ul class="list-group mb-4">
-                    <li class="list-group-item"><strong>Tamanho:</strong> 120 m²</li>
-                    <li class="list-group-item"><strong>Quartos:</strong> 3</li>
-                    <li class="list-group-item"><strong>Banheiros:</strong> 2</li>
-                    <li class="list-group-item"><strong>Salas:</strong> 1</li>
-                    <li class="list-group-item"><strong>Cozinhas:</strong> 1</li>
-                    <li class="list-group-item"><strong>Área:</strong> Quintal, garagem para dois carros</li>
-                    <li class="list-group-item"><strong>Pátio:</strong> Sim</li>
-                    <li class="list-group-item"><strong>Endereço:</strong> Rua das Palmeiras, 123, Realengo, Rio de Janeiro - RJ</li>
+                    <li class="list-group-item"><strong>Tamanho:</strong> 1.536 m² de Esquina</li>
+                    <li class="list-group-item"><strong>Quartos:</strong> 6 (2) Suítes</li>
+                    <li class="list-group-item"><strong>Banheiros:</strong> 4</li>
+                    <li class="list-group-item"><strong>Salas:</strong> 2</li>
+                    <li class="list-group-item"><strong>Cozinhas:</strong> 2</li>
+                    <li class="list-group-item"><strong>Área:</strong> Quintal, com garagem nos fundos para 4 carros, garagem interna para 1 carro</li>
+                    <li class="list-group-item"><strong>Pátio:</strong> Sim com piscina 6 X 12 Metros, quiosque com churrasqueira</li>
+                    <li class="list-group-item"><strong>Endereço:</strong> Rua Antônio Alves Pinheiro, 2523, Santo Antônio da Patrulha, Rio Grande do Sul - RS</li>
                     <li class="list-group-item">
                         <strong>Localização:</strong> 
-                        Próxima a supermercados, escolas, farmácias, transporte público e a 10 minutos do shopping Realengo.
+                        Próxima a supermercados, escolas, farmácias, transporte público.
                     </li>
                 </ul>
                 <p>
-                    Casa ampla, bem iluminada, recém-reformada, com quintal e garagem para dois carros. Bairro tranquilo e seguro, ideal para famílias.
+                    Casa ampla, bem iluminada, recém-reformada, com quintal e garagem para quatro carros. Bairro tranquilo e seguro, ideal para famílias.
                 </p>
                 <div class="d-flex gap-3">
                     <a href="../Compra.php" class="btn btn-success">Compra</a>

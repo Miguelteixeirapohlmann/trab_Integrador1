@@ -27,6 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['agendar_visita'])) {
         $email = trim($_POST['clienteEmail'] ?? '');
         $telefone = trim($_POST['clienteTelefone'] ?? '');
         $casa = trim($_POST['casaSelect'] ?? '');
+        $corretor = trim($_POST['corretorSelect'] ?? '');
         $data = trim($_POST['dataVisita'] ?? '');
         $horario = trim($_POST['horarioVisita'] ?? '');
         $observacoes = trim($_POST['observacoes'] ?? '');
@@ -48,6 +49,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['agendar_visita'])) {
         
         if (empty($casa)) {
             $errors[] = 'Selecione uma casa.';
+        }
+        
+        if (empty($corretor)) {
+            $errors[] = 'Selecione um corretor.';
+        } else {
+            $corretores_validos = ['João Silva', 'Maria Santos', 'Pedro Costa'];
+            if (!in_array($corretor, $corretores_validos)) {
+                $errors[] = 'Corretor inválido selecionado.';
+            }
         }
         
         if (empty($data)) {
@@ -94,6 +104,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['agendar_visita'])) {
                 'email' => htmlspecialchars($email),
                 'telefone' => htmlspecialchars($telefone),
                 'casa' => htmlspecialchars($casa),
+                'corretor' => htmlspecialchars($corretor),
                 'data_visita' => $data,
                 'horario' => htmlspecialchars($horario),
                 'observacoes' => htmlspecialchars($observacoes),
@@ -124,7 +135,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['agendar_visita'])) {
                 $success_message = 'Visita agendada com sucesso! Entraremos em contato para confirmar.';
                 
                 // Limpar campos após sucesso
-                $nome = $email = $telefone = $casa = $data = $horario = $observacoes = '';
+                $nome = $email = $telefone = $casa = $corretor = $data = $horario = $observacoes = '';
             } else {
                 $error_message = 'Erro ao agendar visita. Tente novamente.';
             }
@@ -213,14 +224,14 @@ $casas_disponiveis = [
                                 <div class="col-md-6">
                                     <div class="form-floating mb-3">
                                         <input type="text" class="form-control" id="clienteNome" name="clienteNome" 
-                                               placeholder="Seu nome" required value="<?php echo htmlspecialchars($nome ?? $current_user['first_name'] . ' ' . $current_user['last_name']); ?>"><?php echo $current_user ? ' readonly' : ''; ?>
+                                               placeholder="Seu nome" required value="<?php echo htmlspecialchars($nome ?? $current_user['first_name'] . ' ' . $current_user['last_name']); ?>">
                                         <label for="clienteNome">Nome Completo</label>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-floating mb-3">
                                         <input type="email" class="form-control" id="clienteEmail" name="clienteEmail" 
-                                               placeholder="seu@email.com" required value="<?php echo htmlspecialchars($email ?? $current_user['email']); ?>"<?php echo $current_user ? ' readonly' : ''; ?>>
+                                               placeholder="seu@email.com" required value="<?php echo htmlspecialchars($email ?? $current_user['email']); ?>">
                                         <label for="clienteEmail">Email</label>
                                     </div>
                                 </div>
@@ -246,6 +257,20 @@ $casas_disponiveis = [
                                             <?php endforeach; ?>
                                         </select>
                                         <label for="casaSelect">Imóvel de Interesse</label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-floating mb-3">
+                                        <select class="form-select" id="corretorSelect" name="corretorSelect" required>
+                                            <option value="" disabled <?php echo empty($corretor ?? '') ? 'selected' : ''; ?>>Selecione um corretor</option>
+                                            <option value="João Silva" <?php echo (isset($corretor) && $corretor === 'João Silva') ? 'selected' : ''; ?>>João Silva</option>
+                                            <option value="Maria Santos" <?php echo (isset($corretor) && $corretor === 'Maria Santos') ? 'selected' : ''; ?>>Maria Santos</option>
+                                            <option value="Pedro Costa" <?php echo (isset($corretor) && $corretor === 'Pedro Costa') ? 'selected' : ''; ?>>Pedro Costa</option>
+                                        </select>
+                                        <label for="corretorSelect">Corretor de Preferência</label>
                                     </div>
                                 </div>
                             </div>

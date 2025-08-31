@@ -9,8 +9,18 @@ function renderNavbar($current_user, $current_page = '') {
     
     echo '<nav class="navbar navbar-expand-lg navbar-light fixed-top py-3" id="mainNav">';
     echo '<div class="container px-4 px-lg-5">';
-    echo '<a class="navbar-brand" href="index.php">';
-    echo '<i class="fas fa-home me-2"></i>' . htmlspecialchars($app_name);
+    
+    // Link do logo baseado no tipo de usuário
+    if ($user_type === 'corretor') {
+        $home_link = 'gerenciar_imoveis.php';
+        $home_text = 'Gerenciar Imóveis';
+    } else {
+        $home_link = 'index.php';  
+        $home_text = 'Tela Inicial';
+    }
+    
+    echo '<a class="navbar-brand" href="' . $home_link . '">';
+    echo '<i class="fas fa-home me-2"></i>' . htmlspecialchars($home_text);
     echo '</a>';
     
     echo '<button class="navbar-toggler navbar-toggler-right" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">';
@@ -25,13 +35,13 @@ function renderNavbar($current_user, $current_page = '') {
         // Menu para Corretores
         ?>
         <li class="nav-item">
-            <a class="nav-link <?= $current_page === 'casas_disponiveis' ? 'active' : '' ?>" href="casas_disponiveis.php">
-                <i class="fas fa-home me-1"></i>Casas Disponíveis
+            <a class="nav-link <?= $current_page === 'gerenciar_imoveis' ? 'active' : '' ?>" href="gerenciar_imoveis.php">
+                <i class="fas fa-home me-1"></i>Início
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link <?= $current_page === 'meus_imoveis' ? 'active' : '' ?>" href="meus_imoveis.php">
-                <i class="fas fa-building me-1"></i>Meus Imóveis
+            <a class="nav-link <?= $current_page === 'casas_disponiveis' ? 'active' : '' ?>" href="casas_disponiveis.php">
+                <i class="fas fa-search me-1"></i>Casas Disponíveis
             </a>
         </li>
         <li class="nav-item">
@@ -45,7 +55,7 @@ function renderNavbar($current_user, $current_page = '') {
         ?>
         <li class="nav-item">
             <a class="nav-link <?= $current_page === 'casas_disponiveis' ? 'active' : '' ?>" href="casas_disponiveis.php">
-                <i class="fas fa-home me-1"></i>Casas Disponíveis
+                <i class="fas fa-search me-1"></i>Casas Disponíveis
             </a>
         </li>
         <li class="nav-item">

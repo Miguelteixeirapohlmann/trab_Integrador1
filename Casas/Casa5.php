@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Casa Vista Alegre</title>
+    <title>Casa em Taquara Rua Flores da Cunha</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
     <link href="../css/styles.css?v=20250829" rel="stylesheet">
     <style>
@@ -141,28 +141,30 @@
                 </div>
             </div>
             <div class="col-md-6">
-                <h1 class="mb-3">Casa Vista Alegre</h1>
-                <h4 class="text-success mb-4">R$ 310.000,00</h4>
+                <h1 class="mb-3">Casa em Taquara Rua Flores da Cunha</h1>
+                <h4 class="text-success mb-4">Compra R$ 380.000,00
+                    <span class="text-success mb-4">Aluguel R$ 900,00</span>
+                </h4>
                 <ul class="list-group mb-4">
-                    <li class="list-group-item"><strong>Tamanho:</strong> 140 m²</li>
-                    <li class="list-group-item"><strong>Quartos:</strong> 4</li>
-                    <li class="list-group-item"><strong>Banheiros:</strong> 3</li>
-                    <li class="list-group-item"><strong>Salas:</strong> 2</li>
+                    <li class="list-group-item"><strong>Tamanho:</strong> 225 m²</li>
+                    <li class="list-group-item"><strong>Quartos:</strong> 2</li>
+                    <li class="list-group-item"><strong>Banheiros:</strong> 1</li>
+                    <li class="list-group-item"><strong>Salas:</strong> 1</li>
                     <li class="list-group-item"><strong>Cozinhas:</strong> 1</li>
-                    <li class="list-group-item"><strong>Área:</strong> Varanda, área gourmet, piscina</li>
+                    <li class="list-group-item"><strong>Área:</strong> Varanda, piscina e Garagem com churrasqueira</li>
                     <li class="list-group-item"><strong>Pátio:</strong> Sim</li>
-                    <li class="list-group-item"><strong>Endereço:</strong> Av. Vista Alegre, 456, Vista Alegre, Rio de Janeiro - RJ</li>
+                    <li class="list-group-item"><strong>Endereço:</strong> Rua Flores da Cunha, 456, Mundo Novo, Taquara - RS</li>
                     <li class="list-group-item">
                         <strong>Localização:</strong>
                         Próxima a mercados, escolas, hospitais e fácil acesso ao centro.
                     </li>
                 </ul>
                 <p>
-                    Casa espaçosa, com varanda, área gourmet, piscina e garagem. Bairro valorizado e com ótima infraestrutura.
+                    Casa espaçosa, com varanda,  piscina e garagem. Bairro valorizado e com ótima infraestrutura.
                 </p>
                 <div class="d-flex gap-3">
-                    <a href="../Compra.html" class="btn btn-success">Compra</a>
-                    <a href="../alugar.html" class="btn btn-primary">Alugar</a>
+                    <a href="../Compra.php" class="btn btn-success">Compra</a>
+                    <a href="../alugar.php" class="btn btn-primary">Alugar</a>
                 </div>
             </div>
         </div>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Casa Alpha Ville</title>
+    <title>Casa em Taquara</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
     <link href="../css/styles.css?v=20250829" rel="stylesheet">
     <style>
@@ -137,28 +137,27 @@
                 </div>
             </div>
             <div class="col-md-6">
-                <h1 class="mb-3">Casa Alpha Ville</h1>
-                <h4 class="text-success mb-4">R$ 150.000,00</h4>
+                <h1 class="mb-3">Casa em Taquara Alto Padrão</h1>
+                <h4 class="text-success mb-4">Compra R$ 3.000.000,00</h4>
                 <ul class="list-group mb-4">
-                    <li class="list-group-item"><strong>Tamanho:</strong> 80 m²</li>
-                    <li class="list-group-item"><strong>Quartos:</strong> 2</li>
+                    <li class="list-group-item"><strong>Tamanho:</strong> 837 m² de Esquina</li>
+                    <li class="list-group-item"><strong>Quartos:</strong> 3 (com Suítes e Closet)</li>
                     <li class="list-group-item"><strong>Banheiros:</strong> 2</li>
-                    <li class="list-group-item"><strong>Salas:</strong> 1</li>
+                    <li class="list-group-item"><strong>Salas:</strong> 2 Salas de Estar (1 com Lareira)</li>
                     <li class="list-group-item"><strong>Cozinhas:</strong> 1</li>
                     <li class="list-group-item"><strong>Área:</strong> Varanda, área gourmet e jardim</li>
                     <li class="list-group-item"><strong>Pátio:</strong> Sim</li>
-                    <li class="list-group-item"><strong>Endereço:</strong> Av. Central, 789, Alpha Ville, Rio de Janeiro - RJ</li>
+                    <li class="list-group-item"><strong>Endereço:</strong> Rua Luiz Capovilla, 3206, Nossa Senhora de Fátima, Taquara - RS</li>
                     <li class="list-group-item">
                         <strong>Localização:</strong>
                         Próxima a shoppings, escolas, restaurantes e fácil acesso à rodovia.
                     </li>
                 </ul>
                 <p>
-                    Casa moderna, com varanda, área gourmet, jardim e garagem. Bairro planejado, seguro e com ótima infraestrutura.
+                    Casa moderna, com varanda, área gourmet, jardim e garagem para dois carros. Bairro planejado, seguro e com ótima infraestrutura.
                 </p>
                 <div class="d-flex gap-3">
                     <a href="../Compra.php" class="btn btn-success">Compra</a>
-                    <a href="../alugar.php" class="btn btn-primary">Alugar</a>
                 </div>
             </div>
         </div>

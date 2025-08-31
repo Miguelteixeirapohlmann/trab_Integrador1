@@ -96,13 +96,14 @@ $csrf_token = generateCSRFToken();
             </button>
             <div class="collapse navbar-collapse" id="navbarResponsive">
                 <ul class="navbar-nav ms-auto my-2 my-lg-0">
-                    <li class="nav-item"><a class="nav-link" href="alugar.php">Alugar</a></li>
-                    <li class="nav-item"><a class="nav-link" href="Compra.php">Comprar</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#services">Descobrir</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#Final">Ajuda</a></li>
-                    <li class="nav-item"><a class="nav-link" href="agendar_visita.php">Agendar Visita</a></li>
-                    
                     <?php if ($auth->isLoggedIn()): ?>
+                        <!-- Menu para usuário logado -->
+                        <li class="nav-item"><a class="nav-link" href="#services">Descobrir</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#comprar">Comprar</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#Alugar">Alugar</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#contact">Ajuda</a></li>
+                        <li class="nav-item"><a class="nav-link" href="agendar_visita.php">Agendar Visita</a></li>
+
                         <?php $currentUser = $auth->getCurrentUser(); ?>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -113,17 +114,24 @@ $csrf_token = generateCSRFToken();
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 <li><a class="dropdown-item" href="perfil.php">Meu Perfil</a></li>
-                                <?php if ($auth->hasRole('admin')): ?>
+                                <?php if ($currentUser['user_type'] === 'admin'): ?>
                                     <li><a class="dropdown-item" href="views/admin/dashboard.php">Painel Admin</a></li>
                                 <?php endif; ?>
-                                <?php if ($auth->hasRole('broker')): ?>
-                                    <li><a class="dropdown-item" href="meus_imoveis.php">Meus Imóveis</a></li>
+                                <?php if ($currentUser['user_type'] === 'corretor'): ?>
+                                    <li><a class="dropdown-item" href="gerenciar_imoveis.php">Meus Imóveis</a></li>
                                 <?php endif; ?>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" href="logout.php">Sair</a></li>
                             </ul>
                         </li>
                     <?php else: ?>
+                        <!-- Menu para usuário não logado -->
+                        <li class="nav-item"><a class="nav-link" href="#services">Descobrir</a></li>
+                        <li class="nav-item"><a class="nav-link" href="Compra.php">Comprar</a></li>
+                        <li class="nav-item"><a class="nav-link" href="alugar.php">Alugar</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#contact">Ajuda</a></li>
+                        <li class="nav-item"><a class="nav-link" href="agendar_visita.php">Agendar Visita</a></li>
+
                         <li class="nav-item"><a class="nav-link" href="Login.php">Login</a></li>
                         <li class="nav-item"><a class="nav-link" href="Cadastro.php">Registrar</a></li>
                     <?php endif; ?>
@@ -299,7 +307,7 @@ $csrf_token = generateCSRFToken();
     <section class="page-section bg-dark text-white" id="comprar">
         <div class="container px-4 px-lg-5 text-center">
             <h2 class="mb-4">mais casas a venda</h2>
-            <a class="btn btn-light btn-xl" href="Compra.php">Comprar</a>
+            <a class="btn btn-light btn-xl" href="casas_disponiveis.php">Comprar</a>
         </div>
     </section>
     
@@ -308,7 +316,7 @@ $csrf_token = generateCSRFToken();
         <div class="container px-4 px-lg-5 text-center">
             <h2 class="mb-4">Casas para Alugar</h2>
             <p class="mb-5">Encontre a casa perfeita para alugar com as melhores condições do mercado.</p>
-            <a class="btn btn-primary btn-xl" href="alugar.php">Alugar Imóvel</a>
+            <a class="btn btn-primary btn-xl" href="casas_disponiveis.php">Alugar Imóvel</a>
         </div>
     </section>
 

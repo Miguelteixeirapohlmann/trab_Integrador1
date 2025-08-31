@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Casa Jardim das Flores</title>
+    <title>Casa em Taquara Rua Mundo Novo</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
     <link href="../css/styles.css?v=20250829" rel="stylesheet">
     <style>
@@ -132,24 +132,26 @@
                 </div>
             </div>
             <div class="col-md-6">
-                <h1 class="mb-3">Casa Jardim das Flores</h1>
-                <h4 class="text-success mb-4">R$ 220.000,00</h4>
+                <h1 class="mb-3">Casa em Taquara Rua Mundo Novo</h1>
+                <h4 class="text-success mb-4">Compra R$ 170.000,00
+                    <span class="text-success mb-4">Aluguel R$ 1.000,00</span>
+                </h4>
                 <ul class="list-group mb-4">
-                    <li class="list-group-item"><strong>Tamanho:</strong> 110 m²</li>
-                    <li class="list-group-item"><strong>Quartos:</strong> 3</li>
-                    <li class="list-group-item"><strong>Banheiros:</strong> 2</li>
+                    <li class="list-group-item"><strong>Tamanho:</strong> 150 m²</li>
+                    <li class="list-group-item"><strong>Quartos:</strong> 2</li>
+                    <li class="list-group-item"><strong>Banheiros:</strong> 1</li>
                     <li class="list-group-item"><strong>Salas:</strong> 1</li>
                     <li class="list-group-item"><strong>Cozinhas:</strong> 1</li>
                     <li class="list-group-item"><strong>Área:</strong> Jardim, varanda e área de lazer</li>
                     <li class="list-group-item"><strong>Pátio:</strong> Sim</li>
-                    <li class="list-group-item"><strong>Endereço:</strong> Rua das Flores, 321, Jardim das Flores, Rio de Janeiro - RJ</li>
+                    <li class="list-group-item"><strong>Endereço:</strong> Rua Mundo Novo, 1368, Mundo Novo, Taquara - RS</li>
                     <li class="list-group-item">
                         <strong>Localização:</strong>
                         Próxima a praças, escolas, padarias e transporte público.
                     </li>
                 </ul>
                 <p>
-                    Casa charmosa, com jardim, varanda, área de lazer e garagem. Bairro familiar e arborizado.
+                    Casa charmosa, área de lazer ampla. Bairro familiar e arborizado.
                 </p>
                 <div class="d-flex gap-3">
                     <a href="../Compra.php" class="btn btn-success">Compra</a>

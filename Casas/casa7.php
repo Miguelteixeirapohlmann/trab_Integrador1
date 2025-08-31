@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Casa das Palmeiras</title>
+    <title>Casa em Taquara - Bairro Santa Terezinha</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
     <link href="../css/styles.css?v=20250829" rel="stylesheet">
     <style>
@@ -130,17 +130,19 @@
                 </div>
             </div>
             <div class="col-md-6">
-                <h1 class="mb-3">Casa Bela Vista</h1>
-                <h4 class="text-success mb-4">R$ 199.000,00</h4>
+                <h1 class="mb-3">Casa em Taquara Bairro Santa Terezinha</h1>
+                <h4 class="text-success mb-4">Compra R$ 650.000,00
+                    <span class="text-success mb-4">Aluguel R$ 2.000,00</span>
+                </h4>
                 <ul class="list-group mb-4">
-                    <li class="list-group-item"><strong>Tamanho:</strong> 100 m²</li>
-                    <li class="list-group-item"><strong>Quartos:</strong> 2</li>
+                    <li class="list-group-item"><strong>Tamanho:</strong> 363 m²</li>
+                    <li class="list-group-item"><strong>Quartos:</strong> 3 (1 suíte com Closet e Banheira de Hidromassagem)</li>
                     <li class="list-group-item"><strong>Banheiros:</strong> 1</li>
                     <li class="list-group-item"><strong>Salas:</strong> 1</li>
                     <li class="list-group-item"><strong>Cozinhas:</strong> 1</li>
-                    <li class="list-group-item"><strong>Área:</strong> Quintal, área de serviço</li>
+                    <li class="list-group-item"><strong>Área:</strong> Quintal, área de serviço e Piscina</li>
                     <li class="list-group-item"><strong>Pátio:</strong> Sim</li>
-                    <li class="list-group-item"><strong>Endereço:</strong> Rua Bela Vista, 55, Bela Vista, Rio de Janeiro - RJ</li>
+                    <li class="list-group-item"><strong>Endereço:</strong> Rua Amazonas, 55, Santa Terezinha, Taquara - RS</li>
                     <li class="list-group-item">
                         <strong>Localização:</strong>
                         Próxima a escolas, supermercados, farmácias e transporte público.

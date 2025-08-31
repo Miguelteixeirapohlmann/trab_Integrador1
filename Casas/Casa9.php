@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Casa do Bosque</title>
+    <title>Casa em Taquara - Rua São Francisco</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
     <link href="../css/styles.css?v=20250829" rel="stylesheet">
     <style>
@@ -106,17 +106,17 @@
                 </div>
             </div>
             <div class="col-md-6">
-                <h1 class="mb-3">Casa Nova Esperança</h1>
-                <h4 class="text-success mb-4">R$ 185.000,00</h4>
+                <h1 class="mb-3">Casa em Taquara - Rua São Francisco</h1>
+                <h4 class="text-success mb-4">Compra R$  450.000,00</h4>
                 <ul class="list-group mb-4">
-                    <li class="list-group-item"><strong>Tamanho:</strong> 90 m²</li>
-                    <li class="list-group-item"><strong>Quartos:</strong> 2</li>
-                    <li class="list-group-item"><strong>Banheiros:</strong> 1</li>
+                    <li class="list-group-item"><strong>Tamanho:</strong> 286 m²</li>
+                    <li class="list-group-item"><strong>Quartos:</strong> 3 (com Closet)</li>
+                    <li class="list-group-item"><strong>Banheiros:</strong> 2</li>
                     <li class="list-group-item"><strong>Salas:</strong> 1</li>
                     <li class="list-group-item"><strong>Cozinhas:</strong> 1</li>
-                    <li class="list-group-item"><strong>Área:</strong> Quintal, área de serviço</li>
+                    <li class="list-group-item"><strong>Área:</strong> área de serviço</li>
                     <li class="list-group-item"><strong>Pátio:</strong> Sim</li>
-                    <li class="list-group-item"><strong>Endereço:</strong> Rua Nova, 99, Nova Esperança, Rio de Janeiro - RJ</li>
+                    <li class="list-group-item"><strong>Endereço:</strong> Rua São Francisco, 502, Medianeira, Taquara - RS</li>
                     <li class="list-group-item">
                         <strong>Localização:</strong>
                         Próxima a escolas, mercados, farmácias e transporte público.
@@ -127,7 +127,6 @@
                 </p>
                 <div class="d-flex gap-3">
                     <a href="../Compra.php" class="btn btn-success">Compra</a>
-                    <a href="../alugar.php" class="btn btn-primary">Alugar</a>
                 </div>
             </div>
         </div>

@@ -8,7 +8,12 @@ require_once __DIR__ . '/includes/init.php';
 
 // Se usuário já estiver logado, redirecionar
 if ($auth->isLoggedIn()) {
-    redirect('index.php');
+    $user = $auth->getCurrentUser();
+    if ($user['user_type'] === 'corretor') {
+        redirect('gerenciar_imoveis.php');
+    } else {
+        redirect('index.php');
+    }
 }
 
 // Verificar mensagens flash
@@ -63,7 +68,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login_form'])) {
                 
                 // Redirecionar baseado no tipo de usuário
                 $user = $result['user'];
-                $redirect_url = 'index.php'; // Todos vão para index.php
+                if ($user['user_type'] === 'corretor') {
+                    $redirect_url = 'gerenciar_imoveis.php';
+                } else {
+                    $redirect_url = 'index.php';
+                }
                 
                 redirect($redirect_url, 'Login realizado com sucesso!', 'success');
             } else {

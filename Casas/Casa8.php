@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Casa dos Girassóis</title>
+    <title>Casa em Taquara - Bairro Tucanos</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
     <link href="../css/styles.css?v=20250829" rel="stylesheet">
     <style>
@@ -106,17 +106,17 @@
                 </div>
             </div>
             <div class="col-md-6">
-                <h1 class="mb-3">Casa do Gabriel</h1>
-                <h4 class="text-success mb-4">R$ 1,00</h4>
+                <h1 class="mb-3">Casa em Taquara Bairro Tucanos</h1>
+                <h4 class="text-success mb-4">Compra R$ 184.900,00</h4>
                 <ul class="list-group mb-4">
-                    <li class="list-group-item"><strong>Tamanho:</strong> 60 m²</li>
+                    <li class="list-group-item"><strong>Tamanho:</strong> 180 m²</li>
                     <li class="list-group-item"><strong>Quartos:</strong> 1</li>
                     <li class="list-group-item"><strong>Banheiros:</strong> 1</li>
                     <li class="list-group-item"><strong>Salas:</strong> 1</li>
                     <li class="list-group-item"><strong>Cozinhas:</strong> 1</li>
                     <li class="list-group-item"><strong>Área:</strong> Compacta, fácil manutenção</li>
                     <li class="list-group-item"><strong>Pátio:</strong> Não</li>
-                    <li class="list-group-item"><strong>Endereço:</strong> Rua Central, 1, Centro, Rio de Janeiro - RJ</li>
+                    <li class="list-group-item"><strong>Endereço:</strong> Rua ALVARINO LACERDA FILHO, 1843, Tucanos, Taquara - RS</li>
                     <li class="list-group-item">
                         <strong>Localização:</strong>
                         Próxima a tudo! Supermercados, escolas, bancos, transporte público e comércio.
@@ -127,7 +127,6 @@
                 </p>
                 <div class="d-flex gap-3">
                     <a href="../Compra.php" class="btn btn-success">Compra</a>
-                    <a href="../alugar.php" class="btn btn-primary">Alugar</a>
                 </div>
             </div>
         </div>

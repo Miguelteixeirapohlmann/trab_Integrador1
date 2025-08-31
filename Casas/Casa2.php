@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Casa Alto Rolantinho</title>
+    <title>Casa em Taquara</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
     <link href="../css/styles.css?v=20250829" rel="stylesheet">
     <style>
@@ -153,27 +153,26 @@
                 </div>
             </div>
             <div class="col-md-6">
-                <h1 class="mb-3">Casa Alto Rolantinho</h1>
-                <h4 class="text-success mb-4">R$ 180.000,00</h4>
+                <h1 class="mb-3">Casa em Taquara</h1>
+                <h4 class="text-success mb-4">Aluguel R$ 1.500,00</h4>
                 <ul class="list-group mb-4">
-                    <li class="list-group-item"><strong>Tamanho:</strong> 95 m²</li>
-                    <li class="list-group-item"><strong>Quartos:</strong> 2</li>
+                    <li class="list-group-item"><strong>Tamanho:</strong> 336 m²</li>
+                    <li class="list-group-item"><strong>Quartos:</strong> 3 (com Closet)</li>
                     <li class="list-group-item"><strong>Banheiros:</strong> 1</li>
                     <li class="list-group-item"><strong>Salas:</strong> 1</li>
                     <li class="list-group-item"><strong>Cozinhas:</strong> 1</li>
                     <li class="list-group-item"><strong>Área:</strong> Varanda, área de serviço, quintal</li>
                     <li class="list-group-item"><strong>Pátio:</strong> Sim</li>
-                    <li class="list-group-item"><strong>Endereço:</strong> Rua das Acácias, 45, Alto Rolantinho, Rio de Janeiro - RJ</li>
+                    <li class="list-group-item"><strong>Endereço:</strong> Rua Professor Nestor Paulo Hartmann, 45, Bairro Recreio, Taquara - RS</li>
                     <li class="list-group-item">
                         <strong>Localização:</strong>
-                        Próxima a padarias, escolas, ponto de ônibus, academia e a 5 minutos do parque municipal.
+                        Próxima a padarias, escolas, ponto de ônibus, academia e a 10 minutos do parque municipal.
                     </li>
                 </ul>
                 <p>
                     Casa aconchegante, com varanda, área de serviço, quintal e garagem. Bairro residencial, silencioso e com fácil acesso ao centro.
                 </p>
                 <div class="d-flex gap-3">
-                    <a href="../Compra.php" class="btn btn-success">Compra</a>
                     <a href="../alugar.php" class="btn btn-primary">Alugar</a>
                 </div>
             </div>
