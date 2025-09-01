@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciar Docker do Projeto</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card shadow">
+                    <div class="card-header bg-primary text-white">
+                        <h4 class="mb-0">Gerenciar Docker do Projeto</h4>
+                    </div>
+                    <div class="card-body">
+                        <p>Utilize os botões abaixo para executar comandos Docker no seu projeto:</p>
+                        <div class="d-grid gap-2 mb-3">
+                            <button class="btn btn-success" onclick="copyCommand('docker-compose up --build')">Subir containers (docker-compose up --build)</button>
+                            <button class="btn btn-danger" onclick="copyCommand('docker-compose down')">Derrubar containers (docker-compose down)</button>
+                            <button class="btn btn-secondary" onclick="copyCommand('docker-compose logs')">Ver logs (docker-compose logs)</button>
+                        </div>
+                        <div class="alert alert-info" id="msg" style="display:none;"></div>
+                        <hr>
+                        <p class="text-muted small">Copie o comando desejado e cole no seu terminal na raiz do projeto.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function copyCommand(cmd) {
+            navigator.clipboard.writeText(cmd);
+            const msg = document.getElementById('msg');
+            msg.innerText = 'Comando copiado: ' + cmd;
+            msg.style.display = 'block';
+            setTimeout(() => { msg.style.display = 'none'; }, 2000);
+        }
+    </script>
+</body>
+</html>
