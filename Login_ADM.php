@@ -11,6 +11,8 @@ if ($auth->isLoggedIn()) {
     $user = $auth->getCurrentUser();
     if ($user['user_type'] === 'corretor') {
         redirect('gerenciar_imoveis.php');
+    } elseif ($user['user_type'] === 'admin') {
+        redirect('admin.php');
     } else {
         redirect('index.php');
     }
@@ -66,7 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login_form'])) {
                 } else {
                     // Login bem-sucedido
                     $_SESSION['tentativas_login'] = 0; // Reset tentativas
-                    redirect('views/admin/dashboard.php', 'Login de administrador realizado com sucesso!', 'success');
+                    redirect('admin.php', 'Login de administrador realizado com sucesso!', 'success');
                 }
             } else {
                 // Incrementar tentativas
@@ -212,7 +214,7 @@ $csrf_token = generateCSRFToken();
 
                     <!-- Botões de submissão -->
                     <div class="d-grid gap-2 mb-4">
-                        <button type="submit" class="btn btn-danger btn-lg">
+                        <button type="submit" class="btn btn-danger btn-lg" href="admin.php">
                             <i class="fas fa-sign-in-alt me-2"></i>Entrar como Admin
                         </button>
                     </div>

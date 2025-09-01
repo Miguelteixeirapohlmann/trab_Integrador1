@@ -1,21 +1,11 @@
 // Dados simulados para demonstração
 let corretores = [
-    { id: 1, nome: "João Silva", email: "joao@email.com", ativo: true },
-    { id: 2, nome: "Maria Souza", email: "maria@email.com", ativo: false },
-    { id: 3, nome: "Carlos Lima", email: "carlos@email.com", ativo: true }
+    { id: 1, nome: "João Silva", email: "joao@gmail.com", ativo: true },
+    { id: 2, nome: "Maria Souza", email: "maria@gmail.com", ativo: false },
+    { id: 3, nome: "Pedro Costa", email: "pedro@gmail.com", ativo: true }
 ];
 
-let imoveis = [
-    { id: 1, nome: "Casa Realengo", corretorId: 1, preco: 250000, imagem: "imgs/Foto9.jpg", ativo: true, detalhes: "Casas/Casa1.html" },
-    { id: 2, nome: "Casa Alto Rolantinho", corretorId: 2, preco: 180000, imagem: "imgs/foto8.jpg", ativo: true, detalhes: "Casas/Casa2.html" },
-    { id: 3, nome: "Casa Alpha Ville", corretorId: 3, preco: 150000, imagem: "imgs/foto7.jpg", ativo: true, detalhes: "Casas/Casa3.html" },
-    { id: 4, nome: "Casa Jardim das Flores", corretorId: 1, preco: 220000, imagem: "imgs/foto1.jpeg", ativo: true, detalhes: "Casas/Casa4.html" },
-    { id: 5, nome: "Casa Vista Alegre", corretorId: 2, preco: 310000, imagem: "imgs/foto2.jpg", ativo: true, detalhes: "Casas/Casa5.html" },
-    { id: 6, nome: "Casa Solar dos Pássaros", corretorId: 3, preco: 275000, imagem: "imgs/foto3.jpg", ativo: true, detalhes: "Casas/Casa6.html" },
-    { id: 7, nome: "Casa Bela Vista", corretorId: 1, preco: 199000, imagem: "imgs/foto4.jpg", ativo: true, detalhes: "Casas/Casa7.html" },
-    { id: 8, nome: "Casa do Gabriel", corretorId: 2, preco: 1, imagem: "imgs/foto5.jpg", ativo: true, detalhes: "Casas/Casa8.html" },
-    { id: 9, nome: "Casa Nova Esperança", corretorId: 3, preco: 185000, imagem: "imgs/casa6.jpg", ativo: true, detalhes: "Casas/Casa9.html" }
-];
+
 
 function renderCorretores() {
     const tbody = document.querySelector("#corretoresTable tbody");
@@ -30,7 +20,7 @@ function renderCorretores() {
                 <button class="btn btn-primary btn-sm me-1" onclick="editCorretor(${corretor.id})"><i class='fas fa-edit'></i> Editar</button>
                 <button class="btn btn-sm ${corretor.ativo ? 'btn-warning' : 'btn-success'}" onclick="toggleCorretor(${corretor.id})">${corretor.ativo ? 'Desabilitar' : 'Habilitar'}</button>
             </td>
-            <td><a href="corretor-${corretor.id}.html" class="btn btn-info btn-sm">Ver Perfil</a></td>
+            <td><a href="perfil.php?id=${corretor.id}" class="btn btn-info btn-sm">Ver Perfil</a></td>
         `;
 // Abrir modal para novo corretor
 window.openCorretorModal = function() {

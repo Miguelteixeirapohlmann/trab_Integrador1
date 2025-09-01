@@ -8,7 +8,23 @@ require_once __DIR__ . '/includes/init.php';
 
 // Verificar se o usuário está logado
 $auth->requireLogin('Login.php');
-$current_user = $auth->getCurrentUser();
+
+// Se for admin e houver ?id=, mostrar o perfil do corretor correspondente
+if (isset($_GET['id']) && $auth->hasRole('admin')) {
+    $corretor_id = intval($_GET['id']);
+    $stmt = $pdo->prepare("SELECT * FROM users WHERE id = ? AND user_type = 'broker'");
+    $stmt->execute([$corretor_id]);
+    $corretor = $stmt->fetch();
+    if ($corretor) {
+        $current_user = $corretor;
+    } else {
+        // Se não encontrar corretor, volta para admin.php
+        header('Location: admin.php');
+        exit;
+    }
+} else {
+    $current_user = $auth->getCurrentUser();
+}
 
 // Verificar mensagens flash
 $flash = getFlashMessage();

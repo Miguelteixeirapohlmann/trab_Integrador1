@@ -131,13 +131,146 @@ require_once __DIR__ . '/includes/navbar.php';
 
         <script src="js/scripts.js"></script>
         <script>
-        // Dados iniciais das casas
-        let casas = [
+        // Seleção dinâmica das casas conforme corretor logado
+        let casas = [];
+        <?php
+        $corretor_nome = strtolower($current_user['first_name'] ?? '');
+        if ($corretor_nome === 'maria') {
+        ?>
+        casas = [
+            {
+                id: 4,
+                nome: "Casa em Parobé",
+                tipo: "Residencial",
+                tipo_negocio: "compra",
+                valor_compra: 180000,
+                imagens: [
+                    "imgs/Casa4/Casa4.0.jpg",
+                    "imgs/Casa4/Casa4.2.jpg",
+                    "imgs/Casa4/Casa4.3.jpg",
+                    "imgs/Casa4/Casa4.4.jpg",
+                    "imgs/Casa4/Casa4.5.jpg",
+                    "imgs/Casa4/Casa4.6.jpg",
+                    "imgs/Casa4/Casa4.7.jpg",
+                    "imgs/Casa4/Casa4.8.jpg",
+                    "imgs/Casa4/Casa4.9.jpg"
+                ]
+            },
+            {
+                id: 5,
+                nome: "Casa em Igrejinha",
+                tipo: "Residencial",
+                tipo_negocio: "aluguel",
+                valor_aluguel: 1800,
+                imagens: [
+                    "imgs/Casa5/Casa5.0.jpg",
+                    "imgs/Casa5/Casa5.1.jpg",
+                    "imgs/Casa5/Casa5.2.jpg",
+                    "imgs/Casa5/Casa5.3.jpg",
+                    "imgs/Casa5/Casa5.4.jpg",
+                    "imgs/Casa5/Casa5.5.jpg",
+                    "imgs/Casa5/Casa5.6.jpg",
+                    "imgs/Casa5/Casa5.7.jpg",
+                    "imgs/Casa5/Casa5.8.jpg",
+                    "imgs/Casa5/Casa5.9.jpg",
+                    "imgs/Casa5/Casa5.10.jpg"
+                ]
+            },
+            {
+                id: 6,
+                nome: "Casa em Rolante",
+                tipo: "Residencial",
+                tipo_negocio: "ambos",
+                valor_compra: 320000,
+                valor_aluguel: 2200,
+                imagens: [
+                    "imgs/Casa6/Casa6.0.jpg",
+                    "imgs/Casa6/Casa6.1.jpg",
+                    "imgs/Casa6/Casa6.2.jpg",
+                    "imgs/Casa6/Casa6.3.jpg",
+                    "imgs/Casa6/Casa6.4.jpg",
+                    "imgs/Casa6/Casa6.5.jpg",
+                    "imgs/Casa6/Casa6.6.jpg",
+                    "imgs/Casa6/Casa6.7.jpg",
+                    "imgs/Casa6/Casa6.8.jpg",
+                    "imgs/Casa6/Casa6.9.jpg"
+                ]
+            }
+        ];
+        <?php
+        } else if ($corretor_nome === 'pedro') {
+        ?>
+        casas = [
+            {
+                id: 7,
+                nome: "Casa em Sapiranga",
+                tipo: "Residencial",
+                tipo_negocio: "aluguel",
+                valor_aluguel: 1700,
+                imagens: [
+                    "imgs/Casa7/Casa7.0.jpg",
+                    "imgs/Casa7/Casa7.1.jpg",
+                    "imgs/Casa7/Casa7.2.jpg",
+                    "imgs/Casa7/Casa7.3.jpg",
+                    "imgs/Casa7/Casa7.4.jpg",
+                    "imgs/Casa7/Casa7.5.jpg",
+                    "imgs/Casa7/Casa7.6.jpg",
+                    "imgs/Casa7/Casa7.7.jpg",
+                    "imgs/Casa7/Casa7.8.jpg",
+                    "imgs/Casa7/Casa7.9.jpg"
+                ]
+            },
+            {
+                id: 8,
+                nome: "Casa em Nova Hartz",
+                tipo: "Residencial",
+                tipo_negocio: "compra",
+                valor_compra: 195000,
+                imagens: [
+                    "imgs/Casa8/Casa8.0.jpg",
+                    "imgs/Casa8/Casa8.1.jpg",
+                    "imgs/Casa8/Casa8.2.jpg",
+                    "imgs/Casa8/Casa8.3.jpg",
+                    "imgs/Casa8/Casa8.4.jpg",
+                    "imgs/Casa8/Casa8.5.jpg",
+                    "imgs/Casa8/Casa8.6.jpg",
+                    "imgs/Casa8/Casa8.7.jpg",
+                    "imgs/Casa8/Casa8.8.jpg",
+                    "imgs/Casa8/Casa8.9.jpg"
+                ]
+            },
+            {
+                id: 9,
+                nome: "Casa em Campo Bom",
+                tipo: "Residencial",
+                tipo_negocio: "ambos",
+                valor_compra: 275000,
+                valor_aluguel: 2100,
+                imagens: [
+                    "imgs/Casa9/Casa9.0.jpg",
+                    "imgs/Casa9/Casa9.1.jpg",
+                    "imgs/Casa9/Casa9.2.jpg",
+                    "imgs/Casa9/Casa9.3.jpg",
+                    "imgs/Casa9/Casa9.4.jpg",
+                    "imgs/Casa9/Casa9.5.jpg",
+                    "imgs/Casa9/Casa9.6.jpg",
+                    "imgs/Casa9/Casa9.7.jpg",
+                    "imgs/Casa9/Casa9.8.jpg",
+                    "imgs/Casa9/Casa9.9.jpg"
+                ]
+            }
+        ];
+        <?php
+        } else {
+        ?>
+        casas = [
             {
                 id: 1,
                 nome: "Casa em Santo Antônio da Patrulha",
-                valor: 300000,
                 tipo: "Residencial",
+                tipo_negocio: "ambos",
+                valor_compra: 300000,
+                valor_aluguel: 2000,
                 imagens: [
                     "imgs/Casa1/Casa1.0.jpg",
                     "imgs/Casa1/Casa1.1.jpg",
@@ -154,8 +287,9 @@ require_once __DIR__ . '/includes/navbar.php';
             {
                 id: 2,
                 nome: "Casa em Taquara",
-                valor: 220000,
                 tipo: "Residencial",
+                tipo_negocio: "aluguel",
+                valor_aluguel: 1600,
                 imagens: [
                     "imgs/Casa2/Casa2.0.jpg",
                     "imgs/Casa2/Casa2.1.jpg",
@@ -176,8 +310,9 @@ require_once __DIR__ . '/includes/navbar.php';
             {
                 id: 3,
                 nome: "Casa em Taquara Alto Padrão",
-                valor: 3000000,
                 tipo: "Alto Padrão",
+                tipo_negocio: "compra",
+                valor_compra: 3000000,
                 imagens: [
                     "imgs/Casa3/Casa3.0.jpg",
                     "imgs/Casa3/Casa3.1.jpg",
@@ -192,6 +327,7 @@ require_once __DIR__ . '/includes/navbar.php';
                 ]
             }
         ];
+        <?php } ?>
 
         function renderCasas() {
             const container = document.getElementById('casasCards');
@@ -200,6 +336,14 @@ require_once __DIR__ . '/includes/navbar.php';
                 const card = document.createElement('div');
                 card.className = 'col-md-4 mb-4';
                 const carouselId = `carousel-casa-${casa.id}`;
+                let negocioHtml = '';
+                if (casa.tipo_negocio === 'compra') {
+                    negocioHtml = `<span class='badge bg-success mb-2'>À venda</span><br><strong>Valor de compra:</strong> R$ ${casa.valor_compra.toLocaleString('pt-BR')}`;
+                } else if (casa.tipo_negocio === 'aluguel') {
+                    negocioHtml = `<span class='badge bg-info mb-2'>Para Alugar</span><br><strong>Valor do aluguel:</strong> R$ ${casa.valor_aluguel.toLocaleString('pt-BR')}`;
+                } else if (casa.tipo_negocio === 'ambos') {
+                    negocioHtml = `<span class='badge bg-success mb-2'>À venda</span> <span class='badge bg-info mb-2'>Para Alugar</span><br><strong>Valor de compra:</strong> R$ ${casa.valor_compra.toLocaleString('pt-BR')}<br><strong>Valor do aluguel:</strong> R$ ${casa.valor_aluguel.toLocaleString('pt-BR')}`;
+                }
                 card.innerHTML = `
                     <div class="card h-100 border-top border-primary" style="border-width:4px !important;">
                         <div class="position-absolute top-0 end-0 m-2">
@@ -231,8 +375,8 @@ require_once __DIR__ . '/includes/navbar.php';
                         </div>
                         <div class="card-body">
                             <h5 class="card-title">${casa.nome}</h5>
-                            <p class="card-text mb-1"><strong>Valor:</strong> R$ ${casa.valor.toLocaleString('pt-BR')}</p>
-                            <p class="card-text"><strong>Tipo:</strong> ${casa.tipo}</p>
+                            <p class="card-text mb-1"><strong>Tipo:</strong> ${casa.tipo}</p>
+                            <div class="mb-2">${negocioHtml}</div>
                             <div class="d-flex justify-content-between mt-3">
                                 <button class="btn btn-warning btn-sm" onclick="abrirModalEditarCasa(${casa.id})"><i class="bi bi-pencil"></i> Editar</button>
                                 <button class="btn btn-danger btn-sm" onclick="excluirCasa(${casa.id})"><i class="bi bi-trash"></i> Excluir</button>

@@ -199,6 +199,9 @@ $csrf_token = generateCSRFToken();
                                             <option value="broker" <?php echo ($form_data['user_type'] ?? '') === 'broker' ? 'selected' : ''; ?>>
                                                 Corretor
                                             </option>
+                                            <option value="admin" <?php echo ($form_data['user_type'] ?? '') === 'admin' ? 'selected' : ''; ?>>
+                                                Administrador
+                                            </option>
                                         </select>
                                         <label for="user_type">Tipo de Conta</label>
                                     </div>
