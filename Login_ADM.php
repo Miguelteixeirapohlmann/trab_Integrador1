@@ -34,14 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login_form'])) {
     
     // Se muitas tentativas, bloquear temporariamente
     if ($_SESSION['tentativas_login'] >= 5) {
-        $tempo_bloqueio = 300; // 5 minutos
-        if (time() - $_SESSION['ultimo_tentativa'] < $tempo_bloqueio) {
-            $tempo_restante = $tempo_bloqueio - (time() - $_SESSION['ultimo_tentativa']);
-            $error_message = "Muitas tentativas de login. Tente novamente em " . ceil($tempo_restante / 60) . " minutos.";
-        } else {
-            // Reset das tentativas após o período de bloqueio
-            $_SESSION['tentativas_login'] = 0;
-        }
+    // Bloqueio removido
     }
     
     if (empty($error_message)) {

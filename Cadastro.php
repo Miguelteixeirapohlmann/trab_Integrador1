@@ -32,7 +32,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['register_form'])) {
             'phone' => trim($_POST['phone'] ?? ''),
             'password' => $_POST['password'] ?? '',
             'confirm_password' => $_POST['confirm_password'] ?? '',
-            'user_type' => $_POST['user_type'] ?? 'user'
+            // Impede cadastro como admin
+            'user_type' => (isset($_POST['user_type']) && $_POST['user_type'] === 'broker') ? 'broker' : 'user'
         ];
         
         // Validações
@@ -100,7 +101,7 @@ $csrf_token = generateCSRFToken();
         body {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            padding: 2rem 0;
+            padding: 6rem 0 2rem 0; /* padding-top maior para o navbar */
         }
         
         .register-card {
@@ -111,6 +112,13 @@ $csrf_token = generateCSRFToken();
     </style>
 </head>
 <body>
+    <?php
+    require_once __DIR__ . '/includes/navbar.php';
+    // Exibe navbar para visitante (não logado)
+    if (function_exists('renderNavbar')) {
+        renderNavbar(null, 'cadastro');
+    }
+    ?>
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-8 col-md-10">
@@ -193,14 +201,11 @@ $csrf_token = generateCSRFToken();
                                 <div class="col-md-6">
                                     <div class="form-floating mb-3">
                                         <select class="form-select" id="user_type" name="user_type">
-                                            <option value="user" <?php echo ($form_data['user_type'] ?? 'user') === 'user' ? 'selected' : ''; ?>>
+                                            <option value="user" <?php echo ($form_data['user_type'] ?? 'user') === 'user' ? 'selected' : ''; ?> >
                                                 Cliente
                                             </option>
-                                            <option value="broker" <?php echo ($form_data['user_type'] ?? '') === 'broker' ? 'selected' : ''; ?>>
+                                            <option value="broker" <?php echo ($form_data['user_type'] ?? '') === 'broker' ? 'selected' : ''; ?> >
                                                 Corretor
-                                            </option>
-                                            <option value="admin" <?php echo ($form_data['user_type'] ?? '') === 'admin' ? 'selected' : ''; ?>>
-                                                Administrador
                                             </option>
                                         </select>
                                         <label for="user_type">Tipo de Conta</label>

@@ -15,9 +15,7 @@ class Auth {
     }
     
     private function startSession() {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
+        // session_start() removido para evitar duplicidade
     }
     
     /**

@@ -18,8 +18,8 @@ DROP TABLE IF EXISTS users;
 SET FOREIGN_KEY_CHECKS = 1;
 
 -- Criação do banco de dados
-CREATE DATABASE IF NOT EXISTS real_estate CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-USE real_estate;
+CREATE DATABASE IF NOT EXISTS trab_integrador CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE trab_integrador;
 
 -- Tabela de usuários
 CREATE TABLE users (

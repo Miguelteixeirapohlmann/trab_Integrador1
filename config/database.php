@@ -9,15 +9,15 @@ $isDocker = isset($_ENV['APP_ENV']) && $_ENV['APP_ENV'] === 'docker' ||
             file_exists('/.dockerenv');
 
 if ($isDocker) {
-    // Configurações para Docker
+    // Configurações para Docker (iguais ao docker-compose.yml)
     define('DB_HOST', 'db');
-    define('DB_NAME', 'real_estate');
-    define('DB_USER', 'real_estate_user');
-    define('DB_PASS', 'real_estate_pass_2024');
+    define('DB_NAME', 'trab_integrador');
+    define('DB_USER', 'user');
+    define('DB_PASS', 'password');
 } else {
     // Configurações para ambiente local
     define('DB_HOST', 'localhost:3307');
-    define('DB_NAME', 'real_estate');
+    define('DB_NAME', 'trab_integrador');
     define('DB_USER', 'root');
     define('DB_PASS', '');
 }

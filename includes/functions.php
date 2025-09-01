@@ -286,9 +286,6 @@ function sendEmail($to, $subject, $body, $from = null) {
  * Gerar token CSRF
  */
 function generateCSRFToken() {
-    if (session_status() === PHP_SESSION_NONE) {
-        session_start();
-    }
     if (!isset($_SESSION['csrf_token'])) {
         $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
     }
@@ -299,9 +296,6 @@ function generateCSRFToken() {
  * Validar token CSRF
  */
 function validateCSRFToken($token) {
-    if (session_status() === PHP_SESSION_NONE) {
-        session_start();
-    }
     return isset($_SESSION['csrf_token']) && hash_equals($_SESSION['csrf_token'], $token);
 }
 
@@ -310,9 +304,6 @@ function validateCSRFToken($token) {
  */
 function redirect($url, $message = null, $type = 'success') {
     if ($message) {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
         $_SESSION['flash_message'] = $message;
         $_SESSION['flash_type'] = $type;
     }
@@ -324,19 +315,12 @@ function redirect($url, $message = null, $type = 'success') {
  * Obter e limpar mensagem flash
  */
 function getFlashMessage() {
-    if (session_status() === PHP_SESSION_NONE) {
-        session_start();
-    }
-    
     if (isset($_SESSION['flash_message'])) {
         $message = $_SESSION['flash_message'];
         $type = $_SESSION['flash_type'] ?? 'info';
-        
         unset($_SESSION['flash_message'], $_SESSION['flash_type']);
-        
         return ['message' => $message, 'type' => $type];
     }
-    
     return null;
 }
 
@@ -344,10 +328,6 @@ function getFlashMessage() {
  * Definir mensagem flash
  */
 function setFlashMessage($message, $type = 'info') {
-    if (session_status() === PHP_SESSION_NONE) {
-        session_start();
-    }
-    
     $_SESSION['flash_message'] = $message;
     $_SESSION['flash_type'] = $type;
 }

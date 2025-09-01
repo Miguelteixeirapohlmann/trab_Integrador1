@@ -49,66 +49,233 @@
                   <h5 class="modal-title" id="modalCorretorLabel">Novo Corretor</h5>
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
-                  <input type="hidden" id="corretorId">
-                        <tbody>
-                        <tr>
-                            <td colspan="6">
-                                <h4 class="mb-4">Imóveis dos Corretores</h4>
-                                <div class="row g-4">
-                                    <!-- Casa 1 -->
-                                    <div class="col-lg-4 col-md-6">
-                                        <div class="card property-card" style="border-radius:12px;box-shadow:0 4px 16px rgba(0,0,0,0.08);">
-                                            <div class="position-relative overflow-hidden">
-                                                <div id="carouselCasa1" class="carousel slide" data-bs-ride="carousel" style="width:100%;margin:auto;">
-                                                    <div class="carousel-inner" style="border-radius:10px;">
-                                                        <div class="carousel-item active"><img src="imgs/Casa1/Casa1.0.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Santo Antônio da Patrulha 1"></div>
-                                                        <div class="carousel-item"><img src="imgs/Casa1/Casa1.1.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Santo Antônio da Patrulha 2"></div>
-                                                        <div class="carousel-item"><img src="imgs/Casa1/Casa1.2.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Santo Antônio da Patrulha 3"></div>
-                                                        <div class="carousel-item"><img src="imgs/Casa1/Casa1.3.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Santo Antônio da Patrulha 4"></div>
-                                                        <div class="carousel-item"><img src="imgs/Casa1/Casa1.4.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Santo Antônio da Patrulha 5"></div>
-                                                        <div class="carousel-item"><img src="imgs/Casa1/Casa1.5.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Santo Antônio da Patrulha 6"></div>
-                                                        <div class="carousel-item"><img src="imgs/Casa1/Casa1.6.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Santo Antônio da Patrulha 7"></div>
-                                                        <div class="carousel-item"><img src="imgs/Casa1/Casa1.7.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Santo Antônio da Patrulha 8"></div>
-                                                        <div class="carousel-item"><img src="imgs/Casa1/Casa1.8.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Santo Antônio da Patrulha 9"></div>
-                                                        <div class="carousel-item"><img src="imgs/Casa1/Casa1.9.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Santo Antônio da Patrulha 10"></div>
-                                                    </div>
-                                                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselCasa1" data-bs-slide="prev" style="width:32px;height:32px;top:50%;transform:translateY(-50%);">
-                                                        <span class="carousel-control-prev-icon" style="width:16px;height:16px;" aria-hidden="true"></span>
-                                                        <span class="visually-hidden">Anterior</span>
-                                                    </button>
-                                                    <button class="carousel-control-next" type="button" data-bs-target="#carouselCasa1" data-bs-slide="next" style="width:32px;height:32px;top:50%;transform:translateY(-50%);">
-                                                        <span class="carousel-control-next-icon" style="width:16px;height:16px;" aria-hidden="true"></span>
-                                                        <span class="visually-hidden">Próximo</span>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                            <div class="card-body">
-                                                <h5 class="property-title" style="font-size:1.1rem;font-weight:600;color:#333;">Casa em Santo Antônio da Patrulha</h5>
-                                                <div class="property-price price-sale mb-2" style="font-size:1rem;font-weight:700;">R$ 300.000,00</div>
-                                                <div class="mb-2"><span class="badge bg-success rounded-pill">Disponível</span></div>
-                                                <div class="mb-2"><span class="badge bg-primary rounded-pill">João Silva</span></div>
-                                                <a href="Casas/Casa1.php" class="btn btn-details w-100 btn-sm" style="background:linear-gradient(45deg,#ff7b00,#ff9500);border:none;color:white;">Ver Detalhes</a>
-                                            </div>
-                                        </div>
+                                <div class="modal-body">
+                                    <input type="hidden" id="corretorId">
+                                    <div class="mb-3">
+                                        <label for="corretorNome" class="form-label">Nome do Corretor</label>
+                                        <input type="text" class="form-control" id="corretorNome" name="corretorNome" placeholder="Digite o nome completo" required>
                                     </div>
-                                    <!-- Repita para casas 2 a 9, seguindo o mesmo padrão -->
+                                    <div class="mb-3">
+                                        <label for="corretorEmail" class="form-label">E-mail</label>
+                                        <input type="email" class="form-control" id="corretorEmail" name="corretorEmail" placeholder="exemplo@email.com" required>
+                                    </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+
+    <!-- Gerenciador de Imóveis -->
+    <div class="card mt-5">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">Gerenciador de Imóveis dos Corretores</h4>
+        </div>
+        <div class="card-body">
+            <div class="row row-cols-1 row-cols-md-3 g-4">
+         
+                <!-- Imóvel 4 -->
+                <div class="col">
+                    <div class="card property-card" style="border-radius:12px;box-shadow:0 4px 16px rgba(0,0,0,0.08);">
+                        <div class="position-relative overflow-hidden">
+                            <div id="carouselCasa4" class="carousel slide" data-bs-ride="carousel" style="width:100%;margin:auto;">
+                                <div class="carousel-inner" style="border-radius:10px;">
+                                    <div class="carousel-item active"><img src="imgs/Casa4/Casa4.0.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Parobé 1"></div>
+                                    <div class="carousel-item"><img src="imgs/Casa4/Casa4.2.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Parobé 2"></div>
+                                    <div class="carousel-item"><img src="imgs/Casa4/Casa4.3.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Parobé 3"></div>
                                 </div>
-                            </td>
-                        </tr>
-                                        </button>
-                                        <button class="carousel-control-next" type="button" data-bs-target="#carouselCasa1" data-bs-slide="next" style="width:32px;height:32px;top:50%;transform:translateY(-50%);">
-                                            <span class="carousel-control-next-icon" style="width:16px;height:16px;" aria-hidden="true"></span>
-                                            <span class="visually-hidden">Próximo</span>
-                                        </button>
-                                        <div class="carousel-indicators" style="bottom:0;">
-                                            <button type="button" data-bs-target="#carouselCasa1" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1" style="width:8px;height:8px;"></button>
-                                            <button type="button" data-bs-target="#carouselCasa1" data-bs-slide-to="1" aria-label="Slide 2" style="width:8px;height:8px;"></button>
-                                            <button type="button" data-bs-target="#carouselCasa1" data-bs-slide-to="2" aria-label="Slide 3" style="width:8px;height:8px;"></button>
-                                            <button type="button" data-bs-target="#carouselCasa1" data-bs-slide-to="3" aria-label="Slide 4" style="width:8px;height:8px;"></button>
-                                            <button type="button" data-bs-target="#carouselCasa1" data-bs-slide-to="4" aria-label="Slide 5" style="width:8px;height:8px;"></button>
-                                            <button type="button" data-bs-target="#carouselCasa1" data-bs-slide-to="5" aria-label="Slide 6" style="width:8px;height:8px;"></button>
-                                            <button type="button" data-bs-target="#carouselCasa1" data-bs-slide-to="6" aria-label="Slide 7" style="width:8px;height:8px;"></button>
+                                <button class="carousel-control-prev" type="button" data-bs-target="#carouselCasa4" data-bs-slide="prev" style="width:32px;height:32px;top:50%;transform:translateY(-50%);">
+                                    <span class="carousel-control-prev-icon" style="width:16px;height:16px;" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Anterior</span>
+                                </button>
+                                <button class="carousel-control-next" type="button" data-bs-target="#carouselCasa4" data-bs-slide="next" style="width:32px;height:32px;top:50%;transform:translateY(-50%);">
+                                    <span class="carousel-control-next-icon" style="width:16px;height:16px;" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Próximo</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="property-title" style="font-size:1.1rem;font-weight:600;color:#333;">Casa em Parobé</h5>
+                            <div class="property-price price-sale mb-2" style="font-size:1rem;font-weight:700;">R$ 180.000,00</div>
+                            <div class="mb-2"><span class="badge bg-success rounded-pill">Disponível</span></div>
+                            <div class="mb-2"><span class="badge bg-primary rounded-pill">Maria Souza</span></div>
+                            <a href="Casas/Casa4.php" class="btn btn-details w-100 btn-sm" style="background:linear-gradient(45deg,#ff7b00,#ff9500);border:none;color:white;">Ver Detalhes</a>
+                            <div class="d-flex justify-content-between mt-3">
+                                <button class="btn btn-warning btn-sm"><i class="bi bi-pencil"></i> Editar</button>
+                                <button class="btn btn-danger btn-sm"><i class="bi bi-trash"></i> Excluir</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Imóvel 5 -->
+                <div class="col">
+                    <div class="card property-card" style="border-radius:12px;box-shadow:0 4px 16px rgba(0,0,0,0.08);">
+                        <div class="position-relative overflow-hidden">
+                            <div id="carouselCasa5" class="carousel slide" data-bs-ride="carousel" style="width:100%;margin:auto;">
+                                <div class="carousel-inner" style="border-radius:10px;">
+                                    <div class="carousel-item active"><img src="imgs/Casa5/Casa5.0.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Igrejinha 1"></div>
+                                    <div class="carousel-item"><img src="imgs/Casa5/Casa5.1.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Igrejinha 2"></div>
+                                    <div class="carousel-item"><img src="imgs/Casa5/Casa5.10.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Igrejinha 3"></div>
+                                </div>
+                                <button class="carousel-control-prev" type="button" data-bs-target="#carouselCasa5" data-bs-slide="prev" style="width:32px;height:32px;top:50%;transform:translateY(-50%);">
+                                    <span class="carousel-control-prev-icon" style="width:16px;height:16px;" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Anterior</span>
+                                </button>
+                                <button class="carousel-control-next" type="button" data-bs-target="#carouselCasa5" data-bs-slide="next" style="width:32px;height:32px;top:50%;transform:translateY(-50%);">
+                                    <span class="carousel-control-next-icon" style="width:16px;height:16px;" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Próximo</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="property-title" style="font-size:1.1rem;font-weight:600;color:#333;">Casa em Igrejinha</h5>
+                            <div class="property-price price-sale mb-2" style="font-size:1rem;font-weight:700;">R$ 250.000,00</div>
+                            <div class="mb-2"><span class="badge bg-success rounded-pill">Disponível</span></div>
+                            <div class="mb-2"><span class="badge bg-primary rounded-pill">Maria Souza</span></div>
+                            <a href="Casas/Casa5.php" class="btn btn-details w-100 btn-sm" style="background:linear-gradient(45deg,#ff7b00,#ff9500);border:none;color:white;">Ver Detalhes</a>
+                            <div class="d-flex justify-content-between mt-3">
+                                <button class="btn btn-warning btn-sm"><i class="bi bi-pencil"></i> Editar</button>
+                                <button class="btn btn-danger btn-sm"><i class="bi bi-trash"></i> Excluir</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Imóvel 6 -->
+                <div class="col">
+                    <div class="card property-card" style="border-radius:12px;box-shadow:0 4px 16px rgba(0,0,0,0.08);">
+                        <div class="position-relative overflow-hidden">
+                            <div id="carouselCasa6" class="carousel slide" data-bs-ride="carousel" style="width:100%;margin:auto;">
+                                <div class="carousel-inner" style="border-radius:10px;">
+                                    <div class="carousel-item active"><img src="imgs/Casa6/Casa6.0.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Rolante 1"></div>
+                                    <div class="carousel-item"><img src="imgs/Casa6/Casa6.1.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Rolante 2"></div>
+                                    <div class="carousel-item"><img src="imgs/Casa6/Casa6.2.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Rolante 3"></div>
+                                </div>
+                                <button class="carousel-control-prev" type="button" data-bs-target="#carouselCasa6" data-bs-slide="prev" style="width:32px;height:32px;top:50%;transform:translateY(-50%);">
+                                    <span class="carousel-control-prev-icon" style="width:16px;height:16px;" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Anterior</span>
+                                </button>
+                                <button class="carousel-control-next" type="button" data-bs-target="#carouselCasa6" data-bs-slide="next" style="width:32px;height:32px;top:50%;transform:translateY(-50%);">
+                                    <span class="carousel-control-next-icon" style="width:16px;height:16px;" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Próximo</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="property-title" style="font-size:1.1rem;font-weight:600;color:#333;">Casa em Rolante</h5>
+                            <div class="property-price price-sale mb-2" style="font-size:1rem;font-weight:700;">R$ 320.000,00</div>
+                            <div class="mb-2"><span class="badge bg-success rounded-pill">Disponível</span></div>
+                            <div class="mb-2"><span class="badge bg-primary rounded-pill">Maria Souza</span></div>
+                            <a href="Casas/Casa6.php" class="btn btn-details w-100 btn-sm" style="background:linear-gradient(45deg,#ff7b00,#ff9500);border:none;color:white;">Ver Detalhes</a>
+                            <div class="d-flex justify-content-between mt-3">
+                                <button class="btn btn-warning btn-sm"><i class="bi bi-pencil"></i> Editar</button>
+                                <button class="btn btn-danger btn-sm"><i class="bi bi-trash"></i> Excluir</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Imóvel 7 -->
+                <div class="col">
+                    <div class="card property-card" style="border-radius:12px;box-shadow:0 4px 16px rgba(0,0,0,0.08);">
+                        <div class="position-relative overflow-hidden">
+                            <div id="carouselCasa7" class="carousel slide" data-bs-ride="carousel" style="width:100%;margin:auto;">
+                                <div class="carousel-inner" style="border-radius:10px;">
+                                    <div class="carousel-item active"><img src="imgs/Casa7/Casa7.0.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Sapiranga 1"></div>
+                                    <div class="carousel-item"><img src="imgs/Casa7/Casa7.1.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Sapiranga 2"></div>
+                                    <div class="carousel-item"><img src="imgs/Casa7/Casa7.2.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Sapiranga 3"></div>
+                                </div>
+                                <button class="carousel-control-prev" type="button" data-bs-target="#carouselCasa7" data-bs-slide="prev" style="width:32px;height:32px;top:50%;transform:translateY(-50%);">
+                                    <span class="carousel-control-prev-icon" style="width:16px;height:16px;" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Anterior</span>
+                                </button>
+                                <button class="carousel-control-next" type="button" data-bs-target="#carouselCasa7" data-bs-slide="next" style="width:32px;height:32px;top:50%;transform:translateY(-50%);">
+                                    <span class="carousel-control-next-icon" style="width:16px;height:16px;" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Próximo</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="property-title" style="font-size:1.1rem;font-weight:600;color:#333;">Casa em Sapiranga</h5>
+                            <div class="property-price price-sale mb-2" style="font-size:1rem;font-weight:700;">R$ 210.000,00</div>
+                            <div class="mb-2"><span class="badge bg-success rounded-pill">Disponível</span></div>
+                            <div class="mb-2"><span class="badge bg-primary rounded-pill">Pedro Costa</span></div>
+                            <a href="Casas/Casa7.php" class="btn btn-details w-100 btn-sm" style="background:linear-gradient(45deg,#ff7b00,#ff9500);border:none;color:white;">Ver Detalhes</a>
+                            <div class="d-flex justify-content-between mt-3">
+                                <button class="btn btn-warning btn-sm"><i class="bi bi-pencil"></i> Editar</button>
+                                <button class="btn btn-danger btn-sm"><i class="bi bi-trash"></i> Excluir</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Imóvel 8 -->
+                <div class="col">
+                    <div class="card property-card" style="border-radius:12px;box-shadow:0 4px 16px rgba(0,0,0,0.08);">
+                        <div class="position-relative overflow-hidden">
+                            <div id="carouselCasa8" class="carousel slide" data-bs-ride="carousel" style="width:100%;margin:auto;">
+                                <div class="carousel-inner" style="border-radius:10px;">
+                                    <div class="carousel-item active"><img src="imgs/Casa8/Casa8.0.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Nova Hartz 1"></div>
+                                    <div class="carousel-item"><img src="imgs/Casa8/Casa8.1.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Nova Hartz 2"></div>
+                                    <div class="carousel-item"><img src="imgs/Casa8/Casa8.2.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Nova Hartz 3"></div>
+                                </div>
+                                <button class="carousel-control-prev" type="button" data-bs-target="#carouselCasa8" data-bs-slide="prev" style="width:32px;height:32px;top:50%;transform:translateY(-50%);">
+                                    <span class="carousel-control-prev-icon" style="width:16px;height:16px;" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Anterior</span>
+                                </button>
+                                <button class="carousel-control-next" type="button" data-bs-target="#carouselCasa8" data-bs-slide="next" style="width:32px;height:32px;top:50%;transform:translateY(-50%);">
+                                    <span class="carousel-control-next-icon" style="width:16px;height:16px;" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Próximo</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="property-title" style="font-size:1.1rem;font-weight:600;color:#333;">Casa em Nova Hartz</h5>
+                            <div class="property-price price-sale mb-2" style="font-size:1rem;font-weight:700;">R$ 195.000,00</div>
+                            <div class="mb-2"><span class="badge bg-success rounded-pill">Disponível</span></div>
+                            <div class="mb-2"><span class="badge bg-primary rounded-pill">Pedro Costa</span></div>
+                            <a href="Casas/Casa8.php" class="btn btn-details w-100 btn-sm" style="background:linear-gradient(45deg,#ff7b00,#ff9500);border:none;color:white;">Ver Detalhes</a>
+                            <div class="d-flex justify-content-between mt-3">
+                                <button class="btn btn-warning btn-sm"><i class="bi bi-pencil"></i> Editar</button>
+                                <button class="btn btn-danger btn-sm"><i class="bi bi-trash"></i> Excluir</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Imóvel 9 -->
+                <div class="col">
+                    <div class="card property-card" style="border-radius:12px;box-shadow:0 4px 16px rgba(0,0,0,0.08);">
+                        <div class="position-relative overflow-hidden">
+                            <div id="carouselCasa9" class="carousel slide" data-bs-ride="carousel" style="width:100%;margin:auto;">
+                                <div class="carousel-inner" style="border-radius:10px;">
+                                    <div class="carousel-item active"><img src="imgs/Casa9/Casa9.0.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Campo Bom 1"></div>
+                                    <div class="carousel-item"><img src="imgs/Casa9/Casa9.1.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Campo Bom 2"></div>
+                                    <div class="carousel-item"><img src="imgs/Casa9/Casa9.2.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Campo Bom 3"></div>
+                                </div>
+                                <button class="carousel-control-prev" type="button" data-bs-target="#carouselCasa9" data-bs-slide="prev" style="width:32px;height:32px;top:50%;transform:translateY(-50%);">
+                                    <span class="carousel-control-prev-icon" style="width:16px;height:16px;" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Anterior</span>
+                                </button>
+                                <button class="carousel-control-next" type="button" data-bs-target="#carouselCasa9" data-bs-slide="next" style="width:32px;height:32px;top:50%;transform:translateY(-50%);">
+                                    <span class="carousel-control-next-icon" style="width:16px;height:16px;" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Próximo</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="property-title" style="font-size:1.1rem;font-weight:600;color:#333;">Casa em Campo Bom</h5>
+                            <div class="property-price price-sale mb-2" style="font-size:1rem;font-weight:700;">R$ 275.000,00</div>
+                            <div class="mb-2"><span class="badge bg-success rounded-pill">Disponível</span></div>
+                            <div class="mb-2"><span class="badge bg-primary rounded-pill">Pedro Costa</span></div>
+                            <a href="Casas/Casa9.php" class="btn btn-details w-100 btn-sm" style="background:linear-gradient(45deg,#ff7b00,#ff9500);border:none;color:white;">Ver Detalhes</a>
+                            <div class="d-flex justify-content-between mt-3">
+                                <button class="btn btn-warning btn-sm"><i class="bi bi-pencil"></i> Editar</button>
+                                <button class="btn btn-danger btn-sm"><i class="bi bi-trash"></i> Excluir</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+                                        <!-- ...carrosséis grandes removidos... -->
                                             <button type="button" data-bs-target="#carouselCasa1" data-bs-slide-to="7" aria-label="Slide 8" style="width:8px;height:8px;"></button>
                                             <button type="button" data-bs-target="#carouselCasa1" data-bs-slide-to="8" aria-label="Slide 9" style="width:8px;height:8px;"></button>
                                             <button type="button" data-bs-target="#carouselCasa1" data-bs-slide-to="9" aria-label="Slide 10" style="width:8px;height:8px;"></button>
@@ -189,24 +356,18 @@
                             </tr>
                             <tr>
                                 <td>
-                                    <div id="carouselCasa4" class="carousel slide" data-bs-ride="carousel">
-                                        <div class="carousel-inner">
-                                            <div class="carousel-item active">
-                                                <img src="imgs/Casa4/Casa4.0.jpg" class="d-block w-100 product-img-preview" alt="Casa em Parobé 1">
-                                            </div>
-                                            <div class="carousel-item">
-                                                <img src="imgs/Casa4/Casa4.2.jpg" class="d-block w-100 product-img-preview" alt="Casa em Parobé 2">
-                                            </div>
-                                            <div class="carousel-item">
-                                                <img src="imgs/Casa4/Casa4.3.jpg" class="d-block w-100 product-img-preview" alt="Casa em Parobé 3">
-                                            </div>
+                                    <div id="carouselCasa4" class="carousel slide" data-bs-ride="carousel" style="width:100%;margin:auto;">
+                                        <div class="carousel-inner" style="border-radius:10px;">
+                                            <div class="carousel-item active"><img src="imgs/Casa4/Casa4.0.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Parobé 1"></div>
+                                            <div class="carousel-item"><img src="imgs/Casa4/Casa4.2.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Parobé 2"></div>
+                                            <div class="carousel-item"><img src="imgs/Casa4/Casa4.3.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Parobé 3"></div>
                                         </div>
-                                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselCasa4" data-bs-slide="prev">
-                                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselCasa4" data-bs-slide="prev" style="width:32px;height:32px;top:50%;transform:translateY(-50%);">
+                                            <span class="carousel-control-prev-icon" style="width:16px;height:16px;" aria-hidden="true"></span>
                                             <span class="visually-hidden">Anterior</span>
                                         </button>
-                                        <button class="carousel-control-next" type="button" data-bs-target="#carouselCasa4" data-bs-slide="next">
-                                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                        <button class="carousel-control-next" type="button" data-bs-target="#carouselCasa4" data-bs-slide="next" style="width:32px;height:32px;top:50%;transform:translateY(-50%);">
+                                            <span class="carousel-control-next-icon" style="width:16px;height:16px;" aria-hidden="true"></span>
                                             <span class="visually-hidden">Próximo</span>
                                         </button>
                                     </div>
@@ -219,24 +380,18 @@
                             </tr>
                             <tr>
                                 <td>
-                                    <div id="carouselCasa5" class="carousel slide" data-bs-ride="carousel">
-                                        <div class="carousel-inner">
-                                            <div class="carousel-item active">
-                                                <img src="imgs/Casa5/Casa5.0.jpg" class="d-block w-100 product-img-preview" alt="Casa em Igrejinha 1">
-                                            </div>
-                                            <div class="carousel-item">
-                                                <img src="imgs/Casa5/Casa5.1.jpg" class="d-block w-100 product-img-preview" alt="Casa em Igrejinha 2">
-                                            </div>
-                                            <div class="carousel-item">
-                                                <img src="imgs/Casa5/Casa5.10.jpg" class="d-block w-100 product-img-preview" alt="Casa em Igrejinha 3">
-                                            </div>
+                                    <div id="carouselCasa5" class="carousel slide" data-bs-ride="carousel" style="width:100%;margin:auto;">
+                                        <div class="carousel-inner" style="border-radius:10px;">
+                                            <div class="carousel-item active"><img src="imgs/Casa5/Casa5.0.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Igrejinha 1"></div>
+                                            <div class="carousel-item"><img src="imgs/Casa5/Casa5.1.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Igrejinha 2"></div>
+                                            <div class="carousel-item"><img src="imgs/Casa5/Casa5.10.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Igrejinha 3"></div>
                                         </div>
-                                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselCasa5" data-bs-slide="prev">
-                                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselCasa5" data-bs-slide="prev" style="width:32px;height:32px;top:50%;transform:translateY(-50%);">
+                                            <span class="carousel-control-prev-icon" style="width:16px;height:16px;" aria-hidden="true"></span>
                                             <span class="visually-hidden">Anterior</span>
                                         </button>
-                                        <button class="carousel-control-next" type="button" data-bs-target="#carouselCasa5" data-bs-slide="next">
-                                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                        <button class="carousel-control-next" type="button" data-bs-target="#carouselCasa5" data-bs-slide="next" style="width:32px;height:32px;top:50%;transform:translateY(-50%);">
+                                            <span class="carousel-control-next-icon" style="width:16px;height:16px;" aria-hidden="true"></span>
                                             <span class="visually-hidden">Próximo</span>
                                         </button>
                                     </div>
@@ -249,24 +404,18 @@
                             </tr>
                             <tr>
                                 <td>
-                                    <div id="carouselCasa6" class="carousel slide" data-bs-ride="carousel">
-                                        <div class="carousel-inner">
-                                            <div class="carousel-item active">
-                                                <img src="imgs/Casa6/Casa6.0.jpg" class="d-block w-100 product-img-preview" alt="Casa em Rolante 1">
-                                            </div>
-                                            <div class="carousel-item">
-                                                <img src="imgs/Casa6/Casa6.1.jpg" class="d-block w-100 product-img-preview" alt="Casa em Rolante 2">
-                                            </div>
-                                            <div class="carousel-item">
-                                                <img src="imgs/Casa6/Casa6.2.jpg" class="d-block w-100 product-img-preview" alt="Casa em Rolante 3">
-                                            </div>
+                                    <div id="carouselCasa6" class="carousel slide" data-bs-ride="carousel" style="width:100%;margin:auto;">
+                                        <div class="carousel-inner" style="border-radius:10px;">
+                                            <div class="carousel-item active"><img src="imgs/Casa6/Casa6.0.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Rolante 1"></div>
+                                            <div class="carousel-item"><img src="imgs/Casa6/Casa6.1.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Rolante 2"></div>
+                                            <div class="carousel-item"><img src="imgs/Casa6/Casa6.2.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Rolante 3"></div>
                                         </div>
-                                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselCasa6" data-bs-slide="prev">
-                                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselCasa6" data-bs-slide="prev" style="width:32px;height:32px;top:50%;transform:translateY(-50%);">
+                                            <span class="carousel-control-prev-icon" style="width:16px;height:16px;" aria-hidden="true"></span>
                                             <span class="visually-hidden">Anterior</span>
                                         </button>
-                                        <button class="carousel-control-next" type="button" data-bs-target="#carouselCasa6" data-bs-slide="next">
-                                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                        <button class="carousel-control-next" type="button" data-bs-target="#carouselCasa6" data-bs-slide="next" style="width:32px;height:32px;top:50%;transform:translateY(-50%);">
+                                            <span class="carousel-control-next-icon" style="width:16px;height:16px;" aria-hidden="true"></span>
                                             <span class="visually-hidden">Próximo</span>
                                         </button>
                                     </div>
@@ -278,95 +427,105 @@
                                 <td><a href="Casas/Casa6.php" class="btn btn-sm btn-primary">Ver detalhes</a></td>
                             </tr>
                             <tr>
-                                <td>
-                                    <div id="carouselCasa7" class="carousel slide" data-bs-ride="carousel">
-                                        <div class="carousel-inner">
-                                            <div class="carousel-item active">
-                                                <img src="imgs/Casa7/Casa7.0.jpg" class="d-block w-100 product-img-preview" alt="Casa em Sapiranga 1">
-                                            </div>
-                                            <div class="carousel-item">
-                                                <img src="imgs/Casa7/Casa7.1.jpg" class="d-block w-100 product-img-preview" alt="Casa em Sapiranga 2">
-                                            </div>
-                                            <div class="carousel-item">
-                                                <img src="imgs/Casa7/Casa7.2.jpg" class="d-block w-100 product-img-preview" alt="Casa em Sapiranga 3">
-                                            </div>
-                                        </div>
-                                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselCasa7" data-bs-slide="prev">
-                                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                            <span class="visually-hidden">Anterior</span>
-                                        </button>
-                                        <button class="carousel-control-next" type="button" data-bs-target="#carouselCasa7" data-bs-slide="next">
-                                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                            <span class="visually-hidden">Próximo</span>
-                                        </button>
-                                    </div>
-                                </td>
-                                <td>Casa em Sapiranga</td>
-                                <td>Pedro Costa</td>
-                                <td>R$ 210.000,00</td>
-                                <td>Disponível</td>
-                                <td><a href="Casas/Casa7.php" class="btn btn-sm btn-primary">Ver detalhes</a></td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div id="carouselCasa8" class="carousel slide" data-bs-ride="carousel">
-                                        <div class="carousel-inner">
-                                            <div class="carousel-item active">
-                                                <img src="imgs/Casa8/Casa8.0.jpg" class="d-block w-100 product-img-preview" alt="Casa em Nova Hartz 1">
-                                            </div>
-                                            <div class="carousel-item">
-                                                <img src="imgs/Casa8/Casa8.1.jpg" class="d-block w-100 product-img-preview" alt="Casa em Nova Hartz 2">
-                                            </div>
-                                            <div class="carousel-item">
-                                                <img src="imgs/Casa8/Casa8.2.jpg" class="d-block w-100 product-img-preview" alt="Casa em Nova Hartz 3">
-                                            </div>
-                                        </div>
-                                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselCasa8" data-bs-slide="prev">
-                                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                            <span class="visually-hidden">Anterior</span>
-                                        </button>
-                                        <button class="carousel-control-next" type="button" data-bs-target="#carouselCasa8" data-bs-slide="next">
-                                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                            <span class="visually-hidden">Próximo</span>
-                                        </button>
-                                    </div>
-                                </td>
-                                <td>Casa em Nova Hartz</td>
-                                <td>Pedro Costa</td>
-                                <td>R$ 195.000,00</td>
-                                <td>Disponível</td>
-                                <td><a href="Casas/Casa8.php" class="btn btn-sm btn-primary">Ver detalhes</a></td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div id="carouselCasa9" class="carousel slide" data-bs-ride="carousel">
-                                        <div class="carousel-inner">
-                                            <div class="carousel-item active">
-                                                <img src="imgs/Casa9/Casa9.0.jpg" class="d-block w-100 product-img-preview" alt="Casa em Campo Bom 1">
-                                            </div>
-                                            <div class="carousel-item">
-                                                <img src="imgs/Casa9/Casa9.1.jpg" class="d-block w-100 product-img-preview" alt="Casa em Campo Bom 2">
-                                            </div>
-                                            <div class="carousel-item">
-                                                <img src="imgs/Casa9/Casa9.2.jpg" class="d-block w-100 product-img-preview" alt="Casa em Campo Bom 3">
-                                            </div>
-                                        </div>
-                                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselCasa9" data-bs-slide="prev">
-                                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                            <span class="visually-hidden">Anterior</span>
-                                        </button>
-                                        <button class="carousel-control-next" type="button" data-bs-target="#carouselCasa9" data-bs-slide="next">
-                                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                            <span class="visually-hidden">Próximo</span>
-                                        </button>
-                                    </div>
-                                </td>
-                                <td>Casa em Campo Bom</td>
-                                <td>Pedro Costa</td>
-                                <td>R$ 275.000,00</td>
-                                <td>Disponível</td>
-                                <td><a href="Casas/Casa9.php" class="btn btn-sm btn-primary">Ver detalhes</a></td>
-                            </tr>
+                <!-- Imóvel 7 -->
+                <div class="col">
+                    <div class="card property-card" style="border-radius:12px;box-shadow:0 4px 16px rgba(0,0,0,0.08);">
+                        <div class="position-relative overflow-hidden">
+                            <div id="carouselCasa7" class="carousel slide" data-bs-ride="carousel" style="width:100%;margin:auto;">
+                                <div class="carousel-inner" style="border-radius:10px;">
+                                    <div class="carousel-item active"><img src="imgs/Casa7/Casa7.0.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Sapiranga 1"></div>
+                                    <div class="carousel-item"><img src="imgs/Casa7/Casa7.1.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Sapiranga 2"></div>
+                                    <div class="carousel-item"><img src="imgs/Casa7/Casa7.2.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Sapiranga 3"></div>
+                                </div>
+                                <button class="carousel-control-prev" type="button" data-bs-target="#carouselCasa7" data-bs-slide="prev" style="width:32px;height:32px;top:50%;transform:translateY(-50%);">
+                                    <span class="carousel-control-prev-icon" style="width:16px;height:16px;" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Anterior</span>
+                                </button>
+                                <button class="carousel-control-next" type="button" data-bs-target="#carouselCasa7" data-bs-slide="next" style="width:32px;height:32px;top:50%;transform:translateY(-50%);">
+                                    <span class="carousel-control-next-icon" style="width:16px;height:16px;" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Próximo</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="property-title" style="font-size:1.1rem;font-weight:600;color:#333;">Casa em Sapiranga</h5>
+                            <div class="property-price price-sale mb-2" style="font-size:1rem;font-weight:700;">R$ 210.000,00</div>
+                            <div class="mb-2"><span class="badge bg-success rounded-pill">Disponível</span></div>
+                            <div class="mb-2"><span class="badge bg-primary rounded-pill">Pedro Costa</span></div>
+                            <a href="Casas/Casa7.php" class="btn btn-details w-100 btn-sm" style="background:linear-gradient(45deg,#ff7b00,#ff9500);border:none;color:white;">Ver Detalhes</a>
+                            <div class="d-flex justify-content-between mt-3">
+                                <button class="btn btn-warning btn-sm"><i class="bi bi-pencil"></i> Editar</button>
+                                <button class="btn btn-danger btn-sm"><i class="bi bi-trash"></i> Excluir</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Imóvel 8 -->
+                <div class="col">
+                    <div class="card property-card" style="border-radius:12px;box-shadow:0 4px 16px rgba(0,0,0,0.08);">
+                        <div class="position-relative overflow-hidden">
+                            <div id="carouselCasa8" class="carousel slide" data-bs-ride="carousel" style="width:100%;margin:auto;">
+                                <div class="carousel-inner" style="border-radius:10px;">
+                                    <div class="carousel-item active"><img src="imgs/Casa8/Casa8.0.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Nova Hartz 1"></div>
+                                    <div class="carousel-item"><img src="imgs/Casa8/Casa8.1.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Nova Hartz 2"></div>
+                                    <div class="carousel-item"><img src="imgs/Casa8/Casa8.2.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Nova Hartz 3"></div>
+                                </div>
+                                <button class="carousel-control-prev" type="button" data-bs-target="#carouselCasa8" data-bs-slide="prev" style="width:32px;height:32px;top:50%;transform:translateY(-50%);">
+                                    <span class="carousel-control-prev-icon" style="width:16px;height:16px;" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Anterior</span>
+                                </button>
+                                <button class="carousel-control-next" type="button" data-bs-target="#carouselCasa8" data-bs-slide="next" style="width:32px;height:32px;top:50%;transform:translateY(-50%);">
+                                    <span class="carousel-control-next-icon" style="width:16px;height:16px;" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Próximo</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="property-title" style="font-size:1.1rem;font-weight:600;color:#333;">Casa em Nova Hartz</h5>
+                            <div class="property-price price-sale mb-2" style="font-size:1rem;font-weight:700;">R$ 195.000,00</div>
+                            <div class="mb-2"><span class="badge bg-success rounded-pill">Disponível</span></div>
+                            <div class="mb-2"><span class="badge bg-primary rounded-pill">Pedro Costa</span></div>
+                            <a href="Casas/Casa8.php" class="btn btn-details w-100 btn-sm" style="background:linear-gradient(45deg,#ff7b00,#ff9500);border:none;color:white;">Ver Detalhes</a>
+                            <div class="d-flex justify-content-between mt-3">
+                                <button class="btn btn-warning btn-sm"><i class="bi bi-pencil"></i> Editar</button>
+                                <button class="btn btn-danger btn-sm"><i class="bi bi-trash"></i> Excluir</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Imóvel 9 -->
+                <div class="col">
+                    <div class="card property-card" style="border-radius:12px;box-shadow:0 4px 16px rgba(0,0,0,0.08);">
+                        <div class="position-relative overflow-hidden">
+                            <div id="carouselCasa9" class="carousel slide" data-bs-ride="carousel" style="width:100%;margin:auto;">
+                                <div class="carousel-inner" style="border-radius:10px;">
+                                    <div class="carousel-item active"><img src="imgs/Casa9/Casa9.0.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Campo Bom 1"></div>
+                                    <div class="carousel-item"><img src="imgs/Casa9/Casa9.1.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Campo Bom 2"></div>
+                                    <div class="carousel-item"><img src="imgs/Casa9/Casa9.2.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Campo Bom 3"></div>
+                                </div>
+                                <button class="carousel-control-prev" type="button" data-bs-target="#carouselCasa9" data-bs-slide="prev" style="width:32px;height:32px;top:50%;transform:translateY(-50%);">
+                                    <span class="carousel-control-prev-icon" style="width:16px;height:16px;" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Anterior</span>
+                                </button>
+                                <button class="carousel-control-next" type="button" data-bs-target="#carouselCasa9" data-bs-slide="next" style="width:32px;height:32px;top:50%;transform:translateY(-50%);">
+                                    <span class="carousel-control-next-icon" style="width:16px;height:16px;" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Próximo</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="property-title" style="font-size:1.1rem;font-weight:600;color:#333;">Casa em Campo Bom</h5>
+                            <div class="property-price price-sale mb-2" style="font-size:1rem;font-weight:700;">R$ 275.000,00</div>
+                            <div class="mb-2"><span class="badge bg-success rounded-pill">Disponível</span></div>
+                            <div class="mb-2"><span class="badge bg-primary rounded-pill">Pedro Costa</span></div>
+                            <a href="Casas/Casa9.php" class="btn btn-details w-100 btn-sm" style="background:linear-gradient(45deg,#ff7b00,#ff9500);border:none;color:white;">Ver Detalhes</a>
+                            <div class="d-flex justify-content-between mt-3">
+                                <button class="btn btn-warning btn-sm"><i class="bi bi-pencil"></i> Editar</button>
+                                <button class="btn btn-danger btn-sm"><i class="bi bi-trash"></i> Excluir</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                         </tbody>
                     </table>
                 </div>
