@@ -1,0 +1,9 @@
+# Ignorar arquivos e pastas desnecessários para o build da imagem Docker
+backup_old_files/
+node_modules/
+*.log
+*.sql
+*.md
+.git/
+.gitignore
+.vscode/
