@@ -57,7 +57,6 @@ require_once __DIR__ . '/includes/navbar.php';
         <div class="container" style="padding-top: 90px;">
             <h2 class="mb-4">Casas Disponíveis</h2>
             <div class="row justify-content-center" id="casasCards">
-                <!-- Cards serão renderizados via JS -->
             </div>
         </div>
     </section>
@@ -116,9 +115,6 @@ require_once __DIR__ . '/includes/navbar.php';
                                             <th>Status</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        <!-- Pedidos personalizados via JS -->
-                                    </tbody>
                                 </table>
                             </div>
                         </div>
@@ -376,9 +372,8 @@ require_once __DIR__ . '/includes/navbar.php';
                             <h5 class="card-title">${casa.nome}</h5>
                             <p class="card-text mb-1"><strong>Tipo:</strong> ${casa.tipo}</p>
                             <div class="mb-2">${negocioHtml}</div>
-                            <div class="d-flex justify-content-between mt-3">
-                                <button class="btn btn-warning btn-sm" onclick="abrirModalEditarCasa(${casa.id})"><i class="bi bi-pencil"></i> Editar</button>
-                                <button class="btn btn-danger btn-sm" onclick="excluirCasa(${casa.id})"><i class="bi bi-trash"></i> Excluir</button>
+                            <div class="d-flex justify-content-center mt-3">
+                                <a href="Casas/Casa${casa.id}.php" class="btn btn-warning btn-sm"><i class="bi bi-pencil"></i> Mais Informações</a>
                             </div>
                         </div>
                     </div>
@@ -387,18 +382,7 @@ require_once __DIR__ . '/includes/navbar.php';
             });
         }
 
-        function abrirModalEditarCasa(id) {
-            const casa = casas.find(c => c.id === id);
-            if (!casa) return;
-            document.getElementById('editCasaId').value = casa.id;
-            document.getElementById('editCasaNome').value = casa.nome;
-            document.getElementById('editCasaValor').value = casa.valor;
-            document.getElementById('editCasaTipo').value = casa.tipo;
-            document.getElementById('editCasaImagens').value = '';
-            renderImagensPreview(casa.imagens);
-            const modal = new bootstrap.Modal(document.getElementById('modalEditarCasa'));
-            modal.show();
-        }
+       
 
         function renderImagensPreview(imagens) {
             const preview = document.getElementById('imagensPreview');
@@ -412,51 +396,6 @@ require_once __DIR__ . '/includes/navbar.php';
                 preview.appendChild(img);
             });
         }
-
-        document.getElementById('editCasaImagens').addEventListener('change', function(e) {
-            const files = Array.from(e.target.files);
-            const preview = document.getElementById('imagensPreview');
-            preview.innerHTML = '';
-            files.forEach(file => {
-                const reader = new FileReader();
-                reader.onload = function(ev) {
-                    const img = document.createElement('img');
-                    img.src = ev.target.result;
-                    img.style.height = '60px';
-                    img.style.objectFit = 'cover';
-                    img.className = 'rounded border';
-                    preview.appendChild(img);
-                };
-                reader.readAsDataURL(file);
-            });
-        });
-
-        document.getElementById('formEditarCasa').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const id = parseInt(document.getElementById('editCasaId').value);
-            const nome = document.getElementById('editCasaNome').value;
-            const valor = parseFloat(document.getElementById('editCasaValor').value);
-            const tipo = document.getElementById('editCasaTipo').value;
-            const files = Array.from(document.getElementById('editCasaImagens').files);
-            let imagens = casas.find(c => c.id === id).imagens;
-            if (files.length > 0) {
-                imagens = [];
-                files.forEach(file => {
-                    imagens.push(URL.createObjectURL(file));
-                });
-            }
-            casas = casas.map(c => c.id === id ? { ...c, nome, valor, tipo, imagens } : c);
-            renderCasas();
-            bootstrap.Modal.getInstance(document.getElementById('modalEditarCasa')).hide();
-        });
-
-        function excluirCasa(id) {
-            if (confirm('Tem certeza que deseja excluir esta casa?')) {
-                casas = casas.filter(c => c.id !== id);
-                renderCasas();
-            }
-        }
-
         // Inicialização
         document.addEventListener('DOMContentLoaded', renderCasas);
         </script>

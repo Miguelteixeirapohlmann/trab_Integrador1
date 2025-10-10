@@ -33,14 +33,12 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <!-- Corretores via JS -->
+                            <!-- Conteúdo será preenchido pelo JavaScript -->
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
-
-        <!-- Modal de Cadastro/Edição de Corretor -->
         <div class="modal fade" id="modalCorretor" tabindex="-1" aria-labelledby="modalCorretorLabel" aria-hidden="true">
           <div class="modal-dialog">
             <div class="modal-content">
@@ -49,16 +47,27 @@
                   <h5 class="modal-title" id="modalCorretorLabel">Novo Corretor</h5>
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                                <div class="modal-body">
-                                    <input type="hidden" id="corretorId">
-                                    <div class="mb-3">
-                                        <label for="corretorNome" class="form-label">Nome do Corretor</label>
-                                        <input type="text" class="form-control" id="corretorNome" name="corretorNome" placeholder="Digite o nome completo" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="corretorEmail" class="form-label">E-mail</label>
-                                        <input type="email" class="form-control" id="corretorEmail" name="corretorEmail" placeholder="exemplo@email.com" required>
-                                    </div>
+                <div class="modal-body">
+                  <input type="hidden" id="corretorId">
+                    <div class="mb-3">
+                        <label for="corretorNome" class="form-label">Nome do Corretor</label>
+                        <input type="text" class="form-control" id="corretorNome" name="corretorNome" placeholder="Digite o nome completo" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="corretorEmail" class="form-label">E-mail</label>
+                        <input type="email" class="form-control" id="corretorEmail" name="corretorEmail" placeholder="exemplo@email.com" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="corretorStatus" class="form-label">Status</label>
+                        <select class="form-control" id="corretorStatus" name="corretorStatus" required>
+                            <option value="true">Ativo</option>
+                            <option value="false">Inativo</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                  <button type="submit" class="btn btn-primary">Salvar</button>
                 </div>
               </form>
             </div>
@@ -77,7 +86,20 @@
                <div class="col">
                    <div class="card property-card" style="border-radius:12px;box-shadow:0 4px 16px rgba(0,0,0,0.08);">
                        <div class="position-relative overflow-hidden">
-                           <div id="carouselCasa1" class="carousel slide" data-bs-ride="carousel" style="width:100%;margin:auto;">
+                           <div id="carouselCasa1" class="carousel slide" data-bs-interval="false" style="width:100%;margin:auto;">
+                               <div class="carousel-indicators">
+                                   <button type="button" data-bs-target="#carouselCasa1" data-bs-slide-to="0" class="active"></button>
+                                   <button type="button" data-bs-target="#carouselCasa1" data-bs-slide-to="1"></button>
+                                   <button type="button" data-bs-target="#carouselCasa1" data-bs-slide-to="2"></button>
+                                   <button type="button" data-bs-target="#carouselCasa1" data-bs-slide-to="3"></button>
+                                   <button type="button" data-bs-target="#carouselCasa1" data-bs-slide-to="4"></button>
+                                   <button type="button" data-bs-target="#carouselCasa1" data-bs-slide-to="5"></button>
+                                   <button type="button" data-bs-target="#carouselCasa1" data-bs-slide-to="6"></button>
+                                   <button type="button" data-bs-target="#carouselCasa1" data-bs-slide-to="7"></button>
+                                   <button type="button" data-bs-target="#carouselCasa1" data-bs-slide-to="8"></button>
+                                   <button type="button" data-bs-target="#carouselCasa1" data-bs-slide-to="9"></button>
+                               </div>
+                               <div class="photo-counter">10 fotos</div>
                                <div class="carousel-inner" style="border-radius:10px;">
                                    <div class="carousel-item active"><img src="imgs/Casa1/Casa1.0.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Santo Antônio da Patrulha 0"></div>
                                    <div class="carousel-item"><img src="imgs/Casa1/Casa1.1.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Santo Antônio da Patrulha 1"></div>
@@ -113,7 +135,24 @@
               <div class="col">
                    <div class="card property-card" style="border-radius:12px;box-shadow:0 4px 16px rgba(0,0,0,0.08);">
                        <div class="position-relative overflow-hidden">
-                           <div id="carouselCasa2" class="carousel slide" data-bs-ride="carousel" style="width:100%;margin:auto;">
+                           <div id="carouselCasa2" class="carousel slide" data-bs-interval="false" style="width:100%;margin:auto;">
+                               <div class="carousel-indicators">
+                                   <button type="button" data-bs-target="#carouselCasa2" data-bs-slide-to="0" class="active"></button>
+                                   <button type="button" data-bs-target="#carouselCasa2" data-bs-slide-to="1"></button>
+                                   <button type="button" data-bs-target="#carouselCasa2" data-bs-slide-to="2"></button>
+                                   <button type="button" data-bs-target="#carouselCasa2" data-bs-slide-to="3"></button>
+                                   <button type="button" data-bs-target="#carouselCasa2" data-bs-slide-to="4"></button>
+                                   <button type="button" data-bs-target="#carouselCasa2" data-bs-slide-to="5"></button>
+                                   <button type="button" data-bs-target="#carouselCasa2" data-bs-slide-to="6"></button>
+                                   <button type="button" data-bs-target="#carouselCasa2" data-bs-slide-to="7"></button>
+                                   <button type="button" data-bs-target="#carouselCasa2" data-bs-slide-to="8"></button>
+                                   <button type="button" data-bs-target="#carouselCasa2" data-bs-slide-to="9"></button>
+                                   <button type="button" data-bs-target="#carouselCasa2" data-bs-slide-to="10"></button>
+                                   <button type="button" data-bs-target="#carouselCasa2" data-bs-slide-to="11"></button>
+                                   <button type="button" data-bs-target="#carouselCasa2" data-bs-slide-to="12"></button>
+                                   <button type="button" data-bs-target="#carouselCasa2" data-bs-slide-to="13"></button>
+                               </div>
+                               <div class="photo-counter">14 fotos</div>
                                <div class="carousel-inner" style="border-radius:10px;">
                                    <div class="carousel-item active"><img src="imgs/Casa2/Casa2.0.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Taquara 0"></div>
                                    <div class="carousel-item"><img src="imgs/Casa2/Casa2.1.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Taquara 1"></div>
@@ -128,7 +167,7 @@
                                    <div class="carousel-item"><img src="imgs/Casa2/Casa2.10.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Taquara 10"></div>
                                    <div class="carousel-item"><img src="imgs/Casa2/Casa2.11.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Taquara 11"></div>
                                    <div class="carousel-item"><img src="imgs/Casa2/Casa2.12.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Taquara 12"></div>
-                                   <div class="carousel-item"><img src="imgs/Casa2/Casa2.13.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Taquara 13    "></div>
+                                   <div class="carousel-item"><img src="imgs/Casa2/Casa2.13.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Taquara 13"></div>
                                </div>
                                 <button class="carousel-control-prev" type="button" data-bs-target="#carouselCasa2" data-bs-slide="prev" style="width:32px;height:32px;top:50%;transform:translateY(-50%);">
                                     <span class="carousel-control-prev-icon" style="width:16px;height:16px;" aria-hidden="true"></span>
@@ -153,7 +192,20 @@
                <div class="col">
                    <div class="card property-card" style="border-radius:12px;box-shadow:0 4px 16px rgba(0,0,0,0.08);">
                        <div class="position-relative overflow-hidden">
-                           <div id="carouselCasa3" class="carousel slide" data-bs-ride="carousel" style="width:100%;margin:auto;">
+                           <div id="carouselCasa3" class="carousel slide" data-bs-interval="false" style="width:100%;margin:auto;">
+                               <div class="carousel-indicators">
+                                   <button type="button" data-bs-target="#carouselCasa3" data-bs-slide-to="0" class="active"></button>
+                                   <button type="button" data-bs-target="#carouselCasa3" data-bs-slide-to="1"></button>
+                                   <button type="button" data-bs-target="#carouselCasa3" data-bs-slide-to="2"></button>
+                                   <button type="button" data-bs-target="#carouselCasa3" data-bs-slide-to="3"></button>
+                                   <button type="button" data-bs-target="#carouselCasa3" data-bs-slide-to="4"></button>
+                                   <button type="button" data-bs-target="#carouselCasa3" data-bs-slide-to="5"></button>
+                                   <button type="button" data-bs-target="#carouselCasa3" data-bs-slide-to="6"></button>
+                                   <button type="button" data-bs-target="#carouselCasa3" data-bs-slide-to="7"></button>
+                                   <button type="button" data-bs-target="#carouselCasa3" data-bs-slide-to="8"></button>
+                                   <button type="button" data-bs-target="#carouselCasa3" data-bs-slide-to="9"></button>
+                               </div>
+                               <div class="photo-counter">10 fotos</div>
                                <div class="carousel-inner" style="border-radius:10px;">
                                    <div class="carousel-item active"><img src="imgs/Casa3/Casa3.0.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Taquara Rua Mundo Novo 0"></div>
                                    <div class="carousel-item"><img src="imgs/Casa3/Casa3.1.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Taquara Rua Mundo Novo 1"></div>
@@ -189,7 +241,19 @@
                   <div class="col">
                     <div class="card property-card" style="border-radius:12px;box-shadow:0 4px 16px rgba(0,0,0,0.08);">
                         <div class="position-relative overflow-hidden">
-                            <div id="carouselCasa4" class="carousel slide" data-bs-ride="carousel" style="width:100%;margin:auto;">
+                            <div id="carouselCasa4" class="carousel slide" data-bs-interval="false" style="width:100%;margin:auto;">
+                                <div class="carousel-indicators">
+                                    <button type="button" data-bs-target="#carouselCasa4" data-bs-slide-to="0" class="active"></button>
+                                    <button type="button" data-bs-target="#carouselCasa4" data-bs-slide-to="1"></button>
+                                    <button type="button" data-bs-target="#carouselCasa4" data-bs-slide-to="2"></button>
+                                    <button type="button" data-bs-target="#carouselCasa4" data-bs-slide-to="3"></button>
+                                    <button type="button" data-bs-target="#carouselCasa4" data-bs-slide-to="4"></button>
+                                    <button type="button" data-bs-target="#carouselCasa4" data-bs-slide-to="5"></button>
+                                    <button type="button" data-bs-target="#carouselCasa4" data-bs-slide-to="6"></button>
+                                    <button type="button" data-bs-target="#carouselCasa4" data-bs-slide-to="7"></button>
+                                    <button type="button" data-bs-target="#carouselCasa4" data-bs-slide-to="8"></button>
+                                </div>
+                                <div class="photo-counter">9 fotos</div>
                                 <div class="carousel-inner" style="border-radius:10px;">
                                     <div class="carousel-item active"><img src="imgs/Casa4/Casa4.0.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Taquara Rua Mundo Novo 0"></div>
                                     <div class="carousel-item"><img src="imgs/Casa4/Casa4.9.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Taquara Rua Mundo Novo 9"></div>
@@ -224,14 +288,28 @@
                 <div class="col">
                     <div class="card property-card" style="border-radius:12px;box-shadow:0 4px 16px rgba(0,0,0,0.08);">
                         <div class="position-relative overflow-hidden">
-                            <div id="carouselCasa5" class="carousel slide" data-bs-ride="carousel" style="width:100%;margin:auto;">
+                            <div id="carouselCasa5" class="carousel slide" data-bs-interval="false" style="width:100%;margin:auto;">
+                                <div class="carousel-indicators">
+                                    <button type="button" data-bs-target="#carouselCasa5" data-bs-slide-to="0" class="active"></button>
+                                    <button type="button" data-bs-target="#carouselCasa5" data-bs-slide-to="1"></button>
+                                    <button type="button" data-bs-target="#carouselCasa5" data-bs-slide-to="2"></button>
+                                    <button type="button" data-bs-target="#carouselCasa5" data-bs-slide-to="3"></button>
+                                    <button type="button" data-bs-target="#carouselCasa5" data-bs-slide-to="4"></button>
+                                    <button type="button" data-bs-target="#carouselCasa5" data-bs-slide-to="5"></button>
+                                    <button type="button" data-bs-target="#carouselCasa5" data-bs-slide-to="6"></button>
+                                    <button type="button" data-bs-target="#carouselCasa5" data-bs-slide-to="7"></button>
+                                    <button type="button" data-bs-target="#carouselCasa5" data-bs-slide-to="8"></button>
+                                    <button type="button" data-bs-target="#carouselCasa5" data-bs-slide-to="9"></button>
+                                    <button type="button" data-bs-target="#carouselCasa5" data-bs-slide-to="10"></button>
+                                </div>
+                                <div class="photo-counter">11 fotos</div>
                                 <div class="carousel-inner" style="border-radius:10px;">
                                     <div class="carousel-item active"><img src="imgs/Casa5/Casa5.0.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Taquara Flores da Cunha 0"></div>
                                     <div class="carousel-item"><img src="imgs/Casa5/Casa5.1.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Taquara Flores da Cunha 1"></div>
                                     <div class="carousel-item"><img src="imgs/Casa5/Casa5.2.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Taquara Flores da Cunha 2"></div>
                                     <div class="carousel-item"><img src="imgs/Casa5/Casa5.3.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Taquara Flores da Cunha 3"></div>
                                     <div class="carousel-item"><img src="imgs/Casa5/Casa5.4.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Taquara Flores da Cunha 4"></div>
-                                    <div class="carousel-item"><img src="imgs/Casa5/Casa5.5.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Taquara Flores da Cunha 5 "></div>
+                                    <div class="carousel-item"><img src="imgs/Casa5/Casa5.5.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Taquara Flores da Cunha 5"></div>
                                     <div class="carousel-item"><img src="imgs/Casa5/Casa5.6.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Taquara Flores da Cunha 6"></div>
                                     <div class="carousel-item"><img src="imgs/Casa5/Casa5.7.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Taquara Flores da Cunha 7"></div>
                                     <div class="carousel-item"><img src="imgs/Casa5/Casa5.8.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Taquara Flores da Cunha 8"></div>
@@ -261,7 +339,15 @@
                 <div class="col">
                     <div class="card property-card" style="border-radius:12px;box-shadow:0 4px 16px rgba(0,0,0,0.08);">
                         <div class="position-relative overflow-hidden">
-                            <div id="carouselCasa6" class="carousel slide" data-bs-ride="carousel" style="width:100%;margin:auto;">
+                            <div id="carouselCasa6" class="carousel slide" data-bs-interval="false" style="width:100%;margin:auto;">
+                                <div class="carousel-indicators">
+                                    <button type="button" data-bs-target="#carouselCasa6" data-bs-slide-to="0" class="active"></button>
+                                    <button type="button" data-bs-target="#carouselCasa6" data-bs-slide-to="1"></button>
+                                    <button type="button" data-bs-target="#carouselCasa6" data-bs-slide-to="2"></button>
+                                    <button type="button" data-bs-target="#carouselCasa6" data-bs-slide-to="3"></button>
+                                    <button type="button" data-bs-target="#carouselCasa6" data-bs-slide-to="4"></button>
+                                </div>
+                                <div class="photo-counter">5 fotos</div>
                                 <div class="carousel-inner" style="border-radius:10px;">
                                     <div class="carousel-item active"><img src="imgs/Casa6/Casa6.0.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Parobé 0"></div>
                                     <div class="carousel-item"><img src="imgs/Casa6/Casa6.1.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Parobé 1"></div>
@@ -292,7 +378,26 @@
                 <div class="col">
                     <div class="card property-card" style="border-radius:12px;box-shadow:0 4px 16px rgba(0,0,0,0.08);">
                         <div class="position-relative overflow-hidden">
-                            <div id="carouselCasa7" class="carousel slide" data-bs-ride="carousel" style="width:100%;margin:auto;">
+                            <div id="carouselCasa7" class="carousel slide" data-bs-interval="false" style="width:100%;margin:auto;">
+                                <div class="carousel-indicators">
+                                    <button type="button" data-bs-target="#carouselCasa7" data-bs-slide-to="0" class="active"></button>
+                                    <button type="button" data-bs-target="#carouselCasa7" data-bs-slide-to="1"></button>
+                                    <button type="button" data-bs-target="#carouselCasa7" data-bs-slide-to="2"></button>
+                                    <button type="button" data-bs-target="#carouselCasa7" data-bs-slide-to="3"></button>
+                                    <button type="button" data-bs-target="#carouselCasa7" data-bs-slide-to="4"></button>
+                                    <button type="button" data-bs-target="#carouselCasa7" data-bs-slide-to="5"></button>
+                                    <button type="button" data-bs-target="#carouselCasa7" data-bs-slide-to="6"></button>
+                                    <button type="button" data-bs-target="#carouselCasa7" data-bs-slide-to="7"></button>
+                                    <button type="button" data-bs-target="#carouselCasa7" data-bs-slide-to="8"></button>
+                                    <button type="button" data-bs-target="#carouselCasa7" data-bs-slide-to="9"></button>
+                                    <button type="button" data-bs-target="#carouselCasa7" data-bs-slide-to="10"></button>
+                                    <button type="button" data-bs-target="#carouselCasa7" data-bs-slide-to="11"></button>
+                                    <button type="button" data-bs-target="#carouselCasa7" data-bs-slide-to="12"></button>
+                                    <button type="button" data-bs-target="#carouselCasa7" data-bs-slide-to="13"></button>
+                                    <button type="button" data-bs-target="#carouselCasa7" data-bs-slide-to="14"></button>
+                                    <button type="button" data-bs-target="#carouselCasa7" data-bs-slide-to="15"></button>
+                                </div>
+                                <div class="photo-counter">16 fotos</div>
                                 <div class="carousel-inner" style="border-radius:10px;">
                                     <div class="carousel-item active"><img src="imgs/Casa7/Casa7.0.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Taquara - Bairro Santa Terezinha 0"></div>
                                     <div class="carousel-item"><img src="imgs/Casa7/Casa7.1.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Taquara - Bairro Santa Terezinha 1"></div>
@@ -334,7 +439,20 @@
                 <div class="col">
                     <div class="card property-card" style="border-radius:12px;box-shadow:0 4px 16px rgba(0,0,0,0.08);">
                         <div class="position-relative overflow-hidden">
-                            <div id="carouselCasa8" class="carousel slide" data-bs-ride="carousel" style="width:100%;margin:auto;">
+                            <div id="carouselCasa8" class="carousel slide" data-bs-interval="false" style="width:100%;margin:auto;">
+                                <div class="carousel-indicators">
+                                    <button type="button" data-bs-target="#carouselCasa8" data-bs-slide-to="0" class="active"></button>
+                                    <button type="button" data-bs-target="#carouselCasa8" data-bs-slide-to="1"></button>
+                                    <button type="button" data-bs-target="#carouselCasa8" data-bs-slide-to="2"></button>
+                                    <button type="button" data-bs-target="#carouselCasa8" data-bs-slide-to="3"></button>
+                                    <button type="button" data-bs-target="#carouselCasa8" data-bs-slide-to="4"></button>
+                                    <button type="button" data-bs-target="#carouselCasa8" data-bs-slide-to="5"></button>
+                                    <button type="button" data-bs-target="#carouselCasa8" data-bs-slide-to="6"></button>
+                                    <button type="button" data-bs-target="#carouselCasa8" data-bs-slide-to="7"></button>
+                                    <button type="button" data-bs-target="#carouselCasa8" data-bs-slide-to="8"></button>
+                                    <button type="button" data-bs-target="#carouselCasa8" data-bs-slide-to="9"></button>
+                                </div>
+                                <div class="photo-counter">10 fotos</div>
                                 <div class="carousel-inner" style="border-radius:10px;">
                                     <div class="carousel-item active"><img src="imgs/Casa8/Casa8.0.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Taquara - Bairro Tucanos 0"></div>
                                     <div class="carousel-item"><img src="imgs/Casa8/Casa8.1.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Taquara - Bairro Tucanos 1"></div>
@@ -370,7 +488,20 @@
                 <div class="col">
                     <div class="card property-card" style="border-radius:12px;box-shadow:0 4px 16px rgba(0,0,0,0.08);">
                         <div class="position-relative overflow-hidden">
-                            <div id="carouselCasa9" class="carousel slide" data-bs-ride="carousel" style="width:100%;margin:auto;">
+                            <div id="carouselCasa9" class="carousel slide" data-bs-interval="false" style="width:100%;margin:auto;">
+                                <div class="carousel-indicators">
+                                    <button type="button" data-bs-target="#carouselCasa9" data-bs-slide-to="0" class="active"></button>
+                                    <button type="button" data-bs-target="#carouselCasa9" data-bs-slide-to="1"></button>
+                                    <button type="button" data-bs-target="#carouselCasa9" data-bs-slide-to="2"></button>
+                                    <button type="button" data-bs-target="#carouselCasa9" data-bs-slide-to="3"></button>
+                                    <button type="button" data-bs-target="#carouselCasa9" data-bs-slide-to="4"></button>
+                                    <button type="button" data-bs-target="#carouselCasa9" data-bs-slide-to="5"></button>
+                                    <button type="button" data-bs-target="#carouselCasa9" data-bs-slide-to="6"></button>
+                                    <button type="button" data-bs-target="#carouselCasa9" data-bs-slide-to="7"></button>
+                                    <button type="button" data-bs-target="#carouselCasa9" data-bs-slide-to="8"></button>
+                                    <button type="button" data-bs-target="#carouselCasa9" data-bs-slide-to="9"></button>
+                                </div>
+                                <div class="photo-counter">10 fotos</div>
                                 <div class="carousel-inner" style="border-radius:10px;">
                                     <div class="carousel-item active"><img src="imgs/Casa9/Casa9.0.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Taquara - Rua São Francisco 0"></div>
                                     <div class="carousel-item"><img src="imgs/Casa9/Casa9.1.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Taquara - Rua São Francisco 1"></div>
@@ -401,15 +532,6 @@
                             <a href="Casas/Casa9.php" class="btn btn-details w-100 btn-sm" style="background:linear-gradient(45deg,#ff7b00,#ff9500);border:none;color:white;">Ver Detalhes</a>
                         </div>
                     </div>
-                </div>
-            </div>
-            </div>
-        </div>
-    </div>
-                                      
-                
-                        </tbody>
-                    </table>
                 </div>
             </div>
         </div>
