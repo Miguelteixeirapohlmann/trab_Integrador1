@@ -1,0 +1,22 @@
+{
+    "1": {
+        "id": 1,
+        "title": "Casa em Santo Antônio da Patrulha",
+        "description": "Casa ampla, bem iluminada, recém-reformada, com quintal e garagem para quatro carros. Bairro tranquilo e seguro, ideal para famílias.",
+        "price": 5200000,
+        "rent_price": 2200000,
+        "bedrooms": 6,
+        "suites": 2,
+        "bathrooms": 4,
+        "living_rooms": 2,
+        "kitchens": 2,
+        "area": 1536,
+        "address": "Rua Antônio Alves Pinheiro, 2523",
+        "neighborhood": "Santo Antônio da Patrulha",
+        "city": "Santo Antônio da Patrulha",
+        "state": "RS",
+        "zip_code": "",
+        "type": "both",
+        "status": "sold"
+    }
+}

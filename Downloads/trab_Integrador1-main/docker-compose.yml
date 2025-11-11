@@ -1,0 +1,64 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    container_name: ${PROJECT_CONTAINER_WEB:-php-apache}
+    ports:
+      - "${APACHE_PORT:-8080}:80"
+    volumes:
+      - ./:/var/www/html
+      - sessions:/var/www/html/sessions
+    depends_on:
+      - db
+    environment:
+      APACHE_DOCUMENT_ROOT: /var/www/html
+    restart: unless-stopped
+    networks:
+      - app-network
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:5.2
+    container_name: ${PROJECT_CONTAINER_PMA:-phpmyadmin}
+    restart: unless-stopped
+    depends_on:
+      - db
+    environment:
+      PMA_HOST: db
+      PMA_USER: ${MYSQL_ROOT_USER:-root}
+      PMA_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root}
+      UPLOAD_LIMIT: 64M
+      MAX_EXECUTION_TIME: 600
+    ports:
+      - "${PHPMYADMIN_PORT:-8081}:80"
+    networks:
+      - app-network
+
+  db:
+    image: mysql:5.7
+    container_name: ${PROJECT_CONTAINER_DB:-mysql-db}
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-trab_integrador}
+      MYSQL_USER: ${MYSQL_USER:-user}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-password}
+    ports:
+      - "${MYSQL_HOST_PORT:-3307}:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-uroot", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - app-network
+
+volumes:
+  db_data:
+  sessions:
+
+networks:
+  app-network:
+    driver: bridge
