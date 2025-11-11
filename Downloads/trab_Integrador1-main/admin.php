@@ -109,7 +109,14 @@ if (!$current_user || $current_user['user_type'] !== 'admin') {
                echo '<td>' . htmlspecialchars($corretor['email']) . '</td>';
                echo '<td><span class="badge ' . ($corretor['status'] === 'active' ? 'bg-success' : 'bg-secondary') . '">' . ($corretor['status'] === 'active' ? 'Ativo' : 'Desabilitado') . '</span></td>';
                echo '<td>';
+               // Botão para perfil do corretor
                echo '<a href="perfil.php?id=' . $corretor['id'] . '" class="btn btn-info btn-sm me-1">Ver Perfil</a>';
+               // Botão para imóveis do corretor
+               if ($corretor['broker_id']) {
+                   echo '<a href="gerenciar_imoveis.php?id=' . $corretor['broker_id'] . '" class="btn btn-primary btn-sm">Ver Imóveis</a>';
+               } else {
+                   echo '<button class="btn btn-secondary btn-sm" disabled>Ver Imóveis</button>';
+               }
                echo '</td>';
                echo '<td>';
                // Listar imóveis do corretor
@@ -120,8 +127,13 @@ if (!$current_user || $current_user['user_type'] !== 'admin') {
                    if ($imoveis) {
                        echo '<ul class="list-unstyled mb-0">';
                        foreach ($imoveis as $imovel) {
+                           // Tenta encontrar o arquivo da casa pelo id
+                           $casaFile = 'Casas/Casa' . $imovel['id'] . '.php';
+                           if (!file_exists($casaFile)) {
+                               $casaFile = 'properties/view.php?id=' . $imovel['id'];
+                           }
                            echo '<li>';
-                           echo '<a href="properties/view.php?id=' . $imovel['id'] . '" target="_blank">' . htmlspecialchars($imovel['title']) . '</a>';
+                           echo '<a href="' . $casaFile . '" target="_blank">' . htmlspecialchars($imovel['title']) . '</a>';
                            echo ' <span class="text-muted">R$ ' . number_format($imovel['price'], 2, ',', '.') . '</span>';
                            echo '</li>';
                        }
@@ -166,365 +178,70 @@ if (!$current_user || $current_user['user_type'] !== 'admin') {
           </div>
         </div>
 
-    <!-- Gerenciador de Imóveis -->
+    <!-- Gerenciador de Imóveis Dinâmico -->
     <div class="card mt-5">
         <div class="card-header bg-primary text-white">
             <h4 class="mb-0">Gerenciador de Imóveis dos Corretores</h4>
         </div>
         <div class="card-body">
             <div class="row row-cols-1 row-cols-md-3 g-4">
-              
-           <!-- imóvel 1 -->
-             <div class="col">
-                    <div class="card property-card" style="border-radius:12px;box-shadow:0 4px 16px rgba(0,0,0,0.08);">
-                        <div class="position-relative overflow-hidden">
-                            <div id="carouselCasa1" class="carousel slide" style="width:100%;margin:auto;">
-                                <div class="carousel-inner" style="border-radius:10px;">
-                                    <div class="carousel-item active"><img src="imgs/Casa1/Casa1.0.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Igrejinha 1"></div>
-                                    <div class="carousel-item"><img src="imgs/Casa1/Casa1.1.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Igrejinha 2"></div>
-                                    <div class="carousel-item"><img src="imgs/Casa1/Casa1.2.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Igrejinha 3"></div>
-                                    <div class="carousel-item"><img src="imgs/Casa1/Casa1.3.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Igrejinha 3"></div>
-                                    <div class="carousel-item"><img src="imgs/Casa1/Casa1.4.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Igrejinha 3"></div>
-                                    <div class="carousel-item"><img src="imgs/Casa1/Casa1.5.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Igrejinha 3"></div>
-                                    <div class="carousel-item"><img src="imgs/Casa1/Casa1.6.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Igrejinha 3"></div>
-                                    <div class="carousel-item"><img src="imgs/Casa1/Casa1.7.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Igrejinha 3"></div>
-                                    <div class="carousel-item"><img src="imgs/Casa1/Casa1.8.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Igrejinha 3"></div>
-                                    <div class="carousel-item"><img src="imgs/Casa1/Casa1.9.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Igrejinha 3"></div>
+                <?php
+                require_once 'models/Property.php';
+                $propertyModel = new Property();
+                $stmt = $pdo->prepare("SELECT b.id as broker_id, u.first_name, u.last_name FROM brokers b LEFT JOIN users u ON b.user_id = u.id");
+                $stmt->execute();
+                $brokers = $stmt->fetchAll();
+                foreach ($brokers as $broker) {
+                    $properties = $propertyModel->getAll(1, 100, ['broker_id' => $broker['broker_id']]);
+                    foreach ($properties['data'] as $property) {
+                        $images = isset($property['images']) && is_array($property['images']) ? $property['images'] : [];
+                        ?>
+                        <div class="col">
+                            <div class="card property-card" style="border-radius:12px;box-shadow:0 4px 16px rgba(0,0,0,0.08);">
+                                <div class="position-relative overflow-hidden">
+                                    <div id="carouselProperty<?php echo $property['id']; ?>" class="carousel slide" style="width:100%;margin:auto;">
+                                        <div class="carousel-inner" style="border-radius:10px;">
+                                            <?php foreach ($images as $idx => $img): ?>
+                                                <div class="carousel-item<?php echo $idx === 0 ? ' active' : ''; ?>">
+                                                    <img src="<?php echo htmlspecialchars($img); ?>" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="<?php echo htmlspecialchars($property['title']); ?>">
+                                                </div>
+                                            <?php endforeach; ?>
+                                        </div>
+                                        <?php if (count($images) > 1): ?>
+                                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselProperty<?php echo $property['id']; ?>" data-bs-slide="prev" style="width:32px;height:32px;top:50%;transform:translateY(-50%);">
+                                                <span class="carousel-control-prev-icon" style="width:16px;height:16px;" aria-hidden="true"></span>
+                                                <span class="visually-hidden">Anterior</span>
+                                            </button>
+                                            <button class="carousel-control-next" type="button" data-bs-target="#carouselProperty<?php echo $property['id']; ?>" data-bs-slide="next" style="width:32px;height:32px;top:50%;transform:translateY(-50%);">
+                                                <span class="carousel-control-next-icon" style="width:16px;height:16px;" aria-hidden="true"></span>
+                                                <span class="visually-hidden">Próximo</span>
+                                            </button>
+                                        <?php endif; ?>
+                                    </div>
                                 </div>
-                                <button class="carousel-control-prev" type="button" data-bs-target="#carouselCasa1" data-bs-slide="prev" style="width:32px;height:32px;top:50%;transform:translateY(-50%);">
-                                    <span class="carousel-control-prev-icon" style="width:16px;height:16px;" aria-hidden="true"></span>
-                                    <span class="visually-hidden">Anterior</span>
-                                </button>
-                                <button class="carousel-control-next" type="button" data-bs-target="#carouselCasa1" data-bs-slide="next" style="width:32px;height:32px;top:50%;transform:translateY(-50%);">
-                                    <span class="carousel-control-next-icon" style="width:16px;height:16px;" aria-hidden="true"></span>
-                                    <span class="visually-hidden">Próximo</span>
-                                </button>
+                                <div class="card-body text-center">
+                                    <h5 class="property-title" style="font-size:1.1rem;font-weight:600;color:#333;"><?php echo htmlspecialchars($property['title']); ?></h5>
+                                    <div class="property-price price-sale mb-2" style="font-size:1rem;font-weight:700;">
+                                        <?php if ($property['transaction_type'] === 'sale' || $property['transaction_type'] === 'both'): ?>
+                                            Compra <?php echo formatCurrency($property['price']); ?>
+                                        <?php endif; ?>
+                                        <?php if ($property['transaction_type'] === 'rent' || $property['transaction_type'] === 'both'): ?>
+                                            <?php if ($property['transaction_type'] === 'both'): ?> | <?php endif; ?>
+                                            Aluguel <?php echo formatCurrency($property['rent_price']); ?>
+                                        <?php endif; ?>
+                                    </div>
+                                    <div class="mb-2"><span class="badge bg-success rounded-pill"><?php echo ucfirst($property['status']); ?></span></div>
+                                    <div class="mb-2"><span class="badge bg-primary rounded-pill"><?php echo htmlspecialchars($broker['first_name'] . ' ' . $broker['last_name']); ?></span></div>
+                                    <a href="properties/view.php?id=<?php echo $property['id']; ?>" class="btn btn-details w-100 btn-sm" style="background:linear-gradient(45deg,#ff7b00,#ff9500);border:none;color:white;">Ver Detalhes</a>
+                                </div>
                             </div>
                         </div>
-                        <div class="card-body text-center">
-                            <h5 class="property-title" style="font-size:1.1rem;font-weight:600;color:#333;">Casa em Santo Antônio da Patrulha</h5>
-                            <div class="property-price price-sale mb-2" style="font-size:1rem;font-weight:700;">Compra R$ 5.200.000,00 Aluguel R$ 2.200.000,00</div>
-                            <div class="mb-2"><span class="badge bg-success rounded-pill">Disponível</span></div>
-                            <div class="mb-2"><span class="badge bg-primary rounded-pill">João Silva</span></div>
-                            <a href="Casas/Casa1.php" class="btn btn-details w-100 btn-sm" style="background:linear-gradient(45deg,#ff7b00,#ff9500);border:none;color:white;">Ver Detalhes</a>
-                            
-                        </div>
-                    </div>
-                </div> 
-            
-            
-            <!-- imóvel 2 -->
-             <div class="col">
-                    <div class="card property-card" style="border-radius:12px;box-shadow:0 4px 16px rgba(0,0,0,0.08);">
-                        <div class="position-relative overflow-hidden">
-                            <div id="carouselCasa2" class="carousel slide" style="width:100%;margin:auto;">
-                                <div class="carousel-inner" style="border-radius:10px;">
-                                    <div class="carousel-item active"><img src="imgs/Casa2/Casa2.0.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Igrejinha 1"></div>
-                                    <div class="carousel-item"><img src="imgs/Casa2/Casa2.1.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Igrejinha 2"></div>
-                                    <div class="carousel-item"><img src="imgs/Casa2/Casa2.2.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Igrejinha 3"></div>
-                                    <div class="carousel-item"><img src="imgs/Casa2/Casa2.3.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Igrejinha 3"></div>
-                                    <div class="carousel-item"><img src="imgs/Casa2/Casa2.4.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Igrejinha 3"></div>
-                                    <div class="carousel-item"><img src="imgs/Casa2/Casa2.5.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Igrejinha 3"></div>
-                                    <div class="carousel-item"><img src="imgs/Casa2/Casa2.6.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Igrejinha 3"></div>
-                                    <div class="carousel-item"><img src="imgs/Casa2/Casa2.7.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Igrejinha 3"></div>
-                                    <div class="carousel-item"><img src="imgs/Casa2/Casa2.8.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Igrejinha 3"></div>
-                                    <div class="carousel-item"><img src="imgs/Casa2/Casa2.9.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Igrejinha 3"></div>
-                                    <div class="carousel-item"><img src="imgs/Casa2/Casa2.10.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Igrejinha 3"></div>
-                                    <div class="carousel-item"><img src="imgs/Casa2/Casa2.11.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Igrejinha 3"></div>
-                                    <div class="carousel-item"><img src="imgs/Casa2/Casa2.12.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Igrejinha 3"></div>
-                                    <div class="carousel-item"><img src="imgs/Casa2/Casa2.13.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Igrejinha 3"></div>
-                                </div>
-                                <button class="carousel-control-prev" type="button" data-bs-target="#carouselCasa2" data-bs-slide="prev" style="width:32px;height:32px;top:50%;transform:translateY(-50%);">
-                                    <span class="carousel-control-prev-icon" style="width:16px;height:16px;" aria-hidden="true"></span>
-                                    <span class="visually-hidden">Anterior</span>
-                                </button>
-                                <button class="carousel-control-next" type="button" data-bs-target="#carouselCasa2" data-bs-slide="next" style="width:32px;height:32px;top:50%;transform:translateY(-50%);">
-                                    <span class="carousel-control-next-icon" style="width:16px;height:16px;" aria-hidden="true"></span>
-                                    <span class="visually-hidden">Próximo</span>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="card-body text-center">
-                            <h5 class="property-title" style="font-size:1.1rem;font-weight:600;color:#333;">Casa em Taquara</h5>
-                            <div class="property-price price-sale mb-2" style="font-size:1rem;font-weight:700;">Aluguel R$ 1.500,00</div>
-                            <div class="mb-2"><span class="badge bg-success rounded-pill">Disponível</span></div>
-                            <div class="mb-2"><span class="badge bg-primary rounded-pill">João Silva</span></div>
-                            <a href="Casas/Casa2.php" class="btn btn-details w-100 btn-sm" style="background:linear-gradient(45deg,#ff7b00,#ff9500);border:none;color:white;">Ver Detalhes</a>
-                           
-                        </div>
-                    </div>
-                </div>   
-            <!-- Imóvel 3 -->
-          <div class="col">
-                    <div class="card property-card" style="border-radius:12px;box-shadow:0 4px 16px rgba(0,0,0,0.08);">
-                        <div class="position-relative overflow-hidden">
-                            <div id="carouselCasa3" class="carousel slide" style="width:100%;margin:auto;">
-                                <div class="carousel-inner" style="border-radius:10px;">
-                                    <div class="carousel-item active"><img src="imgs/Casa3/Casa3.0.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Igrejinha 1"></div>
-                                    <div class="carousel-item"><img src="imgs/Casa3/Casa3.1.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Igrejinha 2"></div>
-                                    <div class="carousel-item"><img src="imgs/Casa3/Casa3.2.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Igrejinha 3"></div>
-                                    <div class="carousel-item"><img src="imgs/Casa3/Casa3.3.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Igrejinha 3"></div>
-                                    <div class="carousel-item"><img src="imgs/Casa3/Casa3.4.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Igrejinha 3"></div>
-                                    <div class="carousel-item"><img src="imgs/Casa3/Casa3.5.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Igrejinha 3"></div>
-                                    <div class="carousel-item"><img src="imgs/Casa3/Casa3.6.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Igrejinha 3"></div>
-                                    <div class="carousel-item"><img src="imgs/Casa3/Casa3.7.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Igrejinha 3"></div>
-                                    <div class="carousel-item"><img src="imgs/Casa3/Casa3.8.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Igrejinha 3"></div>
-                                    <div class="carousel-item"><img src="imgs/Casa3/Casa3.9.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Igrejinha 3"></div>
-                                </div>
-                                <button class="carousel-control-prev" type="button" data-bs-target="#carouselCasa3" data-bs-slide="prev" style="width:32px;height:32px;top:50%;transform:translateY(-50%);">
-                                    <span class="carousel-control-prev-icon" style="width:16px;height:16px;" aria-hidden="true"></span>
-                                    <span class="visually-hidden">Anterior</span>
-                                </button>
-                                <button class="carousel-control-next" type="button" data-bs-target="#carouselCasa3" data-bs-slide="next" style="width:32px;height:32px;top:50%;transform:translateY(-50%);">
-                                    <span class="carousel-control-next-icon" style="width:16px;height:16px;" aria-hidden="true"></span>
-                                    <span class="visually-hidden">Próximo</span>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="card-body text-center">
-                            <h5 class="property-title" style="font-size:1.1rem;font-weight:600;color:#333;">Casa em Taquara Alto Padrão</h5>
-                            <div class="property-price price-sale mb-2" style="font-size:1rem;font-weight:700;">Compra R$ 3.000.000,00</div>
-                            <div class="mb-2"><span class="badge bg-success rounded-pill">Disponível</span></div>
-                            <div class="mb-2"><span class="badge bg-primary rounded-pill">João Silva</span></div>
-                            <a href="Casas/Casa3.php" class="btn btn-details w-100 btn-sm" style="background:linear-gradient(45deg,#ff7b00,#ff9500);border:none;color:white;">Ver Detalhes</a>
-
-                        </div>
-                    </div>
-                </div>
-               <!-- Imóvel 4 -->
-                <div class="col">
-                    <div class="card property-card" style="border-radius:12px;box-shadow:0 4px 16px rgba(0,0,0,0.08);">
-                        <div class="position-relative overflow-hidden">
-                            <div id="carouselCasa4" class="carousel slide" style="width:100%;margin:auto;">
-                                <div class="carousel-inner" style="border-radius:10px;">
-                                    <div class="carousel-item active"><img src="imgs/Casa4/Casa4.0.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Igrejinha 1"></div>
-                                    <div class="carousel-item"><img src="imgs/Casa4/Casa4.2.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Igrejinha 3"></div>
-                                    <div class="carousel-item"><img src="imgs/Casa4/Casa4.3.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Igrejinha 3"></div>
-                                    <div class="carousel-item"><img src="imgs/Casa4/Casa4.4.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Igrejinha 3"></div>
-                                    <div class="carousel-item"><img src="imgs/Casa4/Casa4.5.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Igrejinha 3"></div>
-                                    <div class="carousel-item"><img src="imgs/Casa4/Casa4.6.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Igrejinha 3"></div>
-                                    <div class="carousel-item"><img src="imgs/Casa4/Casa4.7.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Igrejinha 3"></div>
-                                    <div class="carousel-item"><img src="imgs/Casa4/Casa4.8.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Igrejinha 3"></div>
-                                    <div class="carousel-item"><img src="imgs/Casa4/Casa4.9.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Igrejinha 3"></div>
-                                </div>
-                                <button class="carousel-control-prev" type="button" data-bs-target="#carouselCasa4" data-bs-slide="prev" style="width:32px;height:32px;top:50%;transform:translateY(-50%);">
-                                    <span class="carousel-control-prev-icon" style="width:16px;height:16px;" aria-hidden="true"></span>
-                                    <span class="visually-hidden">Anterior</span>
-                                </button>
-                                <button class="carousel-control-next" type="button" data-bs-target="#carouselCasa4" data-bs-slide="next" style="width:32px;height:32px;top:50%;transform:translateY(-50%);">
-                                    <span class="carousel-control-next-icon" style="width:16px;height:16px;" aria-hidden="true"></span>
-                                    <span class="visually-hidden">Próximo</span>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="card-body text-center">
-                            <h5 class="property-title" style="font-size:1.1rem;font-weight:600;color:#333;">Casa em Taquara Rua Mundo Novo</h5>
-                            <div class="property-price price-sale mb-2" style="font-size:1rem;font-weight:700;">Compra R$ 170.000,00 Aluguel R$ 1.000,00</div>
-                            <div class="mb-2"><span class="badge bg-success rounded-pill">Disponível</span></div>
-                            <div class="mb-2"><span class="badge bg-primary rounded-pill">Maria Souza</span></div>
-                            <a href="Casas/Casa4.php" class="btn btn-details w-100 btn-sm" style="background:linear-gradient(45deg,#ff7b00,#ff9500);border:none;color:white;">Ver Detalhes</a>
-                            
-                        </div>
-                    </div>
-                </div>
-                <!-- Imóvel 5 -->
-                <div class="col">
-                    <div class="card property-card" style="border-radius:12px;box-shadow:0 4px 16px rgba(0,0,0,0.08);">
-                        <div class="position-relative overflow-hidden">
-                            <div id="carouselCasa5" class="carousel slide" style="width:100%;margin:auto;">
-                                <div class="carousel-inner" style="border-radius:10px;">
-                                    <div class="carousel-item active"><img src="imgs/Casa5/Casa5.0.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Igrejinha 1"></div>
-                                    <div class="carousel-item"><img src="imgs/Casa5/Casa5.1.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Igrejinha 2"></div>
-                                    <div class="carousel-item"><img src="imgs/Casa5/Casa5.2.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Igrejinha 3"></div>
-                                    <div class="carousel-item"><img src="imgs/Casa5/Casa5.3.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Igrejinha 3"></div>
-                                    <div class="carousel-item"><img src="imgs/Casa5/Casa5.4.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Igrejinha 3"></div>
-                                    <div class="carousel-item"><img src="imgs/Casa5/Casa5.5.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Igrejinha 3"></div>
-                                    <div class="carousel-item"><img src="imgs/Casa5/Casa5.6.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Igrejinha 3"></div>
-                                    <div class="carousel-item"><img src="imgs/Casa5/Casa5.7.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Igrejinha 3"></div>
-                                    <div class="carousel-item"><img src="imgs/Casa5/Casa5.8.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Igrejinha 3"></div>
-                                    <div class="carousel-item"><img src="imgs/Casa5/Casa5.9.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Igrejinha 3"></div>
-                                    <div class="carousel-item"><img src="imgs/Casa5/Casa5.10.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Igrejinha 3"></div>
-                                </div>
-                                <button class="carousel-control-prev" type="button" data-bs-target="#carouselCasa5" data-bs-slide="prev" style="width:32px;height:32px;top:50%;transform:translateY(-50%);">
-                                    <span class="carousel-control-prev-icon" style="width:16px;height:16px;" aria-hidden="true"></span>
-                                    <span class="visually-hidden">Anterior</span>
-                                </button>
-                                <button class="carousel-control-next" type="button" data-bs-target="#carouselCasa5" data-bs-slide="next" style="width:32px;height:32px;top:50%;transform:translateY(-50%);">
-                                    <span class="carousel-control-next-icon" style="width:16px;height:16px;" aria-hidden="true"></span>
-                                    <span class="visually-hidden">Próximo</span>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="card-body text-center">
-                            <h5 class="property-title" style="font-size:1.1rem;font-weight:600;color:#333;">Casa em Taquara Rua Flores da Cunha</h5>
-                            <div class="property-price price-sale mb-2" style="font-size:1rem;font-weight:700;">Compra R$ 380.000,00 Aluguel R$ 900,00</div>
-                            <div class="mb-2"><span class="badge bg-success rounded-pill">Disponível</span></div>
-                            <div class="mb-2"><span class="badge bg-primary rounded-pill">Maria Souza</span></div>
-                            <a href="Casas/Casa5.php" class="btn btn-details w-100 btn-sm" style="background:linear-gradient(45deg,#ff7b00,#ff9500);border:none;color:white;">Ver Detalhes</a>
-                            
-                        </div>
-                    </div>
-                </div>
-                <!-- Imóvel 6 -->
-                <div class="col">
-                    <div class="card property-card" style="border-radius:12px;box-shadow:0 4px 16px rgba(0,0,0,0.08);">
-                        <div class="position-relative overflow-hidden">
-                            <div id="carouselCasa6" class="carousel slide" style="width:100%;margin:auto;">
-                                <div class="carousel-inner" style="border-radius:10px;">
-                                    <div class="carousel-item active"><img src="imgs/Casa6/Casa6.0.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Rolante 1"></div>
-                                    <div class="carousel-item"><img src="imgs/Casa6/Casa6.1.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Rolante 2"></div>
-                                    <div class="carousel-item"><img src="imgs/Casa6/Casa6.2.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Rolante 3"></div>
-                                    <div class="carousel-item"><img src="imgs/Casa6/Casa6.3.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Rolante 3"></div>
-                                    <div class="carousel-item"><img src="imgs/Casa6/Casa6.4.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Rolante 3"></div>
-                                </div>
-                                <button class="carousel-control-prev" type="button" data-bs-target="#carouselCasa6" data-bs-slide="prev" style="width:32px;height:32px;top:50%;transform:translateY(-50%);">
-                                    <span class="carousel-control-prev-icon" style="width:16px;height:16px;" aria-hidden="true"></span>
-                                    <span class="visually-hidden">Anterior</span>
-                                </button>
-                                <button class="carousel-control-next" type="button" data-bs-target="#carouselCasa6" data-bs-slide="next" style="width:32px;height:32px;top:50%;transform:translateY(-50%);">
-                                    <span class="carousel-control-next-icon" style="width:16px;height:16px;" aria-hidden="true"></span>
-                                    <span class="visually-hidden">Próximo</span>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="card-body text-center">
-                            <h5 class="property-title" style="font-size:1.1rem;font-weight:600;color:#333;">Casa em Parobé</h5>
-                            <div class="property-price price-sale mb-2" style="font-size:1rem;font-weight:700;">Compra R$ 195.000,00 Aluguel R$ 1.000,00</div>
-                            <div class="mb-2"><span class="badge bg-success rounded-pill">Disponível</span></div>
-                            <div class="mb-2"><span class="badge bg-primary rounded-pill">Maria Souza</span></div>
-                            <a href="Casas/Casa6.php" class="btn btn-details w-100 btn-sm" style="background:linear-gradient(45deg,#ff7b00,#ff9500);border:none;color:white;">Ver Detalhes</a>
-                           
-                        </div>
-                    </div>
-                </div>
-                <!-- Imóvel 7 -->
-                <div class="col">
-                    <div class="card property-card" style="border-radius:12px;box-shadow:0 4px 16px rgba(0,0,0,0.08);">
-                        <div class="position-relative overflow-hidden">
-                            <div id="carouselCasa7" class="carousel slide" style="width:100%;margin:auto;">
-                                <div class="carousel-inner" style="border-radius:10px;">
-                                    <div class="carousel-item active"><img src="imgs/Casa7/Casa7.0.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Sapiranga 1"></div>
-                                    <div class="carousel-item"><img src="imgs/Casa7/Casa7.1.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Sapiranga 2"></div>
-                                    <div class="carousel-item"><img src="imgs/Casa7/Casa7.2.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Sapiranga 3"></div>
-                                    <div class="carousel-item"><img src="imgs/Casa7/Casa7.3.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Sapiranga 4"></div>   
-                                    <div class="carousel-item"><img src="imgs/Casa7/Casa7.4.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Sapiranga 5"></div>
-                                    <div class="carousel-item"><img src="imgs/Casa7/Casa7.5.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Sapiranga 6"></div>            
-                                    <div class="carousel-item"><img src="imgs/Casa7/Casa7.6.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Sapiranga 6"></div>
-                                    <div class="carousel-item"><img src="imgs/Casa7/Casa7.7.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Sapiranga 6"></div>
-                                    <div class="carousel-item"><img src="imgs/Casa7/Casa7.8.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Sapiranga 6"></div>
-                                    <div class="carousel-item"><img src="imgs/Casa7/Casa7.9.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Sapiranga 6"></div>
-                                    <div class="carousel-item"><img src="imgs/Casa7/Casa7.10.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Sapiranga 6"></div>
-                                    <div class="carousel-item"><img src="imgs/Casa7/Casa7.11.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Sapiranga 6"></div>
-                                    <div class="carousel-item"><img src="imgs/Casa7/Casa7.12.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Sapiranga 6"></div>
-                                    <div class="carousel-item"><img src="imgs/Casa7/Casa7.13.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Sapiranga 6"></div>
-                                    <div class="carousel-item"><img src="imgs/Casa7/Casa7.14.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Sapiranga 6"></div>
-                                    <div class="carousel-item"><img src="imgs/Casa7/Casa7.15.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Sapiranga 6"></div>
-                                </div>
-                                <button class="carousel-control-prev" type="button" data-bs-target="#carouselCasa7" data-bs-slide="prev" style="width:32px;height:32px;top:50%;transform:translateY(-50%);">
-                                    <span class="carousel-control-prev-icon" style="width:16px;height:16px;" aria-hidden="true"></span>
-                                    <span class="visually-hidden">Anterior</span>
-                                </button>
-                                <button class="carousel-control-next" type="button" data-bs-target="#carouselCasa7" data-bs-slide="next" style="width:32px;height:32px;top:50%;transform:translateY(-50%);">
-                                    <span class="carousel-control-next-icon" style="width:16px;height:16px;" aria-hidden="true"></span>
-                                    <span class="visually-hidden">Próximo</span>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="card-body text-center">
-                            <h5 class="property-title" style="font-size:1.1rem;font-weight:600;color:#333;">Casa em Taquara Bairro Santa Terezinha</h5>
-                            <div class="property-price price-sale mb-2" style="font-size:1rem;font-weight:700;">Compra R$ 650.000,00 Aluguel R$ 2.000,00</div>
-                            <div class="mb-2"><span class="badge bg-success rounded-pill">Disponível</span></div>
-                            <div class="mb-2"><span class="badge bg-primary rounded-pill">Pedro Costa</span></div>
-                            <a href="Casas/casa7.php" class="btn btn-details w-100 btn-sm" style="background:linear-gradient(45deg,#ff7b00,#ff9500);border:none;color:white;">Ver Detalhes</a>
-                           
-                        </div>
-                    </div>
-                </div>
-                <!-- Imóvel 8 -->
-                <div class="col">
-                    <div class="card property-card" style="border-radius:12px;box-shadow:0 4px 16px rgba(0,0,0,0.08);">
-                        <div class="position-relative overflow-hidden">
-                            <div id="carouselCasa8" class="carousel slide" style="width:100%;margin:auto;">
-                                <div class="carousel-inner" style="border-radius:10px;">
-                                    <div class="carousel-item active"><img src="imgs/Casa8/Casa8.0.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Taquara - Bairro Tucanos 1"></div>
-                                    <div class="carousel-item"><img src="imgs/Casa8/Casa8.1.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Taquara - Bairro Tucanos 2"></div>
-                                    <div class="carousel-item"><img src="imgs/Casa8/Casa8.2.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Taquara - Bairro Tucanos 3"></div>
-                                    <div class="carousel-item"><img src="imgs/Casa8/Casa8.3.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Taquara - Bairro Tucanos 4"></div>
-                                    <div class="carousel-item"><img src="imgs/Casa8/Casa8.4.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Taquara - Bairro Tucanos 5"></div>
-                                    <div class="carousel-item"><img src="imgs/Casa8/Casa8.5.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Taquara - Bairro Tucanos 6"></div>
-                                    <div class="carousel-item"><img src="imgs/Casa8/Casa8.6.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Taquara - Bairro Tucanos 7"></div>
-                                    <div class="carousel-item"><img src="imgs/Casa8/Casa8.7.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Taquara - Bairro Tucanos 8"></div>
-                                    <div class="carousel-item"><img src="imgs/Casa8/Casa8.8.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Taquara - Bairro Tucanos 9"></ 
-                                    <div class="carousel-item"><img src="imgs/Casa8/Casa8.9.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Taquara - Bairro Tucanos 10"></div>
-                                </div>
-                                <button class="carousel-control-prev" type="button" data-bs-target="#carouselCasa8" data-bs-slide="prev" style="width:32px;height:32px;top:50%;transform:translateY(-50%);">
-                                    <span class="carousel-control-prev-icon" style="width:16px;height:16px;" aria-hidden="true"></span>
-                                    <span class="visually-hidden">Anterior</span>
-                                </button>
-                                <button class="carousel-control-next" type="button" data-bs-target="#carouselCasa8" data-bs-slide="next" style="width:32px;height:32px;top:50%;transform:translateY(-50%);">
-                                    <span class="carousel-control-next-icon" style="width:16px;height:16px;" aria-hidden="true"></span>
-                                    <span class="visually-hidden">Próximo</span>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="card-body text-center">
-                            <h5 class="property-title" style="font-size:1.1rem;font-weight:600;color:#333;">Casa em Taquara - Bairro Tucanos</h5>
-                            <div class="property-price price-sale mb-2" style="font-size:1rem;font-weight:700;">Compra R$ 184.000,00</div>
-                            <div class="mb-2"><span class="badge bg-success rounded-pill">Disponível</span></div>
-                            <div class="mb-2"><span class="badge bg-primary rounded-pill">Pedro Costa</span></div>
-                            <a href="Casas/Casa8.php" class="btn btn-details w-100 btn-sm" style="background:linear-gradient(45deg,#ff7b00,#ff9500);border:none;color:white;">Ver Detalhes</a>
-                            
-                        </div>
-                    </div>
-                </div>
-                <!-- Imóvel 9 -->
-                <div class="col">
-                    <div class="card property-card" style="border-radius:12px;box-shadow:0 4px 16px rgba(0,0,0,0.08);">
-                        <div class="position-relative overflow-hidden">
-                            <div id="carouselCasa9" class="carousel slide" style="width:100%;margin:auto;">
-                                <div class="carousel-inner" style="border-radius:10px;">
-                                    <div class="carousel-item active"><img src="imgs/Casa9/Casa9.0.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa em Taquara"></div>
-                                    <div class="carousel-item"><img src="imgs/Casa9/Casa9.1.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa "></div>
-                                    <div class="carousel-item"><img src="imgs/Casa9/Casa9.2.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa "></div>
-                                    <div class="carousel-item"><img src="imgs/Casa9/Casa9.3.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa "></div>
-                                    <div class="carousel-item"><img src="imgs/Casa9/Casa9.4.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa "></div>
-                                    <div class="carousel-item"><img src="imgs/Casa9/Casa9.5.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa "></div>
-                                    <div class="carousel-item"><img src="imgs/Casa9/Casa9.6.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa "></div>
-                                    <div class="carousel-item"><img src="imgs/Casa9/Casa9.7.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa "></div>
-                                    <div class="carousel-item"><img src="imgs/Casa9/Casa9.8.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa "></div>
-                                    <div class="carousel-item"><img src="imgs/Casa9/Casa9.9.jpg" class="d-block w-100 carousel-img-fixed" style="height:120px;object-fit:cover;" alt="Casa "></div>
-                                </div>
-                                <button class="carousel-control-prev" type="button" data-bs-target="#carouselCasa9" data-bs-slide="prev" style="width:32px;height:32px;top:50%;transform:translateY(-50%);">
-                                    <span class="carousel-control-prev-icon" style="width:16px;height:16px;" aria-hidden="true"></span>
-                                    <span class="visually-hidden">Anterior</span>
-                                </button>
-                                <button class="carousel-control-next" type="button" data-bs-target="#carouselCasa9" data-bs-slide="next" style="width:32px;height:32px;top:50%;transform:translateY(-50%);">
-                                    <span class="carousel-control-next-icon" style="width:16px;height:16px;" aria-hidden="true"></span>
-                                    <span class="visually-hidden">Próximo</span>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="card-body text-center">
-                            <h5 class="property-title" style="font-size:1.1rem;font-weight:600;color:#333;">Casa em Taquara - Rua São Francisco</h5>
-                            <div class="property-price price-sale mb-2" style="font-size:1rem;font-weight:700;">Compra R$ 450.000,00</div>
-                            <div class="mb-2"><span class="badge bg-success rounded-pill">Disponível</span></div>
-                            <div class="mb-2"><span class="badge bg-primary rounded-pill">Pedro Costa</span></div>
-                            <a href="Casas/Casa9.php" class="btn btn-details w-100 btn-sm" style="background:linear-gradient(45deg,#ff7b00,#ff9500);border:none;color:white;">Ver Detalhes</a>
-                            
-                        </div>
-                    </div>
-                </div>
+                        <?php
+                    }
+                }
+                ?>
             </div>
         </div>
     </div>
-    <script src="js/admin.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
-    <script>
-        // Todos os carrosséis funcionam igual ao carrossel 2 (comportamento padrão do Bootstrap)
-        document.addEventListener('DOMContentLoaded', function() {
-            // Sem interferências - deixa o Bootstrap gerenciar todos os carrosséis normalmente
-            console.log('Carrosséis iniciados com comportamento padrão');
-        });
-    </script>
 </body>
 </html>

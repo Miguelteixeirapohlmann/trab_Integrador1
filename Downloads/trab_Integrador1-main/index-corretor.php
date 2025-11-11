@@ -92,13 +92,14 @@ require_once __DIR__ . '/includes/navbar.php';
         </div>
     </section>
 
-        <script src="js/scripts.js"></script>
-        <script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/SimpleLightbox/2.1.0/simpleLightbox.min.js"></script>
+    <script src="js/scripts.js"></script>
+    <script>
         // Seleção dinâmica das casas conforme corretor logado
         let casas = [];
         <?php
-        $corretor_nome = strtolower($current_user['first_name'] ?? '');
-        if ($corretor_nome === 'maria') {
+    $corretor_nome = isset($current_user['first_name']) && $current_user['first_name'] !== null ? strtolower($current_user['first_name']) : '';
+    if ($corretor_nome === 'maria') {
         ?>
         casas = [
             {
@@ -162,6 +163,7 @@ require_once __DIR__ . '/includes/navbar.php';
         ];
         <?php
         } else if ($corretor_nome === 'pedro') {
+    // ...existing code...
         ?>
         casas = [
             {
@@ -235,16 +237,15 @@ require_once __DIR__ . '/includes/navbar.php';
                 valor_compra: 300000,
                 valor_aluguel: 2000,
                 imagens: [
-                    "imgs/Casa1/Casa1.0.jpg",
                     "imgs/Casa1/Casa1.1.jpg",
-                    "imgs/Casa1/Casa1.2.jpg",
                     "imgs/Casa1/Casa1.3.jpg",
                     "imgs/Casa1/Casa1.4.jpg",
                     "imgs/Casa1/Casa1.5.jpg",
-                    "imgs/Casa1/Casa1.6.jpg",
-                    "imgs/Casa1/Casa1.7.jpg",
                     "imgs/Casa1/Casa1.8.jpg",
-                    "imgs/Casa1/Casa1.9.jpg"
+                    "imgs/Casa1/Casa1.9.jpg",
+                    "imgs/Casa1/Casa1.11.jpg",
+                    "imgs/Casa1/Casa1.13.jpg",
+                    "imgs/Casa1/Casa1.15.jpg"
                 ]
             },
             {
@@ -354,14 +355,22 @@ require_once __DIR__ . '/includes/navbar.php';
         function abrirModalEditarCasa(id) {
             const casa = casas.find(c => c.id === id);
             if (!casa) return;
-            document.getElementById('editCasaId').value = casa.id;
-            document.getElementById('editCasaNome').value = casa.nome;
-            document.getElementById('editCasaValor').value = casa.valor;
-            document.getElementById('editCasaTipo').value = casa.tipo;
-            document.getElementById('editCasaImagens').value = '';
+            const elId = document.getElementById('editCasaId');
+            if (elId) elId.value = casa.id;
+            const elNome = document.getElementById('editCasaNome');
+            if (elNome) elNome.value = casa.nome;
+            const elValor = document.getElementById('editCasaValor');
+            if (elValor) elValor.value = casa.valor;
+            const elTipo = document.getElementById('editCasaTipo');
+            if (elTipo) elTipo.value = casa.tipo;
+            const elImagens = document.getElementById('editCasaImagens');
+            if (elImagens) elImagens.value = '';
             renderImagensPreview(casa.imagens);
-            const modal = new bootstrap.Modal(document.getElementById('modalEditarCasa'));
-            modal.show();
+            const modalEl = document.getElementById('modalEditarCasa');
+            if (modalEl) {
+                const modal = new bootstrap.Modal(modalEl);
+                modal.show();
+            }
         }
 
         function renderImagensPreview(imagens) {
@@ -377,42 +386,54 @@ require_once __DIR__ . '/includes/navbar.php';
             });
         }
 
-        document.getElementById('editCasaImagens').addEventListener('change', function(e) {
-            const files = Array.from(e.target.files);
-            const preview = document.getElementById('imagensPreview');
-            preview.innerHTML = '';
-            files.forEach(file => {
-                const reader = new FileReader();
-                reader.onload = function(ev) {
-                    const img = document.createElement('img');
-                    img.src = ev.target.result;
-                    img.style.height = '60px';
-                    img.style.objectFit = 'cover';
-                    img.className = 'rounded border';
-                    preview.appendChild(img);
-                };
-                reader.readAsDataURL(file);
+        const editCasaImagens = document.getElementById('editCasaImagens');
+        if (editCasaImagens) {
+            editCasaImagens.addEventListener('change', function(e) {
+                const files = Array.from(e.target.files);
+                const preview = document.getElementById('imagensPreview');
+                if (preview) {
+                    preview.innerHTML = '';
+                    files.forEach(file => {
+                        const reader = new FileReader();
+                        reader.onload = function(ev) {
+                            const img = document.createElement('img');
+                            img.src = ev.target.result;
+                            img.style.height = '60px';
+                            img.style.objectFit = 'cover';
+                            img.className = 'rounded border';
+                            preview.appendChild(img);
+                        };
+                        reader.readAsDataURL(file);
+                    });
+                }
             });
-        });
+        }
 
-        document.getElementById('formEditarCasa').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const id = parseInt(document.getElementById('editCasaId').value);
-            const nome = document.getElementById('editCasaNome').value;
-            const valor = parseFloat(document.getElementById('editCasaValor').value);
-            const tipo = document.getElementById('editCasaTipo').value;
-            const files = Array.from(document.getElementById('editCasaImagens').files);
-            let imagens = casas.find(c => c.id === id).imagens;
-            if (files.length > 0) {
-                imagens = [];
-                files.forEach(file => {
-                    imagens.push(URL.createObjectURL(file));
-                });
-            }
-            casas = casas.map(c => c.id === id ? { ...c, nome, valor, tipo, imagens } : c);
-            renderCasas();
-            bootstrap.Modal.getInstance(document.getElementById('modalEditarCasa')).hide();
-        });
+        const formEditarCasa = document.getElementById('formEditarCasa');
+        if (formEditarCasa) {
+            formEditarCasa.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const id = parseInt(document.getElementById('editCasaId').value);
+                const nome = document.getElementById('editCasaNome').value;
+                const valor = parseFloat(document.getElementById('editCasaValor').value);
+                const tipo = document.getElementById('editCasaTipo').value;
+                const editCasaImagens = document.getElementById('editCasaImagens');
+                const files = editCasaImagens ? Array.from(editCasaImagens.files) : [];
+                let imagens = casas.find(c => c.id === id).imagens;
+                if (files.length > 0) {
+                    imagens = [];
+                    files.forEach(file => {
+                        imagens.push(URL.createObjectURL(file));
+                    });
+                }
+                casas = casas.map(c => c.id === id ? { ...c, nome, valor, tipo, imagens } : c);
+                renderCasas();
+                const modalEditarCasa = document.getElementById('modalEditarCasa');
+                if (modalEditarCasa) {
+                    bootstrap.Modal.getInstance(modalEditarCasa).hide();
+                }
+            });
+        }
 
         function excluirCasa(id) {
             if (confirm('Tem certeza que deseja excluir esta casa?')) {

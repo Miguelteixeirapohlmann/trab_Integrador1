@@ -74,7 +74,10 @@ document.getElementById('corretorForm').addEventListener('submit', function(e) {
 }
 
 function renderImoveis() {
-    const tbody = document.querySelector("#imoveisTable tbody");
+    const imoveisTable = document.getElementById('imoveisTable');
+    if (!imoveisTable) return;
+    const tbody = imoveisTable.querySelector('tbody');
+    if (!tbody) return;
     tbody.innerHTML = "";
     imoveis.forEach(imovel => {
         const corretor = corretores.find(c => c.id === imovel.corretorId);

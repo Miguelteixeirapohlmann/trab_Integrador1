@@ -109,7 +109,7 @@ $csrf_token = generateCSRFToken();
                                 <?php if (!empty($currentUser['avatar'])): ?>
                                     <img src="<?php echo asset('uploads/' . $currentUser['avatar']); ?>" alt="Avatar" class="rounded-circle me-1" style="width: 24px; height: 24px;">
                                 <?php endif; ?>
-                                <?php echo htmlspecialchars($currentUser['first_name']); ?>
+                                <?php echo isset($currentUser['first_name']) && $currentUser['first_name'] !== null ? htmlspecialchars($currentUser['first_name']) : 'Usuário'; ?>
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 <li><a class="dropdown-item" href="perfil.php">Meu Perfil</a></li>
