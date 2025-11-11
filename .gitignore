@@ -1,0 +1,31 @@
+# Windows system files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msm
+*.msp
+*.lnk
+
+# PHP
+vendor/
+composer.phar
+.phpunit.result.cache
+*.log
+
+# IDE and Editor folders
+.idea/
+.vscode/
+*.sublime-*
+*.swp
+*.swo
+
+# Environment specific files
+.env
+.env.local
+.env.*.local
+
+# Docker
+docker-compose.override.yml
