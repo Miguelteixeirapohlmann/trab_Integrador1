@@ -12,7 +12,7 @@ if ($auth->isLoggedIn()) {
     if ($user['user_type'] === 'admin') {
         redirect('admin.php');
     } elseif ($user['user_type'] === 'broker' || $user['user_type'] === 'corretor') {
-        redirect('gerenciar_imoveis.php');
+        redirect('index-corretor.php');
     } else {
         redirect('index.php');
     }
@@ -67,7 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login_form'])) {
                     if ($user['user_type'] === 'admin') {
                         $redirect_url = 'admin.php';
                     } elseif ($user['user_type'] === 'broker' || $user['user_type'] === 'corretor') {
-                        $redirect_url = 'gerenciar_imoveis.php';
+                        $redirect_url = 'index-corretor.php';
                     } else {
                         $redirect_url = 'index.php';
                     }

@@ -1,0 +1,8 @@
+# Redirect root CasaN.php to Casas/CasaN.php and be case-insensitive
+RewriteEngine On
+
+# Handle /Casa9.php -> /Casas/Casa9.php
+RewriteRule ^Casa([0-9]+)\.php$ Casas/Casa$1.php [L,NC]
+
+# Optionally normalize lowercase folder: /casas/Casa9.php -> /Casas/Casa9.php
+RewriteRule ^casas/Casa([0-9]+)\.php$ Casas/Casa$1.php [L,NC]

@@ -253,6 +253,7 @@ CREATE TABLE property_rentals (
     -- Observações e histórico
     notes TEXT NULL,
     admin_notes TEXT NULL,
+    solicitacao_info TEXT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     

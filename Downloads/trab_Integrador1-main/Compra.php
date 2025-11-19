@@ -285,47 +285,49 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_compra'])) {
         
         // Se não há erros, salvar no banco
         if (empty($errors)) {
-            // Inserir registro de compra
-            $stmt = $pdo->prepare("
-                INSERT INTO property_purchases (
-                    property_id, buyer_id, seller_id, broker_id, purchase_price, 
-                    down_payment, payment_method, contract_date, status,
-                    buyer_income, buyer_profession, contract_terms, notes
-                ) VALUES (
-                    ?, ?, 1, ?, ?, ?, ?, NOW(), 'pending', ?, ?, ?, ?
-                )
-            ");
-            
-            $contract_terms = "Processo de compra iniciado através do site. Documentos e detalhes a serem validados na imobiliária.";
-            $notes = "Dados do comprador: Nome: $nome, CPF: $cpf, Email: $email, Telefone: $telefone, Endereço: $endereco" . 
-                    ($observacoes ? ", Observações: $observacoes" : "");
-            
-            $stmt->execute([
-                $property_id, // property_id
-                $current_user['id'], // buyer_id
-                $broker_id, // broker_id
-                $valor_imovel, // purchase_price
-                $valor_entrada, // down_payment
-                $forma_pagamento, // payment_method
-                $renda, // buyer_income
-                $profissao, // buyer_profession
-                $contract_terms, // contract_terms
-                $notes // notes
-            ]);
-                
-            // Mensagem de sucesso
-            setFlashMessage(
-                "<strong>Imóvel reservado com sucesso!</strong><br>" .
-                "Passe na nossa imobiliária para falar com nossos corretores e finalizar o processo de compra.<br>" .
-                "<strong>Endereço:</strong> Rua das Flores, 123 - Centro<br>" .
-                "<strong>Telefone:</strong> (51) 3333-4444<br>" .
-                "<strong>Horário:</strong> Segunda a Sexta das 8h às 18h",
-                "success"
-            );
-            
-            // Redirecionar para evitar reenvio do formulário
-            header("Location: Compra.php");
-            exit;
+            try {
+                $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                // Inserir registro de compra
+                $stmt = $pdo->prepare("
+                    INSERT INTO property_purchases (
+                        property_id, buyer_id, seller_id, broker_id, purchase_price, 
+                        down_payment, payment_method, contract_date, status,
+                        buyer_income, buyer_profession, contract_terms, notes
+                    ) VALUES (
+                        ?, ?, 1, ?, ?, ?, ?, NOW(), 'pending', ?, ?, ?, ?
+                    )
+                ");
+                $contract_terms = "Processo de compra iniciado através do site. Documentos e detalhes a serem validados na imobiliária.";
+                $notes = "Dados do comprador: Nome: $nome, CPF: $cpf, Email: $email, Telefone: $telefone, Endereço: $endereco" . 
+                        ($observacoes ? ", Observações: $observacoes" : "");
+                $stmt->execute([
+                    $property_id, // property_id
+                    $current_user['id'], // buyer_id
+                    $broker_id, // broker_id
+                    $valor_imovel, // purchase_price
+                    $valor_entrada, // down_payment
+                    $forma_pagamento, // payment_method
+                    $renda, // buyer_income
+                    $profissao, // buyer_profession
+                    $contract_terms, // contract_terms
+                    $notes // notes
+                ]);
+                // Mensagem de sucesso
+                $dataComparecer = date('d/m/Y', strtotime('+2 days'));
+                setFlashMessage(
+                    "<strong>Imóvel reservado com sucesso!</strong><br>" .
+                    "Passe no endereço da imobiliária em <strong>$dataComparecer</strong> para finalizar o processo de compra.<br>" .
+                    "<strong>Endereço:</strong> Rua das Flores, 123 - Centro<br>" .
+                    "<strong>Telefone:</strong> (51) 3333-4444<br>" .
+                    "<strong>Horário:</strong> Segunda a Sexta das 8h às 18h",
+                    "success"
+                );
+                // Redirecionar para evitar reenvio do formulário
+                header("Location: Compra.php");
+                exit;
+            } catch (PDOException $e) {
+                setFlashMessage("Erro ao salvar compra no banco: " . $e->getMessage(), "danger");
+            }
         }
         
         if (!empty($errors)) {
@@ -392,6 +394,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_compra'])) {
     <!-- Hero Section -->
     <header class="masthead">
         <div class="container px-4 px-lg-5 h-100">
+            <?php if ($flash && $flash['type'] === 'success'): ?>
+                <div class="row gx-4 gx-lg-5 justify-content-center text-center">
+                    <div class="col-lg-8">
+                        <div class="alert alert-success alert-dismissible fade show mt-4" role="alert">
+                            <?php echo $flash['message']; ?>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    </div>
+                </div>
+            <?php endif; ?>
             <div class="row gx-4 gx-lg-5 h-100 align-items-center justify-content-center text-center">
                 <div class="col-lg-8 align-self-end">
                     <h1 class="text-white font-weight-bold">Compra de Imóveis</h1>

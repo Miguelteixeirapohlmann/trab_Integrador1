@@ -389,6 +389,22 @@ class Property {
             return ['success' => false, 'message' => 'Erro interno.'];
         }
     }
+
+    /**
+     * Obter todas as imagens de uma propriedade (sem incrementar visualizações)
+     */
+    public function getImages($property_id) {
+        try {
+            $stmt = $this->pdo->prepare("SELECT image_path FROM property_images WHERE property_id = ? ORDER BY is_primary DESC, display_order ASC");
+            $stmt->execute([$property_id]);
+            $rows = $stmt->fetchAll();
+            if (!$rows) return [];
+            return array_map(function($r){ return $r['image_path']; }, $rows);
+        } catch (Exception $e) {
+            error_log("Property getImages error: " . $e->getMessage());
+            return [];
+        }
+    }
     
     /**
      * Remover dos favoritos

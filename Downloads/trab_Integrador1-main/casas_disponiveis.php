@@ -388,7 +388,18 @@ $properties = [];
             // Array de casas
             $casas = [
                 [
-                    'imgs' => ['imgs/Casa1/Casa1.0.jpg', 'imgs/Casa1/Casa1.1.jpg', 'imgs/Casa1/Casa1.2.jpg', 'imgs/Casa1/Casa1.3.jpg', 'imgs/Casa1/Casa1.4.jpg', 'imgs/Casa1/Casa1.5.jpg', 'imgs/Casa1/Casa1.6.jpg', 'imgs/Casa1/Casa1.7.jpg', 'imgs/Casa1/Casa1.8.jpg', 'imgs/Casa1/Casa1.9.jpg'],
+                    // Ajustado para usar apenas imagens existentes no diretório imgs/Casa1
+                    'imgs' => [
+                        'imgs/Casa1/Casa1.1.jpg',
+                        'imgs/Casa1/Casa1.3.jpg',
+                        'imgs/Casa1/Casa1.4.jpg',
+                        'imgs/Casa1/Casa1.5.jpg',
+                        'imgs/Casa1/Casa1.8.jpg',
+                        'imgs/Casa1/Casa1.9.jpg',
+                        'imgs/Casa1/Casa1.11.jpg',
+                        'imgs/Casa1/Casa1.13.jpg',
+                        'imgs/Casa1/Casa1.15.jpg'
+                    ],
                     'titulo' => 'Casa em Santo Antônio da Patrulha',
                     'venda' => 'R$ 5.200.000,00',
                     'aluguel' => 'R$ 1.000.000,00 ao Mês',
@@ -451,6 +462,26 @@ $properties = [];
                     'link' => 'Casas/Casa9.php'
                 ],
             ];
+
+            // Ajustar títulos com base no JSON salvo (quando existir)
+            $jsonPath = __DIR__ . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . 'casas_data.json';
+            if (file_exists($jsonPath)) {
+                $metaAll = json_decode(file_get_contents($jsonPath), true) ?: [];
+                foreach ($casas as &$casa) {
+                    if (!empty($casa['link']) && preg_match('/Casas\\\\Casa(\d+)\.php$/i', $casa['link'], $m)) {
+                        $id = (int)$m[1];
+                        if (isset($metaAll[$id]['title']) && is_string($metaAll[$id]['title']) && trim($metaAll[$id]['title']) !== '') {
+                            $casa['titulo'] = trim($metaAll[$id]['title']);
+                        }
+                    } elseif (!empty($casa['link']) && preg_match('/Casas\\\\casa(\d+)\.php$/i', $casa['link'], $m)) { // suporte para casa7.php minúsculo
+                        $id = (int)$m[1];
+                        if (isset($metaAll[$id]['title']) && is_string($metaAll[$id]['title']) && trim($metaAll[$id]['title']) !== '') {
+                            $casa['titulo'] = trim($metaAll[$id]['title']);
+                        }
+                    }
+                }
+                unset($casa);
+            }
 
             $tipo = $_GET['tipo'] ?? 'todos';
             $casas_filtradas = array_filter($casas, function($casa) use ($tipo) {

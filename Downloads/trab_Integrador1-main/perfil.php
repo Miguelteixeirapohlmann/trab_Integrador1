@@ -346,39 +346,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['change_password'])) {
         if (($current_user['user_type'] ?? '') === 'broker') {
             // Buscar broker_id
             $broker_id = null;
-            $stmt = $pdo->prepare("SELECT id FROM brokers WHERE user_id = ?");
+            $stmt = $pdo->prepare("SELECT id, first_name, last_name FROM brokers b LEFT JOIN users u ON b.user_id = u.id WHERE u.id = ?");
             $stmt->execute([$current_user['id']]);
             $broker = $stmt->fetch();
-            if ($broker) {
-                $broker_id = $broker['id'];
-            }
-            if ($broker_id) {
-                // Buscar casas vinculadas ao corretor
-                $stmt = $pdo->prepare("SELECT * FROM properties WHERE broker_id = ?");
-                $stmt->execute([$broker_id]);
-                $casas = $stmt->fetchAll();
-                echo '<div class="container mt-5">';
-                echo '<h3 class="mb-3" style="color: orange;"><i class="fas fa-home me-2"></i>Imóveis deste corretor</h3>';
-                if ($casas) {
-                    echo '<div class="row">';
-                    foreach ($casas as $casa) {
-                        echo '<div class="col-md-6 col-lg-4 mb-4">';
-                        echo '<div class="card shadow">';
-                        echo '<div class="card-body">';
-                        echo '<h5 class="card-title">' . htmlspecialchars($casa['title']) . '</h5>';
-                        echo '<p class="card-text">' . htmlspecialchars($casa['description']) . '</p>';
-                        echo '<p><strong>Valor:</strong> R$ ' . number_format($casa['price'], 2, ',', '.') . '</p>';
-                        echo '<a href="properties/view.php?id=' . $casa['id'] . '" class="btn btn-primary btn-sm">Ver detalhes</a>';
-                        echo '</div>';
-                        echo '</div>';
-                        echo '</div>';
-                    }
+            $broker_name = $broker ? trim($broker['first_name'] . ' ' . $broker['last_name']) : '';
+            $static_casas = [
+                ['id'=>1,'title'=>'Casa em Santo Antônio da Patrulha','corretor'=>'Maria Santos'],
+                ['id'=>2,'title'=>'Casa em Taquara','corretor'=>'João Silva'],
+                ['id'=>3,'title'=>'Casa em Taquara Alto Padrão','corretor'=>'Pedro Costa'],
+                ['id'=>4,'title'=>'Casa em Taquara Rua Mundo Novo','corretor'=>'Maria Santos'],
+                ['id'=>5,'title'=>'Casa em Taquara Rua Flores da Cunha','corretor'=>'João Silva'],
+                ['id'=>6,'title'=>'Casa em Parobé','corretor'=>'Pedro Costa'],
+                ['id'=>7,'title'=>'Casa em Taquara Bairro Santa Terezinha','corretor'=>'Maria Santos'],
+                ['id'=>8,'title'=>'Casa em Taquara Bairro Tucanos','corretor'=>'João Silva'],
+                ['id'=>9,'title'=>'Casa em Taquara - Rua São Francisco','corretor'=>'Pedro Costa'],
+            ];
+            $casas_do_corretor = array_filter($static_casas, function($casa) use ($broker_name) {
+                return strtolower($casa['corretor']) === strtolower($broker_name);
+            });
+            echo '<div class="container mt-5">';
+            echo '<h3 class="mb-3" style="color: orange;"><i class="fas fa-home me-2"></i>Imóveis deste corretor</h3>';
+            if ($casas_do_corretor) {
+                foreach ($casas_do_corretor as $casa) {
+                    echo '<div class="card mb-4">';
+                    echo '<div class="card-header bg-info text-white">Imóvel ID: ' . intval($casa['id']) . '</div>';
+                    echo '<div class="card-body">';
+                    echo '<h5 class="card-title">' . htmlspecialchars($casa['title']) . '</h5>';
+                    echo '<a href="Casas/Casa' . intval($casa['id']) . '.php" class="btn btn-primary btn-sm">Ver detalhes</a>';
                     echo '</div>';
-                } else {
-                    echo '<p>Nenhum imóvel cadastrado para este corretor.</p>';
+                    echo '</div>';
                 }
-                echo '</div>';
+            } else {
+                echo '<p>Nenhum imóvel cadastrado para este corretor.</p>';
             }
+            echo '</div>';
         }
         ?>
 </body>

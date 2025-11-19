@@ -9,8 +9,8 @@ require_once __DIR__ . '/includes/init.php';
 // Se usuário já estiver logado, redirecionar
 if ($auth->isLoggedIn()) {
     $user = $auth->getCurrentUser();
-    if ($user['user_type'] === 'corretor') {
-        redirect('gerenciar_imoveis.php');
+    if ($user['user_type'] === 'broker') {
+        redirect('index-corretor.php');
     } elseif ($user['user_type'] === 'admin') {
         redirect('admin.php');
     } else {

@@ -32,6 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['agendar_visita'])) {
             $telefone = trim($_POST['clienteTelefone'] ?? '');
             $casa = trim($_POST['casaSelect'] ?? '');
             $corretor = trim($_POST['corretorSelect'] ?? '');
+            $broker_id = intval($_POST['broker_id'] ?? 0);
             $data = trim($_POST['dataVisita'] ?? '');
             $horario = trim($_POST['horarioVisita'] ?? '');
             $observacoes = trim($_POST['observacoes'] ?? '');
@@ -103,49 +104,46 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['agendar_visita'])) {
         } else {
             // Preparar dados para salvamento
             $agendamento_id = uniqid();
-            
             try {
                 // Verificar se o ID já existe no banco (evitar duplicação)
                 $check_stmt = $pdo->prepare("SELECT id FROM agendamentos WHERE id = ?");
                 $check_stmt->execute([$agendamento_id]);
-                
                 if ($check_stmt->fetch()) {
-                    // Se o ID já existir, gerar um novo
                     $agendamento_id = uniqid() . '_' . time();
                 }
-                
-                // Salvar no banco de dados
-                $stmt = $pdo->prepare("
-                    INSERT INTO agendamentos (id, nome, email, telefone, casa, corretor, data_visita, horario, observacoes, data_agendamento, status) 
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-                ");
-                
-                $result = $stmt->execute([
-                    $agendamento_id,
-                    $nome,
-                    $email,
-                    $telefone,
-                    $casa,
-                    $corretor,
-                    $data,
-                    $horario,
-                    $observacoes,
-                    date('Y-m-d H:i:s'),
-                    'agendado'
-                ]);
-                
-                if ($result) {
-                    // Redirecionar para tela inicial após sucesso
-                    setFlashMessage('Visita agendada com sucesso! Entraremos em contato para confirmar.', 'success');
-                    header('Location: index.php');
-                    exit;
-                } else {
-                    $error_message = 'Erro ao agendar visita. Tente novamente.';
+                // Salvar no banco de dados (agora inclui broker_id)
+                try {
+                    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                    $stmt = $pdo->prepare("
+                        INSERT INTO agendamentos (id, nome, email, telefone, casa, corretor, data_visita, horario, observacoes, data_agendamento, status)
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    ");
+                    $result = $stmt->execute([
+                        $agendamento_id,
+                        $nome,
+                        $email,
+                        $telefone,
+                        $casa,
+                        $corretor,
+                        $data,
+                        $horario,
+                        $observacoes,
+                        date('Y-m-d H:i:s'),
+                        'agendado'
+                    ]);
+                    if ($result) {
+                        setFlashMessage('Visita agendada com sucesso! Entraremos em contato para confirmar.', 'success');
+                        header('Location: index.php');
+                        exit;
+                    } else {
+                        $error_message = 'Erro ao agendar visita. Tente novamente.';
+                    }
+                } catch (PDOException $e) {
+                    $error_message = 'Erro ao salvar agendamento no banco: ' . $e->getMessage();
                 }
-                
             } catch (PDOException $e) {
                 error_log("Erro ao salvar agendamento no banco: " . $e->getMessage());
-                
+                setFlashMessage('Erro ao salvar agendamento no banco: ' . $e->getMessage(), 'danger');
                 // Sistema de fallback: salvar no arquivo JSON se o banco falhar
                 $agendamento = [
                     'id' => $agendamento_id,
@@ -154,28 +152,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['agendar_visita'])) {
                     'telefone' => htmlspecialchars($telefone),
                     'casa' => htmlspecialchars($casa),
                     'corretor' => htmlspecialchars($corretor),
+                    'broker_id' => $broker_id,
                     'data_visita' => $data,
                     'horario' => htmlspecialchars($horario),
                     'observacoes' => htmlspecialchars($observacoes),
                     'data_agendamento' => date('Y-m-d H:i:s'),
                     'status' => 'agendado'
                 ];
-                
                 $arquivo_agendamentos = __DIR__ . '/data/agendamentos.json';
-                
-                // Criar diretório se não existir
                 if (!is_dir(dirname($arquivo_agendamentos))) {
                     mkdir(dirname($arquivo_agendamentos), 0755, true);
                 }
-                
-                // Carregar agendamentos existentes
                 $agendamentos = [];
                 if (file_exists($arquivo_agendamentos)) {
                     $json = file_get_contents($arquivo_agendamentos);
                     $agendamentos = json_decode($json, true) ?: [];
                 }
-                
-                // Verificar se o agendamento já existe (evitar duplicação)
                 $existe = false;
                 foreach ($agendamentos as $ag) {
                     if ($ag['id'] === $agendamento_id) {
@@ -183,15 +175,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['agendar_visita'])) {
                         break;
                     }
                 }
-                
-                // Adicionar apenas se não existir
                 if (!$existe) {
                     $agendamentos[] = $agendamento;
-                    
-                    // Salvar como fallback
                     if (file_put_contents($arquivo_agendamentos, json_encode($agendamentos, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE))) {
-                        // Redirecionar para tela inicial após sucesso (mesmo em modo fallback)
-                        setFlashMessage('Visita agendada com sucesso! (Salvo em modo de contingência)', 'warning');
+                        setFlashMessage('Vá até a imobiliária para ver detalhes da visita.', 'warning');
                         header('Location: index.php');
                         exit;
                     } else {
@@ -306,6 +293,7 @@ $casas_disponiveis = [
                         <form method="POST" action="">
                             <input type="hidden" name="csrf_token" value="<?php echo $csrf_token; ?>">
                             <input type="hidden" name="agendar_visita" value="1">
+                            <input type="hidden" id="broker_id" name="broker_id" value="">
                             
                             <div class="row">
                                 <div class="col-md-6">
@@ -449,18 +437,23 @@ $casas_disponiveis = [
             const casaSelecionada = e.target.value;
             const corretorSelect = document.getElementById('corretorSelect');
             const corretorHidden = document.getElementById('corretorHidden');
-            
+            const brokerIdInput = document.getElementById('broker_id');
+            let corretorDesignado = '';
+            let brokerId = '';
             if (casaSelecionada && casaCorretorMap[casaSelecionada]) {
-                const corretorDesignado = casaCorretorMap[casaSelecionada];
+                corretorDesignado = casaCorretorMap[casaSelecionada];
                 corretorSelect.value = corretorDesignado;
-                corretorHidden.value = corretorDesignado; // Atualizar campo hidden também
-                
-                // Opcional: mostrar uma mensagem informativa
-                console.log(`Casa selecionada: ${casaSelecionada} -> Corretor: ${corretorDesignado}`);
+                corretorHidden.value = corretorDesignado;
+                // Definir broker_id conforme corretor
+                if (corretorDesignado === 'João borges') brokerId = 1;
+                else if (corretorDesignado === 'Maria Santos') brokerId = 2;
+                else if (corretorDesignado === 'Pedro Costa') brokerId = 3;
+                brokerIdInput.value = brokerId;
+                console.log(`Casa selecionada: ${casaSelecionada} -> Corretor: ${corretorDesignado} (ID: ${brokerId})`);
             } else {
-                // Se não houver mapeamento, limpar seleção de corretor
                 corretorSelect.value = '';
                 corretorHidden.value = '';
+                brokerIdInput.value = '';
             }
         });
         

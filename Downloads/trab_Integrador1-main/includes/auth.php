@@ -28,11 +28,30 @@ class Auth {
                 FROM users u 
                 LEFT JOIN user_profiles up ON u.id = up.user_id
                 LEFT JOIN brokers b ON u.id = b.user_id
-                WHERE u.email = ? AND u.status = 'active'
+                WHERE u.email = ?
             ");
             $stmt->execute([$email]);
             $user = $stmt->fetch();
-            
+
+            // Regras de mensagens: detalhadas em desenvolvimento, genéricas em produção
+            $isDev = defined('ENVIRONMENT') && ENVIRONMENT === 'development';
+
+            // Usuário não encontrado
+            if (!$user) {
+                return [
+                    'success' => false,
+                    'message' => $isDev ? 'Usuário não encontrado para este email.' : 'Email ou senha inválidos.'
+                ];
+            }
+
+            // Usuário encontrado porém inativo
+            if (!isset($user['status']) || $user['status'] !== 'active') {
+                return [
+                    'success' => false,
+                    'message' => $isDev ? ('Usuário inativo (status: ' . ($user['status'] ?? 'desconhecido') . ').') : 'Usuário não encontrado ou inativo.'
+                ];
+            }
+
             if ($user && password_verify($password, $user['password'])) {
                 // Atualizar sessão
                 $_SESSION['user_id'] = $user['id'];
@@ -61,10 +80,11 @@ class Auth {
                     'message' => 'Login realizado com sucesso!'
                 ];
             }
-            
+
+            // Senha incorreta
             return [
                 'success' => false,
-                'message' => 'Email ou senha inválidos.'
+                'message' => $isDev ? 'Senha incorreta para este usuário.' : 'Email ou senha inválidos.'
             ];
             
         } catch (Exception $e) {

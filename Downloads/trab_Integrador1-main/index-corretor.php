@@ -26,38 +26,44 @@ require_once __DIR__ . '/includes/navbar.php';
 <body>
     <!-- Header -->
     <nav class="navbar navbar-expand-lg navbar-light fixed-top py-3" id="mainNav">
-        <div class="container px-4 px-lg-5">
-            <button class="navbar-toggler navbar-toggler-right" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarResponsive">
-                <ul class="navbar-nav ms-auto my-2 my-lg-0">
-                    <?php if ($auth->isLoggedIn()): ?>
-                        <?php $currentUser = $auth->getCurrentUser(); ?>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <?php if (!empty($currentUser['avatar'])): ?>
-                                    <img src="<?php echo asset('uploads/' . $currentUser['avatar']); ?>" alt="Avatar" class="rounded-circle me-1" style="width: 24px; height: 24px;">
-                                <?php endif; ?>
-                                <?php echo htmlspecialchars($currentUser['first_name']); ?>
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" href="perfil.php">Meu Perfil</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="logout.php">Sair</a></li>
-                            </ul>
-                        </li>
-                    <?php endif; ?>
-                </ul>
-            </div>
-        </div>
-    </nav>
+        <!-- Tabela de interações dos clientes removida -->
+                                // coluna removida
+                                echo '<td>' . htmlspecialchars($ag['casa']) . '</td>';
+                                echo '<td><a href="detalhe_interacao.php?tipo=agendamento&id=' . urlencode($ag['id']) . '" class="btn btn-sm btn-primary">Ver detalhes</a></td>';
+                                echo '</tr>';
+                            }
 
-    <section class="admin-section">
-        <div class="container" style="padding-top: 90px;">
-            <h2 class="mb-4">Casas Disponíveis</h2>
-            <div class="row justify-content-center" id="casasCards">
-                <!-- Cards serão renderizados via JS -->
+                            // Render aluguéis
+                            foreach ($aluguels as $al) {
+                                echo '<tr>';
+                                echo '<td><span class="badge bg-success">Aluguel</span></td>';
+                                echo '<td>' . htmlspecialchars($al['first_name'] . ' ' . $al['last_name']) . '</td>';
+                                echo '<td>' . htmlspecialchars($al['email']) . '</td>';
+                                echo '<td>' . htmlspecialchars($al['cpf'] ?? '-') . '</td>';
+                                // coluna removida
+                                echo '<td>ID ' . htmlspecialchars($al['property_id']) . '</td>';
+                                echo '<td><a href="detalhe_interacao.php?tipo=aluguel&id=' . urlencode($al['id']) . '" class="btn btn-sm btn-primary">Ver detalhes</a></td>';
+                                echo '</tr>';
+                            }
+
+                            // Render compras
+                            foreach ($compras as $cp) {
+                                echo '<tr>';
+                                echo '<td><span class="badge bg-warning">Compra</span></td>';
+                                echo '<td>' . htmlspecialchars($cp['first_name'] . ' ' . $cp['last_name']) . '</td>';
+                                echo '<td>' . htmlspecialchars($cp['email']) . '</td>';
+                                echo '<td>' . htmlspecialchars($cp['cpf'] ?? '-') . '</td>';
+                                // coluna removida
+                                echo '<td>ID ' . htmlspecialchars($cp['property_id']) . '</td>';
+                                echo '<td><a href="detalhe_interacao.php?tipo=compra&id=' . urlencode($cp['id']) . '" class="btn btn-sm btn-primary">Ver detalhes</a></td>';
+                                echo '</tr>';
+                            }
+                        } else {
+                            echo '<tr><td colspan="7" class="text-center text-muted">Nenhum corretor logado ou sem interações.</td></tr>';
+                        }
+                        ?>
+                    </tbody>
+                </table>
             </div>
         </div>
     </section>
@@ -103,11 +109,31 @@ require_once __DIR__ . '/includes/navbar.php';
         ?>
         casas = [
             {
-                id: 4,
-                nome: "Casa em Parobé",
+                id: 1,
+                nome: "Casa em Santo Antônio da Patrulha",
                 tipo: "Residencial",
-                tipo_negocio: "compra",
-                valor_compra: 180000,
+                tipo_negocio: "ambos",
+                valor_compra: 5200000,
+                valor_aluguel: 2200000,
+                imagens: [
+                    "imgs/Casa1/Casa1.1.jpg",
+                    "imgs/Casa1/Casa1.3.jpg",
+                    "imgs/Casa1/Casa1.4.jpg",
+                    "imgs/Casa1/Casa1.5.jpg",
+                    "imgs/Casa1/Casa1.8.jpg",
+                    "imgs/Casa1/Casa1.9.jpg",
+                    "imgs/Casa1/Casa1.11.jpg",
+                    "imgs/Casa1/Casa1.13.jpg",
+                    "imgs/Casa1/Casa1.15.jpg"
+                ]
+            },
+            {
+                id: 4,
+                nome: "Casa em Taquara Rua Mundo Novo",
+                tipo: "Residencial",
+                tipo_negocio: "ambos",
+                valor_compra: 170000,
+                valor_aluguel: 1000,
                 imagens: [
                     "imgs/Casa4/Casa4.0.jpg",
                     "imgs/Casa4/Casa4.2.jpg",
@@ -121,57 +147,38 @@ require_once __DIR__ . '/includes/navbar.php';
                 ]
             },
             {
-                id: 5,
-                nome: "Casa em Igrejinha",
-                tipo: "Residencial",
-                tipo_negocio: "aluguel",
-                valor_aluguel: 1800,
-                imagens: [
-                    "imgs/Casa5/Casa5.0.jpg",
-                    "imgs/Casa5/Casa5.1.jpg",
-                    "imgs/Casa5/Casa5.2.jpg",
-                    "imgs/Casa5/Casa5.3.jpg",
-                    "imgs/Casa5/Casa5.4.jpg",
-                    "imgs/Casa5/Casa5.5.jpg",
-                    "imgs/Casa5/Casa5.6.jpg",
-                    "imgs/Casa5/Casa5.7.jpg",
-                    "imgs/Casa5/Casa5.8.jpg",
-                    "imgs/Casa5/Casa5.9.jpg",
-                    "imgs/Casa5/Casa5.10.jpg"
-                ]
-            },
-            {
-                id: 6,
-                nome: "Casa em Rolante",
+                id: 7,
+                nome: "Casa em Taquara Bairro Santa Terezinha",
                 tipo: "Residencial",
                 tipo_negocio: "ambos",
-                valor_compra: 320000,
-                valor_aluguel: 2200,
+                valor_compra: 650000,
+                valor_aluguel: 2000,
                 imagens: [
-                    "imgs/Casa6/Casa6.0.jpg",
-                    "imgs/Casa6/Casa6.1.jpg",
-                    "imgs/Casa6/Casa6.2.jpg",
-                    "imgs/Casa6/Casa6.3.jpg",
-                    "imgs/Casa6/Casa6.4.jpg",
-                    "imgs/Casa6/Casa6.5.jpg",
-                    "imgs/Casa6/Casa6.6.jpg",
-                    "imgs/Casa6/Casa6.7.jpg",
-                    "imgs/Casa6/Casa6.8.jpg",
-                    "imgs/Casa6/Casa6.9.jpg"
+                    "imgs/Casa7/Casa7.0.jpg",
+                    "imgs/Casa7/Casa7.1.jpg",
+                    "imgs/Casa7/Casa7.2.jpg",
+                    "imgs/Casa7/Casa7.3.jpg",
+                    "imgs/Casa7/Casa7.4.jpg",
+                    "imgs/Casa7/Casa7.5.jpg",
+                    "imgs/Casa7/Casa7.6.jpg",
+                    "imgs/Casa7/Casa7.7.jpg",
+                    "imgs/Casa7/Casa7.8.jpg",
+                    "imgs/Casa7/Casa7.9.jpg"
                 ]
             }
         ];
         <?php
-        } else if ($corretor_nome === 'pedro') {
+    } else if ($corretor_nome === 'pedro') {
     // ...existing code...
         ?>
         casas = [
             {
                 id: 7,
-                nome: "Casa em Sapiranga",
+                nome: "Casa em Taquara Bairro Santa Terezinha",
                 tipo: "Residencial",
-                tipo_negocio: "aluguel",
-                valor_aluguel: 1700,
+                tipo_negocio: "ambos",
+                valor_compra: 650000,
+                valor_aluguel: 2000,
                 imagens: [
                     "imgs/Casa7/Casa7.0.jpg",
                     "imgs/Casa7/Casa7.1.jpg",
@@ -187,10 +194,10 @@ require_once __DIR__ . '/includes/navbar.php';
             },
             {
                 id: 8,
-                nome: "Casa em Nova Hartz",
+                nome: "Casa em Taquara Bairro Tucanos",
                 tipo: "Residencial",
                 tipo_negocio: "compra",
-                valor_compra: 195000,
+                valor_compra: 184900,
                 imagens: [
                     "imgs/Casa8/Casa8.0.jpg",
                     "imgs/Casa8/Casa8.1.jpg",
@@ -206,11 +213,10 @@ require_once __DIR__ . '/includes/navbar.php';
             },
             {
                 id: 9,
-                nome: "Casa em Campo Bom",
+                nome: "Casa em Taquara - Rua São Francisco",
                 tipo: "Residencial",
-                tipo_negocio: "ambos",
-                valor_compra: 275000,
-                valor_aluguel: 2100,
+                tipo_negocio: "compra",
+                valor_compra: 450000,
                 imagens: [
                     "imgs/Casa9/Casa9.0.jpg",
                     "imgs/Casa9/Casa9.1.jpg",
@@ -234,8 +240,8 @@ require_once __DIR__ . '/includes/navbar.php';
                 nome: "Casa em Santo Antônio da Patrulha",
                 tipo: "Residencial",
                 tipo_negocio: "ambos",
-                valor_compra: 300000,
-                valor_aluguel: 2000,
+                valor_compra: 5200000,
+                valor_aluguel:  2200000,
                 imagens: [
                     "imgs/Casa1/Casa1.1.jpg",
                     "imgs/Casa1/Casa1.3.jpg",
@@ -253,7 +259,7 @@ require_once __DIR__ . '/includes/navbar.php';
                 nome: "Casa em Taquara",
                 tipo: "Residencial",
                 tipo_negocio: "aluguel",
-                valor_aluguel: 1600,
+                valor_aluguel: 1500,
                 imagens: [
                     "imgs/Casa2/Casa2.0.jpg",
                     "imgs/Casa2/Casa2.1.jpg",
@@ -300,13 +306,28 @@ require_once __DIR__ . '/includes/navbar.php';
                 const card = document.createElement('div');
                 card.className = 'col-md-4 mb-4';
                 const carouselId = `carousel-casa-${casa.id}`;
+                // Lógica robusta para exibir preços mesmo se faltar valor de aluguel ou compra
+                const parseValor = (v) => {
+                    if (v === undefined || v === null || v === '' ) return null;
+                    if (typeof v === 'number') return v;
+                    // Tentar converter string tipo "450.000,00" em número
+                    const num = parseFloat(String(v).replace(/[^0-9,]/g,'').replace(',','.'));
+                    return isNaN(num) ? null : num;
+                };
+                const valorCompraNum = parseValor(casa.valor_compra);
+                const valorAluguelNum = parseValor(casa.valor_aluguel);
+                const hasCompra = valorCompraNum !== null && valorCompraNum > 0;
+                const hasAluguel = valorAluguelNum !== null && valorAluguelNum > 0;
+                const formatCurrency = (n) => n.toLocaleString('pt-BR', {minimumFractionDigits: 2});
                 let negocioHtml = '';
-                if (casa.tipo_negocio === 'compra') {
-                    negocioHtml = `<span class='badge bg-success mb-2'>À venda</span><br><strong>Valor de compra:</strong> R$ ${casa.valor_compra.toLocaleString('pt-BR')}`;
-                } else if (casa.tipo_negocio === 'aluguel') {
-                    negocioHtml = `<span class='badge bg-info mb-2'>Para Alugar</span><br><strong>Valor do aluguel:</strong> R$ ${casa.valor_aluguel.toLocaleString('pt-BR')}`;
-                } else if (casa.tipo_negocio === 'ambos') {
-                    negocioHtml = `<span class='badge bg-success mb-2'>À venda</span> <span class='badge bg-info mb-2'>Para Alugar</span><br><strong>Valor de compra:</strong> R$ ${casa.valor_compra.toLocaleString('pt-BR')}<br><strong>Valor do aluguel:</strong> R$ ${casa.valor_aluguel.toLocaleString('pt-BR')}`;
+                if (hasCompra && hasAluguel) {
+                    negocioHtml = `<span class='badge bg-success mb-2'>À venda</span> <span class='badge bg-info mb-2'>Para Alugar</span><br><strong>Valor de compra:</strong> R$ ${formatCurrency(valorCompraNum)}<br><strong>Valor do aluguel:</strong> R$ ${formatCurrency(valorAluguelNum)}`;
+                } else if (hasCompra) {
+                    negocioHtml = `<span class='badge bg-success mb-2'>À venda</span><br><strong>Valor de compra:</strong> R$ ${formatCurrency(valorCompraNum)}`;
+                } else if (hasAluguel) {
+                    negocioHtml = `<span class='badge bg-info mb-2'>Para Alugar</span><br><strong>Valor do aluguel:</strong> R$ ${formatCurrency(valorAluguelNum)}`;
+                } else {
+                    negocioHtml = `<span class='badge bg-secondary mb-2'>Sem preço cadastrado</span>`;
                 }
                 card.innerHTML = `
                     <div class="card h-100 border-top border-primary" style="border-width:4px !important;">
@@ -341,9 +362,10 @@ require_once __DIR__ . '/includes/navbar.php';
                             <h5 class="card-title">${casa.nome}</h5>
                             <p class="card-text mb-1"><strong>Tipo:</strong> ${casa.tipo}</p>
                             <div class="mb-2">${negocioHtml}</div>
-                            <div class="d-flex justify-content-between mt-3">
-                                <button class="btn btn-warning btn-sm" onclick="abrirModalEditarCasa(${casa.id})"><i class="bi bi-pencil"></i> Editar</button>
-                                <button class="btn btn-danger btn-sm" onclick="excluirCasa(${casa.id})"><i class="bi bi-trash"></i> Excluir</button>
+                            <div class="d-flex justify-content-center mt-3">
+                                <a class="btn btn-primary btn-sm" href="Casas/Casa${casa.id}.php">
+                                    <i class="bi bi-info-circle"></i> Mais informações
+                                </a>
                             </div>
                         </div>
                     </div>

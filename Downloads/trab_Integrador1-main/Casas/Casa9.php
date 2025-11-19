@@ -14,6 +14,7 @@ $current_user = $auth->getCurrentUser();
     <style>
         /* Ajuste para navbar fixa sem espaço em branco extra */
         body { padding-top: 72px; }
+        <?php if (!$auth->isLoggedIn()): ?>
         .navbar {
             background-color: #000000 !important;
         }
@@ -24,6 +25,7 @@ $current_user = $auth->getCurrentUser();
         .navbar .nav-link:hover {
             color: #cccccc !important;
         }
+        <?php endif; ?>
         
     /* Estilos mínimos para manter a imagem estável */
     #carouselCasa9 .carousel-inner { height: 400px; overflow: hidden; }
@@ -126,6 +128,7 @@ $current_user = $auth->getCurrentUser();
             </div>
             <div class="col-md-6">
                 <h1 class="mb-3">Casa em Taquara - Rua São Francisco</h1>
+                <span class="badge bg-primary mb-2">Corretor: Pedro Costa</span>
                 <h4 class="text-success mb-4">Compra R$  450.000,00</h4>
                 <ul class="list-group mb-4">
                     <li class="list-group-item"><strong>Tamanho:</strong> 286 m²</li>
@@ -153,6 +156,10 @@ $current_user = $auth->getCurrentUser();
                             <button type="submit" class="btn btn-danger mx-0 btn-admin-action"><i class="fas fa-trash me-1"></i> Excluir</button>
                         </form>
                     </span>
+                <?php elseif ($auth->isLoggedIn() && isset($current_user['user_type']) && $current_user['user_type'] === 'broker'): ?>
+                    <div class="d-flex gap-3">
+                        <a href="../editar_casa.php?id=9" class="btn btn-warning">Editar</a>
+                    </div>
                 <?php else: ?>
                     <div class="d-flex gap-3">
                         <a href="../Compra.php" class="btn btn-success">Compra</a>

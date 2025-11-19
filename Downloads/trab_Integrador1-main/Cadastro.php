@@ -32,8 +32,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['register_form'])) {
             'phone' => trim($_POST['phone'] ?? ''),
             'password' => $_POST['password'] ?? '',
             'confirm_password' => $_POST['confirm_password'] ?? '',
-            // Impede cadastro como admin
-            'user_type' => (isset($_POST['user_type']) && $_POST['user_type'] === 'broker') ? 'broker' : 'user'
+            // Sempre cadastra como cliente
+            'user_type' => 'user'
         ];
         
         // Validações
@@ -200,15 +200,7 @@ $csrf_token = generateCSRFToken();
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-floating mb-3">
-                                        <select class="form-select" id="user_type" name="user_type">
-                                            <option value="user" <?php echo ($form_data['user_type'] ?? 'user') === 'user' ? 'selected' : ''; ?> >
-                                                Cliente
-                                            </option>
-                                            <option value="broker" <?php echo ($form_data['user_type'] ?? '') === 'broker' ? 'selected' : ''; ?> >
-                                                Corretor
-                                            </option>
-                                        </select>
-                                        <label for="user_type">Tipo de Conta</label>
+                                        <!-- Campo Tipo de Conta removido: todo cadastro é cliente -->
                                     </div>
                                 </div>
                             </div>

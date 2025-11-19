@@ -12,6 +12,7 @@ $current_user = $auth->getCurrentUser();
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="../css/styles.css?v=20250829" rel="stylesheet">
     <style>
+        <?php if (!$auth->isLoggedIn()): ?>
         .navbar {
             background-color: #000000 !important;
         }
@@ -22,6 +23,7 @@ $current_user = $auth->getCurrentUser();
         .navbar .nav-link:hover {
             color: #cccccc !important;
         }
+        <?php endif; ?>
         
     /* Estilos mínimos para manter a imagem estável */
     #carouselCasa1 .carousel-inner { 
@@ -122,68 +124,52 @@ $current_user = $auth->getCurrentUser();
                         <button type="button" data-bs-target="#carouselCasa1" data-bs-slide-to="6" aria-label="Slide 7"></button>
                         <button type="button" data-bs-target="#carouselCasa1" data-bs-slide-to="7" aria-label="Slide 8"></button>
                         <button type="button" data-bs-target="#carouselCasa1" data-bs-slide-to="8" aria-label="Slide 9"></button>
-                        <button type="button" data-bs-target="#carouselCasa1" data-bs-slide-to="9" aria-label="Slide 10"></button>
                     </div>
                     <div class="carousel-inner rounded shadow" style="height: 400px; overflow: hidden;">
                         <div class="carousel-item active">
-                            <img src="../imgs/Casa1/Casa1.0.jpg" class="d-block w-100" alt="Casa Realengo - Foto 1" 
+                            <img src="../imgs/Casa1/Casa1.1.jpg" class="d-block w-100" alt="Casa Realengo - Foto 1" 
                                  style="width: 100%; height: 400px; object-fit: cover; object-position: center;"
-                                 onerror="console.error('Erro ao carregar: Casa1.0.jpg'); this.style.display='none';"
-                                 onload="console.log('Carregada: Casa1.0.jpg');">
+                                 onerror="this.closest('.carousel-item').remove();">
                         </div>
                         <div class="carousel-item">
-                            <img src="../imgs/Casa1/Casa1.1.jpg" class="d-block w-100" alt="Casa Realengo - Foto 2" 
+                            <img src="../imgs/Casa1/Casa1.3.jpg" class="d-block w-100" alt="Casa Realengo - Foto 2" 
                                  style="width: 100%; height: 400px; object-fit: cover; object-position: center;"
-                                 onerror="console.error('Erro ao carregar: Casa1.1.jpg'); this.style.display='none';"
-                                 onload="console.log('Carregada: Casa1.1.jpg');">
+                                 onerror="this.closest('.carousel-item').remove();">
                         </div>
                         <div class="carousel-item">
-                            <img src="../imgs/Casa1/Casa1.2.jpg" class="d-block w-100" alt="Casa Realengo - Foto 3" 
+                            <img src="../imgs/Casa1/Casa1.4.jpg" class="d-block w-100" alt="Casa Realengo - Foto 3" 
                                  style="width: 100%; height: 400px; object-fit: cover; object-position: center;"
-                                 onerror="console.error('Erro ao carregar: Casa1.2.jpg'); this.style.display='none';"
-                                 onload="console.log('Carregada: Casa1.2.jpg');">
+                                 onerror="this.closest('.carousel-item').remove();">
                         </div>
                         <div class="carousel-item">
-                            <img src="../imgs/Casa1/Casa1.3.jpg" class="d-block w-100" alt="Casa Realengo - Foto 4" 
+                            <img src="../imgs/Casa1/Casa1.5.jpg" class="d-block w-100" alt="Casa Realengo - Foto 4" 
                                  style="width: 100%; height: 400px; object-fit: cover; object-position: center;"
-                                 onerror="console.error('Erro ao carregar: Casa1.3.jpg'); this.style.display='none';"
-                                 onload="console.log('Carregada: Casa1.3.jpg');">
+                                 onerror="this.closest('.carousel-item').remove();">
                         </div>
                         <div class="carousel-item">
-                            <img src="../imgs/Casa1/Casa1.4.jpg" class="d-block w-100" alt="Casa Realengo - Foto 5" 
+                            <img src="../imgs/Casa1/Casa1.8.jpg" class="d-block w-100" alt="Casa Realengo - Foto 5" 
                                  style="width: 100%; height: 400px; object-fit: cover; object-position: center;"
-                                 onerror="console.error('Erro ao carregar: Casa1.4.jpg'); this.style.display='none';"
-                                 onload="console.log('Carregada: Casa1.4.jpg');">
+                                 onerror="this.closest('.carousel-item').remove();">
                         </div>
                         <div class="carousel-item">
-                            <img src="../imgs/Casa1/Casa1.5.jpg" class="d-block w-100" alt="Casa Realengo - Foto 6" 
+                            <img src="../imgs/Casa1/Casa1.9.jpg" class="d-block w-100" alt="Casa Realengo - Foto 6" 
                                  style="width: 100%; height: 400px; object-fit: cover; object-position: center;"
-                                 onerror="console.error('Erro ao carregar: Casa1.5.jpg'); this.style.display='none';"
-                                 onload="console.log('Carregada: Casa1.5.jpg');">
+                                 onerror="this.closest('.carousel-item').remove();">
                         </div>
                         <div class="carousel-item">
-                            <img src="../imgs/Casa1/Casa1.6.jpg" class="d-block w-100" alt="Casa Realengo - Foto 7" 
+                            <img src="../imgs/Casa1/Casa1.11.jpg" class="d-block w-100" alt="Casa Realengo - Foto 7" 
                                  style="width: 100%; height: 400px; object-fit: cover; object-position: center;"
-                                 onerror="console.error('Erro ao carregar: Casa1.6.jpg'); this.style.display='none';"
-                                 onload="console.log('Carregada: Casa1.6.jpg');">
+                                 onerror="this.closest('.carousel-item').remove();">
                         </div>
                         <div class="carousel-item">
-                            <img src="../imgs/Casa1/Casa1.7.jpg" class="d-block w-100" alt="Casa Realengo - Foto 8" 
+                            <img src="../imgs/Casa1/Casa1.13.jpg" class="d-block w-100" alt="Casa Realengo - Foto 8" 
                                  style="width: 100%; height: 400px; object-fit: cover; object-position: center;"
-                                 onerror="console.error('Erro ao carregar: Casa1.7.jpg'); this.style.display='none';"
-                                 onload="console.log('Carregada: Casa1.7.jpg');">
+                                 onerror="this.closest('.carousel-item').remove();">
                         </div>
                         <div class="carousel-item">
-                            <img src="../imgs/Casa1/Casa1.8.jpg" class="d-block w-100" alt="Casa Realengo - Foto 9" 
+                            <img src="../imgs/Casa1/Casa1.15.jpg" class="d-block w-100" alt="Casa Realengo - Foto 9" 
                                  style="width: 100%; height: 400px; object-fit: cover; object-position: center;"
-                                 onerror="console.error('Erro ao carregar: Casa1.8.jpg'); this.style.display='none';"
-                                 onload="console.log('Carregada: Casa1.8.jpg');">
-                        </div>
-                        <div class="carousel-item">
-                            <img src="../imgs/Casa1/Casa1.9.jpg" class="d-block w-100" alt="Casa Realengo - Foto 10" 
-                                 style="width: 100%; height: 400px; object-fit: cover; object-position: center;"
-                                 onerror="console.error('Erro ao carregar: Casa1.9.jpg'); this.style.display='none';"
-                                 onload="console.log('Carregada: Casa1.9.jpg');">
+                                 onerror="this.closest('.carousel-item').remove();">
                         </div>
                     </div>
 
@@ -200,6 +186,7 @@ $current_user = $auth->getCurrentUser();
             </div>
             <div class="col-md-6">
                 <h1 class="mb-3">Casa em Santo Antônio da Patrulha</h1>
+                <span class="badge bg-primary mb-2">Corretor: Maria Santos</span>
                 <h4 class="text-success mb-4"> Compra R$ 5.200.000,00
                     <span class="text-success mb-4"> Aluguel R$ 2.200.000,00</span>
                 </h4>
@@ -229,6 +216,10 @@ $current_user = $auth->getCurrentUser();
                             <button type="submit" class="btn btn-danger mx-0 btn-admin-action"><i class="fas fa-trash me-1"></i> Excluir</button>
                         </form>
                     </span>
+                <?php elseif ($auth->isLoggedIn() && isset($current_user['user_type']) && $current_user['user_type'] === 'broker'): ?>
+                    <div class="d-flex gap-3">
+                        <a href="../editar_casa.php?id=1" class="btn btn-warning">Editar</a>
+                    </div>
                 <?php else: ?>
                     <div class="d-flex gap-3">
                         <a href="../Compra.php" class="btn btn-success">Compra</a>

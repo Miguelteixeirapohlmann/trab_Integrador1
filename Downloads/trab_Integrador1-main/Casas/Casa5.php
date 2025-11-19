@@ -12,6 +12,7 @@ $current_user = $auth->getCurrentUser();
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="../css/styles.css?v=20250829" rel="stylesheet">
     <style>
+        <?php if (!$auth->isLoggedIn()): ?>
         .navbar {
             background-color: #000000 !important;
         }
@@ -22,6 +23,7 @@ $current_user = $auth->getCurrentUser();
         .navbar .nav-link:hover {
             color: #cccccc !important;
         }
+        <?php endif; ?>
         
     /* Estilos mínimos para manter a imagem estável */
     #carouselCasa5 .carousel-inner { 
@@ -161,6 +163,7 @@ $current_user = $auth->getCurrentUser();
             </div>
             <div class="col-md-6">
                 <h1 class="mb-3">Casa em Taquara Rua Flores da Cunha</h1>
+                <span class="badge bg-primary mb-2">Corretor: João Silva</span>
                 <h4 class="text-success mb-4">Compra R$ 380.000,00
                     <span class="text-success mb-4">Aluguel R$ 900,00</span>
                 </h4>
@@ -190,6 +193,10 @@ $current_user = $auth->getCurrentUser();
                             <button type="submit" class="btn btn-danger mx-0 btn-admin-action"><i class="fas fa-trash me-1"></i> Excluir</button>
                         </form>
                     </span>
+                <?php elseif ($auth->isLoggedIn() && isset($current_user['user_type']) && $current_user['user_type'] === 'broker'): ?>
+                    <div class="d-flex gap-3">
+                        <a href="../editar_casa.php?id=5" class="btn btn-warning">Editar</a>
+                    </div>
                 <?php else: ?>
                     <div class="d-flex gap-3">
                         <a href="../Compra.php" class="btn btn-success">Compra</a>

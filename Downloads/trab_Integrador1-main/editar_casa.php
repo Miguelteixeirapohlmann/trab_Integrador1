@@ -9,8 +9,8 @@ require_once 'includes/init.php';
 $auth->requireLogin('Login.php');
 $current_user = $auth->getCurrentUser();
 
-// Verificar se é corretor ou admin
-if (!in_array($current_user['user_type'], ['corretor', 'admin'])) {
+// Verificar se é corretor (broker) ou admin
+if (!in_array($current_user['user_type'], ['broker', 'corretor', 'admin'])) {
     header('Location: index.php');
     exit;
 }
@@ -207,14 +207,31 @@ $casas_data = [
     ]
 ];
 
-// Verificar se a casa existe
-if (!isset($casas_data[$casa_id])) {
+// Carregar dados persistidos do JSON (se houver) ANTES de validar existência
+$json_file = __DIR__ . '/data/casas_data.json';
+$all_data = [];
+if (file_exists($json_file)) {
+    $all_data = json_decode(file_get_contents($json_file), true) ?: [];
+}
+
+// Verificar se a casa existe (lista estática 1..9 ou criada no JSON)
+if (!isset($casas_data[$casa_id]) && !isset($all_data[$casa_id])) {
     $_SESSION['flash_message'] = [
         'type' => 'error',
         'message' => 'Casa não encontrada.'
     ];
     header("Location: gerenciar_imoveis.php");
     exit;
+}
+
+// Base: se existir estática, usa-a; senão inicia vazia e usa apenas JSON
+if (!isset($casas_data[$casa_id])) {
+    $casas_data[$casa_id] = ['id' => $casa_id];
+}
+
+// Mesclar dados do JSON por cima da base
+if (isset($all_data[$casa_id]) && is_array($all_data[$casa_id])) {
+    $casas_data[$casa_id] = array_merge($casas_data[$casa_id], $all_data[$casa_id]);
 }
 
 $casa = $casas_data[$casa_id];
@@ -793,8 +810,13 @@ $current_images = getPropertyImages($casa_id);
                             </div>
                             
                             <!-- Botão Voltar -->
+                            <?php
+                                $back_link = file_exists(__DIR__ . "/Casas/Casa{$casa_id}.php")
+                                    ? ("Casas/Casa{$casa_id}.php")
+                                    : 'admin.php';
+                            ?>
                             <div class="text-center mt-4">
-                                <a href="Casas/Casa<?php echo $casa_id; ?>.php" class="btn btn-secondary btn-lg">
+                                <a href="<?php echo $back_link; ?>" class="btn btn-secondary btn-lg">
                                     Voltar
                                 </a>
                             </div>
@@ -824,7 +846,6 @@ $current_images = getPropertyImages($casa_id);
         // Quando selecionar arquivos
         imageInput.addEventListener('change', function() {
             const files = this.files;
-            
             if (files.length > 0) {
                 let previewHTML = '<div class="alert alert-info"><strong>Arquivos selecionados para upload:</strong><ul class="mb-0 mt-2">';
                 

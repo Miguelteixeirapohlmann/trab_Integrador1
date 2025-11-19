@@ -196,50 +196,84 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_aluguel'])) {
         
         // Se não há erros, salvar no banco
         if (empty($errors)) {
-            // Inserir registro de aluguel
-            $stmt = $pdo->prepare("
-                INSERT INTO property_rentals (
-                    property_id, tenant_id, landlord_id, broker_id, monthly_rent,
-                    start_date, end_date, rental_period_months, status,
-                    tenant_income, tenant_profession, contract_terms, notes,
-                    security_deposit
-                ) VALUES (
-                    ?, ?, 1, ?, ?, NOW(), DATE_ADD(NOW(), INTERVAL ? MONTH), ?, 'pending', ?, ?, ?, ?, ?
-                )
-            ");
-            
-            $contract_terms = "Processo de aluguel iniciado através do site. Documentos e detalhes a serem validados na imobiliária.";
-            $notes = "Dados do locatário: Nome: $nome, CPF: $cpf, Email: $email, Telefone: $telefone, Endereço: $endereco" . 
-                    ($observacoes ? ", Observações: $observacoes" : "");
-            $security_deposit = $valor_aluguel * 2; // Caução de 2 meses
-            
-            $stmt->execute([
-                $property_id, // property_id
-                $current_user['id'], // tenant_id
-                $broker_id, // broker_id
-                $valor_aluguel, // monthly_rent
-                $periodo_meses, // para calcular end_date
-                $periodo_meses, // rental_period_months
-                $renda, // tenant_income
-                $profissao, // tenant_profession
-                $contract_terms, // contract_terms
-                $notes, // notes
-                $security_deposit // security_deposit
-            ]);
-            
-            // Mensagem de sucesso
-            setFlashMessage(
-                "<strong>Solicitação de aluguel enviada com sucesso!</strong><br>" .
-                "Passe na imobiliária para assinar o contrato.<br>" .
-                "<strong>Endereço:</strong> Rua das Flores, 123 - Centro<br>" .
-                "<strong>Telefone:</strong> (51) 3333-4444<br>" .
-                "<strong>Horário:</strong> Segunda a Sexta das 8h às 18h",
-                "success"
-            );
-            
-            // Redirecionar para evitar reenvio do formulário
-            header("Location: alugar.php");
-            exit;
+            try {
+                $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                // Buscar landlord_id (proprietário do imóvel)
+                $landlord_id = null;
+                $landlord_stmt = $pdo->prepare("SELECT broker_id FROM properties WHERE id = ? LIMIT 1");
+                $landlord_stmt->execute([$property_id]);
+                $landlord_row = $landlord_stmt->fetch();
+                if ($landlord_row && isset($landlord_row['broker_id'])) {
+                    // Buscar user_id do corretor
+                    $broker_user_stmt = $pdo->prepare("SELECT user_id FROM brokers WHERE id = ? LIMIT 1");
+                    $broker_user_stmt->execute([$landlord_row['broker_id']]);
+                    $broker_user_row = $broker_user_stmt->fetch();
+                    if ($broker_user_row && isset($broker_user_row['user_id'])) {
+                        $landlord_id = $broker_user_row['user_id'];
+                    }
+                }
+                if (!$landlord_id) {
+                    $landlord_id = 1; // fallback para admin
+                }
+                $start_date = date('Y-m-d');
+                $end_date = date('Y-m-d', strtotime("+$periodo_meses months"));
+                $contract_terms = "Processo de aluguel iniciado através do site. Documentos e detalhes a serem validados na imobiliária.";
+                $notes = "Dados do locatário: Nome: $nome, CPF: $cpf, Email: $email, Telefone: $telefone, Endereço: $endereco" . ($observacoes ? ", Observações: $observacoes" : "");
+                $security_deposit = $valor_aluguel * 2; // Caução de 2 meses
+                $admin_fee = null;
+                $solicitacao_info = json_encode([
+                    'nome' => $nome,
+                    'cpf' => $cpf,
+                    'email' => $email,
+                    'telefone' => $telefone,
+                    'rg' => $rg,
+                    'endereco' => $endereco,
+                    'profissao' => $profissao,
+                    'renda' => $renda,
+                    'valor_aluguel' => $valor_aluguel,
+                    'periodo_meses' => $periodo_meses,
+                    'observacoes' => $observacoes
+                ], JSON_UNESCAPED_UNICODE);
+                $stmt = $pdo->prepare("
+                    INSERT INTO property_rentals (
+                        property_id, tenant_id, landlord_id, broker_id, monthly_rent, security_deposit, admin_fee, rental_period_months, start_date, end_date, status, tenant_income, tenant_profession, contract_terms, notes, solicitacao_info
+                    ) VALUES (
+                        ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending', ?, ?, ?, ?, ?
+                    )
+                ");
+                $stmt->execute([
+                    $property_id, // property_id
+                    $current_user['id'], // tenant_id
+                    $landlord_id, // landlord_id
+                    $broker_id, // broker_id
+                    $valor_aluguel, // monthly_rent
+                    $security_deposit, // security_deposit
+                    $admin_fee, // admin_fee
+                    $periodo_meses, // rental_period_months
+                    $start_date, // start_date
+                    $end_date, // end_date
+                    $renda, // tenant_income
+                    $profissao, // tenant_profession
+                    $contract_terms, // contract_terms
+                    $notes, // notes
+                    $solicitacao_info // solicitacao_info
+                ]);
+                // Mensagem de sucesso
+                $dataComparecer = date('d/m/Y', strtotime('+2 days'));
+                setFlashMessage(
+                    "<strong>Solicitação de aluguel enviada com sucesso!</strong><br>" .
+                    "Passe no endereço da imobiliária em <strong>$dataComparecer</strong> para assinar o contrato.<br>" .
+                    "<strong>Endereço:</strong> Rua das Flores, 123 - Centro<br>" .
+                    "<strong>Telefone:</strong> (51) 3333-4444<br>" .
+                    "<strong>Horário:</strong> Segunda a Sexta das 8h às 18h",
+                    "success"
+                );
+                // Redirecionar para evitar reenvio do formulário
+                header("Location: alugar.php");
+                exit;
+            } catch (PDOException $e) {
+                setFlashMessage("Erro ao salvar aluguel no banco: " . $e->getMessage(), "danger");
+            }
         }
         
         if (!empty($errors)) {
@@ -285,18 +319,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_aluguel'])) {
     renderUserInfo($current_user);
     ?>
 
-    <?php if ($flash): ?>
-        <div class="container-fluid mt-3">
-            <div class="alert alert-<?php echo $flash['type']; ?> alert-dismissible fade show" role="alert">
-                <?php echo $flash['message']; ?>
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>
-        </div>
-    <?php endif; ?>
+    <!-- Alerta movido para o cabeçalho, duplicidade removida -->
 
     <!-- Hero Section -->
     <header class="masthead">
         <div class="container px-4 px-lg-5 h-100">
+            <?php if ($flash && $flash['type'] === 'success'): ?>
+                <div class="row gx-4 gx-lg-5 justify-content-center text-center">
+                    <div class="col-lg-8">
+                        <div class="alert alert-success alert-dismissible fade show mt-4" role="alert">
+                            <?php echo $flash['message']; ?>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    </div>
+                </div>
+            <?php endif; ?>
             <div class="row gx-4 gx-lg-5 h-100 align-items-center justify-content-center text-center">
                 <div class="col-lg-8 align-self-end">
                     <h1 class="text-white font-weight-bold">Aluguel de Imóveis</h1>
@@ -511,16 +548,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_aluguel'])) {
 
         // Mapeamento casa -> corretor
         // Casa 1-3 = João borges, Casa 4-6 = Maria Santos, Casa 7-9 = Pedro Costa
-        const casaCorretorMap = {
-            'Casa em Santo Antônio da Patrulha': 'joao',        // Casa 1
-            'Casa em Taquara': 'joao',                          // Casa 2  
-            'Casa Em Taquara Alto Padrão': 'joao',              // Casa 3
-            'Casa em Taquara Rua Mundo Novo': 'maria',          // Casa 4
-            'Casa em Taquara Flores da Cunha': 'maria',         // Casa 5
-            'Casa em Parobé': 'maria',                          // Casa 6
-            'Casa em Taquara Santa Terezinha': 'pedro',         // Casa 7
-            'Casa em Taquara rua Alvarino Lacerda Filho': 'pedro', // Casa 8
-            'Casa em Taquara - São Francisco': 'pedro'          // Casa 9
+        // Mapeamento casa -> broker_id (do banco)
+        const casaBrokerIdMap = {
+            'Casa em Santo Antônio da Patrulha': 1,        // Casa 1
+            'Casa em Taquara': 1,                          // Casa 2  
+            'Casa Em Taquara Alto Padrão': 1,              // Casa 3
+            'Casa em Taquara Rua Mundo Novo': 2,           // Casa 4
+            'Casa em Taquara Flores da Cunha': 2,          // Casa 5
+            'Casa em Parobé': 2,                           // Casa 6
+            'Casa em Taquara Santa Terezinha': 3,          // Casa 7
+            'Casa em Taquara rua Alvarino Lacerda Filho': 3, // Casa 8
+            'Casa em Taquara - São Francisco': 3           // Casa 9
         };
 
         // Mapeamento casa -> corretor (nome completo para display)
@@ -541,23 +579,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_aluguel'])) {
             const propertySelect = document.getElementById('property_id');
             const brokerInput = document.getElementById('broker_id');
             const brokerDisplay = document.getElementById('broker_display');
-            
             if (propertySelect.value) {
                 const selectedOption = propertySelect.options[propertySelect.selectedIndex];
-                const propertyTitle = selectedOption.textContent.trim(); // Pegar só o título
-                
-                if (casaCorretorMap[propertyTitle]) {
-                    const corretorId = casaCorretorMap[propertyTitle];
+                const propertyTitle = selectedOption.textContent.trim();
+                if (casaBrokerIdMap[propertyTitle]) {
+                    const brokerId = casaBrokerIdMap[propertyTitle];
                     const corretorNome = casaCorretorMapDisplay[propertyTitle];
-                    
-                    brokerInput.value = corretorId;
+                    brokerInput.value = brokerId;
                     brokerDisplay.value = corretorNome;
                     brokerDisplay.style.backgroundColor = '#e9f7ef';
                     brokerDisplay.style.color = '#155724';
-                    
-                    console.log(`Casa selecionada: ${propertyTitle} -> Corretor: ${corretorNome}`);
+                    console.log(`Casa selecionada: ${propertyTitle} -> broker_id: ${brokerId} (${corretorNome})`);
                 } else {
-                    // Se não houver mapeamento, limpar campos
                     brokerInput.value = '';
                     brokerDisplay.value = 'Corretor não encontrado para esta casa';
                     brokerDisplay.style.backgroundColor = '#f8d7da';
@@ -616,4 +649,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_aluguel'])) {
         });
     </script>
 </body>
+</body>
+<?php include __DIR__ . '/includes/modal_sucesso_aluguel.php'; ?>
 </html>

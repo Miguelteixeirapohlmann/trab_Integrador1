@@ -9,7 +9,7 @@ require_once __DIR__ . '/includes/init.php';
 // Se usuário já estiver logado, redirecionar
 if ($auth->isLoggedIn()) {
     $user = $auth->getCurrentUser();
-    if ($user['user_type'] === 'corretor') {
+    if ($user['user_type'] === 'broker') {
         redirect('index-corretor.php');
     } else {
         redirect('index.php');

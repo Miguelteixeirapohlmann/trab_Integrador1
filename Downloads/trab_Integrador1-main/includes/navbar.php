@@ -45,22 +45,20 @@ function renderNavbar($current_user, $current_page = '', $path_prefix = '') {
     
     // Menu baseado no tipo de usuário
     if ($user_type === 'broker') {
-        // Menu para Corretores
+        // Navbar para Corretores: igual ao index-corretor (dropdown com avatar/nome)
         ?>
-        <li class="nav-item">
-            <a class="<?= $nav_link_class ?> <?= $current_page === 'gerenciar_imoveis' ? 'active' : '' ?>" href="<?= $path_prefix ?>gerenciar_imoveis.php">
-                <i class="fas fa-home me-1"></i>Início
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <?php if (!empty($current_user['avatar'])): ?>
+                    <img src="<?= asset('uploads/' . $current_user['avatar']) ?>" alt="Avatar" class="rounded-circle me-1" style="width: 24px; height: 24px;">
+                <?php endif; ?>
+                <?= htmlspecialchars($current_user['first_name'] ?? 'Corretor') ?>
             </a>
-        </li>
-        <li class="nav-item">
-            <a class="<?= $nav_link_class ?> <?= $current_page === 'casas_disponiveis' ? 'active' : '' ?>" href="<?= $path_prefix ?>casas_disponiveis.php">
-                <i class="fas fa-search me-1"></i>Casas Disponíveis
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="<?= $nav_link_class ?> <?= $current_page === 'agendamentos' ? 'active' : '' ?>" href="<?= $path_prefix ?>agendamentos.php">
-                <i class="fas fa-calendar-check me-1"></i>Ver Agendamentos
-            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a class="dropdown-item" href="<?= $path_prefix ?>perfil.php">Meu Perfil</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="<?= $path_prefix ?>logout.php">Sair</a></li>
+            </ul>
         </li>
         <?php
     } else {
@@ -102,11 +100,13 @@ function renderNavbar($current_user, $current_page = '', $path_prefix = '') {
     }
     ?>
     
-    <li class="nav-item">
-        <a class="<?= $nav_link_class ?>" href="<?= $path_prefix ?>logout.php">
-            <i class="fas fa-sign-out-alt me-1"></i>Sair
-        </a>
-    </li>
+    <?php if ($user_type !== 'broker'): ?>
+        <li class="nav-item">
+            <a class="<?= $nav_link_class ?>" href="<?= $path_prefix ?>logout.php">
+                <i class="fas fa-sign-out-alt me-1"></i>Sair
+            </a>
+        </li>
+    <?php endif; ?>
     
     <?php
     echo '</ul>';
