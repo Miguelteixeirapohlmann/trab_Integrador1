@@ -18,87 +18,35 @@ require_once __DIR__ . '/includes/navbar.php';
         <!-- Google fonts-->
         <link href="https://fonts.googleapis.com/css?family=Merriweather+Sans:400,700" rel="stylesheet" />
         <link href="https://fonts.googleapis.com/css?family=Merriweather:400,300,300italic,400italic,700,700italic" rel="stylesheet" type="text/css" />
+        <!-- Bootstrap CSS -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
         <!-- SimpleLightbox plugin CSS-->
         <link href="https://cdnjs.cloudflare.com/ajax/libs/SimpleLightbox/2.1.0/simpleLightbox.min.css" rel="stylesheet" />
-        <!-- Core theme CSS (includes Bootstrap)-->
-       <link href="css/styles.css" rel="stylesheet">
+        <!-- Core theme CSS -->
+        <link href="css/styles.css" rel="stylesheet">
     </head>
 <body>
     <!-- Header -->
-    <nav class="navbar navbar-expand-lg navbar-light fixed-top py-3" id="mainNav">
-        <!-- Tabela de interações dos clientes removida -->
-                                // coluna removida
-                                echo '<td>' . htmlspecialchars($ag['casa']) . '</td>';
-                                echo '<td><a href="detalhe_interacao.php?tipo=agendamento&id=' . urlencode($ag['id']) . '" class="btn btn-sm btn-primary">Ver detalhes</a></td>';
-                                echo '</tr>';
-                            }
+    <?php renderNavbar($current_user, 'corretor'); ?>
 
-                            // Render aluguéis
-                            foreach ($aluguels as $al) {
-                                echo '<tr>';
-                                echo '<td><span class="badge bg-success">Aluguel</span></td>';
-                                echo '<td>' . htmlspecialchars($al['first_name'] . ' ' . $al['last_name']) . '</td>';
-                                echo '<td>' . htmlspecialchars($al['email']) . '</td>';
-                                echo '<td>' . htmlspecialchars($al['cpf'] ?? '-') . '</td>';
-                                // coluna removida
-                                echo '<td>ID ' . htmlspecialchars($al['property_id']) . '</td>';
-                                echo '<td><a href="detalhe_interacao.php?tipo=aluguel&id=' . urlencode($al['id']) . '" class="btn btn-sm btn-primary">Ver detalhes</a></td>';
-                                echo '</tr>';
-                            }
-
-                            // Render compras
-                            foreach ($compras as $cp) {
-                                echo '<tr>';
-                                echo '<td><span class="badge bg-warning">Compra</span></td>';
-                                echo '<td>' . htmlspecialchars($cp['first_name'] . ' ' . $cp['last_name']) . '</td>';
-                                echo '<td>' . htmlspecialchars($cp['email']) . '</td>';
-                                echo '<td>' . htmlspecialchars($cp['cpf'] ?? '-') . '</td>';
-                                // coluna removida
-                                echo '<td>ID ' . htmlspecialchars($cp['property_id']) . '</td>';
-                                echo '<td><a href="detalhe_interacao.php?tipo=compra&id=' . urlencode($cp['id']) . '" class="btn btn-sm btn-primary">Ver detalhes</a></td>';
-                                echo '</tr>';
-                            }
-                        } else {
-                            echo '<tr><td colspan="7" class="text-center text-muted">Nenhum corretor logado ou sem interações.</td></tr>';
-                        }
-                        ?>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </section>
-
-       
-   
-                <!-- Pedidos Personalizados -->
-                <div class="tab-pane fade" id="custom-orders" role="tabpanel">
-                    <div class="card">
-                        <div class="card-header">Pedidos Personalizados</div>
-                        <div class="card-body p-0">
-                            <div class="table-responsive">
-                                <table class="table table-striped mb-0" id="customOrdersTable">
-                                    <thead class="table-dark">
-                                        <tr>
-                                            <th>#</th>
-                                            <th>Cliente</th>
-                                            <th>Email</th>
-                                            <th>Descrição</th>
-                                            <th>Status</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <!-- Pedidos personalizados via JS -->
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
+    <!-- Seção de Casas -->
+    <section class="page-section bg-light py-5" id="casas">
+        <div class="container px-4 px-lg-5">
+            <div class="row gx-4 gx-lg-5 justify-content-center">
+                <div class="col-lg-8 text-center">
+                    <h2 class="text-dark mt-0">Imóveis Disponíveis</h2>
+                    <hr class="divider" />
+                    <p class="text-muted mb-5">Confira os imóveis disponíveis para venda e aluguel</p>
                 </div>
+            </div>
+            <div class="row gx-4 gx-lg-5" id="casasCards">
+                <!-- Os cards das casas serão renderizados aqui via JavaScript -->
             </div>
         </div>
     </section>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/SimpleLightbox/2.1.0/simpleLightbox.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
     <script src="js/scripts.js"></script>
     <script>
         // Seleção dinâmica das casas conforme corretor logado
@@ -173,26 +121,6 @@ require_once __DIR__ . '/includes/navbar.php';
         ?>
         casas = [
             {
-                id: 7,
-                nome: "Casa em Taquara Bairro Santa Terezinha",
-                tipo: "Residencial",
-                tipo_negocio: "ambos",
-                valor_compra: 650000,
-                valor_aluguel: 2000,
-                imagens: [
-                    "imgs/Casa7/Casa7.0.jpg",
-                    "imgs/Casa7/Casa7.1.jpg",
-                    "imgs/Casa7/Casa7.2.jpg",
-                    "imgs/Casa7/Casa7.3.jpg",
-                    "imgs/Casa7/Casa7.4.jpg",
-                    "imgs/Casa7/Casa7.5.jpg",
-                    "imgs/Casa7/Casa7.6.jpg",
-                    "imgs/Casa7/Casa7.7.jpg",
-                    "imgs/Casa7/Casa7.8.jpg",
-                    "imgs/Casa7/Casa7.9.jpg"
-                ]
-            },
-            {
                 id: 8,
                 nome: "Casa em Taquara Bairro Tucanos",
                 tipo: "Residencial",
@@ -229,30 +157,6 @@ require_once __DIR__ . '/includes/navbar.php';
                     "imgs/Casa9/Casa9.8.jpg",
                     "imgs/Casa9/Casa9.9.jpg"
                 ]
-            }
-        ];
-        <?php
-        } else {
-        ?>
-        casas = [
-            {
-                id: 1,
-                nome: "Casa em Santo Antônio da Patrulha",
-                tipo: "Residencial",
-                tipo_negocio: "ambos",
-                valor_compra: 5200000,
-                valor_aluguel:  2200000,
-                imagens: [
-                    "imgs/Casa1/Casa1.1.jpg",
-                    "imgs/Casa1/Casa1.3.jpg",
-                    "imgs/Casa1/Casa1.4.jpg",
-                    "imgs/Casa1/Casa1.5.jpg",
-                    "imgs/Casa1/Casa1.8.jpg",
-                    "imgs/Casa1/Casa1.9.jpg",
-                    "imgs/Casa1/Casa1.11.jpg",
-                    "imgs/Casa1/Casa1.13.jpg",
-                    "imgs/Casa1/Casa1.15.jpg"
-                ]
             },
             {
                 id: 2,
@@ -276,7 +180,12 @@ require_once __DIR__ . '/includes/navbar.php';
                     "imgs/Casa2/Casa2.12.jpg",
                     "imgs/Casa2/Casa2.13.jpg"
                 ]
-            },
+            }
+        ];
+        <?php
+        } else {
+        ?>
+        casas = [
             {
                 id: 3,
                 nome: "Casa em Taquara Alto Padrão",
@@ -294,6 +203,32 @@ require_once __DIR__ . '/includes/navbar.php';
                     "imgs/Casa3/Casa3.7.jpg",
                     "imgs/Casa3/Casa3.8.jpg",
                     "imgs/Casa3/Casa3.9.jpg"
+                ]
+            },
+            {
+                id: 5,
+                nome: "Casa 5 - Exemplo",
+                tipo: "Residencial",
+                tipo_negocio: "aluguel",
+                valor_aluguel: 1200,
+                imagens: [
+                    "imgs/Casa5/Casa5.0.jpg",
+                    "imgs/Casa5/Casa5.1.jpg",
+                    "imgs/Casa5/Casa5.2.jpg",
+                    "imgs/Casa5/Casa5.3.jpg"
+                ]
+            },
+            {
+                id: 6,
+                nome: "Casa 6 - Exemplo",
+                tipo: "Residencial",
+                tipo_negocio: "compra",
+                valor_compra: 250000,
+                imagens: [
+                    "imgs/Casa6/Casa6.0.jpg",
+                    "imgs/Casa6/Casa6.1.jpg",
+                    "imgs/Casa6/Casa6.2.jpg",
+                    "imgs/Casa6/Casa6.3.jpg"
                 ]
             }
         ];
@@ -467,6 +402,5 @@ require_once __DIR__ . '/includes/navbar.php';
         // Inicialização
         document.addEventListener('DOMContentLoaded', renderCasas);
         </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

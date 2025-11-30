@@ -13,7 +13,7 @@ $current_user = $auth->getCurrentUser();
 // Verificar mensagens flash
 $flash = getFlashMessage();
 
-// Buscar propriedades disponíveis para venda
+// Buscar apenas propriedades disponíveis para venda
 $properties_stmt = $pdo->prepare("
     SELECT p.id, p.title, p.price, p.address, p.neighborhood, p.city, p.bedrooms, p.bathrooms, p.area_sqm
     FROM properties p 
@@ -23,98 +23,82 @@ $properties_stmt = $pdo->prepare("
 $properties_stmt->execute();
 $available_properties = $properties_stmt->fetchAll();
 
-// Fallback para casas estáticas caso o banco esteja vazio
-if (empty($available_properties)) {
-    $available_properties = [
-        [
-            'id' => 101,
-            'title' => 'Casa em Santo Antônio da Patrulha',
-            'price' => 5200000.00,
-            'address' => 'Santo Antônio da Patrulha',
-            'neighborhood' => 'Centro',
-            'city' => 'Santo Antônio da Patrulha',
-            'bedrooms' => 4,
-            'bathrooms' => 3,
-            'area_sqm' => 350
-        ],
-        [
-            'id' => 102,
-            'title' => 'Casa Em Taquara Alto Padrão',
-            'price' => 3000000.00,
-            'address' => 'Taquara',
-            'neighborhood' => 'Alto Padrão',
-            'city' => 'Taquara',
-            'bedrooms' => 4,
-            'bathrooms' => 3,
-            'area_sqm' => 280
-        ],
-        [
-            'id' => 103,
-            'title' => 'Casa em Taquara Rua Mundo Novo',
-            'price' => 170000.00,
-            'address' => 'Rua Mundo Novo',
-            'neighborhood' => 'Centro',
-            'city' => 'Taquara',
-            'bedrooms' => 3,
-            'bathrooms' => 2,
-            'area_sqm' => 150
-        ],
-        [
-            'id' => 104,
-            'title' => 'Casa em Taquara Flores da Cunha',
-            'price' => 380000.00,
-            'address' => 'Flores da Cunha',
-            'neighborhood' => 'Flores da Cunha',
-            'city' => 'Taquara',
-            'bedrooms' => 3,
-            'bathrooms' => 2,
-            'area_sqm' => 180
-        ],
-        [
-            'id' => 105,
-            'title' => 'Casa em Parobé',
-            'price' => 210000.00,
-            'address' => 'Parobé',
-            'neighborhood' => 'Centro',
-            'city' => 'Parobé',
-            'bedrooms' => 2,
-            'bathrooms' => 2,
-            'area_sqm' => 100
-        ],
-        [
-            'id' => 106,
-            'title' => 'Casa em Taquara Santa Terezinha',
-            'price' => 650000.00,
-            'address' => 'Santa Terezinha',
-            'neighborhood' => 'Santa Terezinha',
-            'city' => 'Taquara',
-            'bedrooms' => 3,
-            'bathrooms' => 2,
-            'area_sqm' => 160
-        ],
-        [
-            'id' => 107,
-            'title' => 'Casa em Taquara rua Alvarino Lacerda Filho',
-            'price' => 184900.00,
-            'address' => 'Rua Alvarino Lacerda Filho',
-            'neighborhood' => 'Centro',
-            'city' => 'Taquara',
-            'bedrooms' => 2,
-            'bathrooms' => 2,
-            'area_sqm' => 110
-        ],
-        [
-            'id' => 108,
-            'title' => 'Casa em Taquara - São Francisco',
-            'price' => 450000.00,
-            'address' => 'São Francisco',
-            'neighborhood' => 'São Francisco',
-            'city' => 'Taquara',
-            'bedrooms' => 3,
-            'bathrooms' => 2,
-            'area_sqm' => 140
-        ]
-    ];
+// Casas estáticas de venda (sempre disponíveis)
+$static_properties = [
+    [
+        'id' => 101,
+        'title' => 'Casa em Santo Antônio da Patrulha',
+        'price' => 5200000.00,
+        'address' => 'Santo Antônio da Patrulha',
+        'neighborhood' => 'Centro',
+        'city' => 'Santo Antônio da Patrulha',
+        'bedrooms' => 4,
+        'bathrooms' => 3,
+        'area_sqm' => 350
+    ],
+    [
+        'id' => 102,
+        'title' => 'Casa Em Taquara Alto Padrão',
+        'price' => 3000000.00,
+        'address' => 'Taquara',
+        'neighborhood' => 'Alto Padrão',
+        'city' => 'Taquara',
+        'bedrooms' => 4,
+        'bathrooms' => 3,
+        'area_sqm' => 280
+    ],
+    [
+        'id' => 103,
+        'title' => 'Casa em Taquara Rua Mundo Novo',
+        'price' => 170000.00,
+        'address' => 'Rua Mundo Novo',
+        'neighborhood' => 'Centro',
+        'city' => 'Taquara',
+        'bedrooms' => 3,
+        'bathrooms' => 2,
+        'area_sqm' => 150
+    ],
+    [
+        'id' => 104,
+        'title' => 'Casa em Taquara Flores da Cunha',
+        'price' => 380000.00,
+        'address' => 'Flores da Cunha',
+        'neighborhood' => 'Flores da Cunha',
+        'city' => 'Taquara',
+        'bedrooms' => 3,
+        'bathrooms' => 2,
+        'area_sqm' => 180
+    ],
+    [
+        'id' => 106,
+        'title' => 'Casa em Taquara Santa Terezinha',
+        'price' => 650000.00,
+        'address' => 'Santa Terezinha',
+        'neighborhood' => 'Santa Terezinha',
+        'city' => 'Taquara',
+        'bedrooms' => 3,
+        'bathrooms' => 2,
+        'area_sqm' => 160
+    ],
+    [
+        'id' => 108,
+        'title' => 'Casa em Taquara - São Francisco',
+        'price' => 450000.00,
+        'address' => 'São Francisco',
+        'neighborhood' => 'São Francisco',
+        'city' => 'Taquara',
+        'bedrooms' => 3,
+        'bathrooms' => 2,
+        'area_sqm' => 140
+    ]
+];
+
+// Mesclar casas do banco e estáticas, evitando duplicidade de IDs
+$property_ids = array_column($available_properties, 'id');
+foreach ($static_properties as $static) {
+    if (!in_array($static['id'], $property_ids)) {
+        $available_properties[] = $static;
+    }
 }
 
 // Buscar corretores disponíveis
@@ -168,7 +152,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_compra'])) {
     try {
         // Validar dados do formulário
         $property_id = intval($_POST['property_id'] ?? 0);
-        $broker_id = intval($_POST['broker_id'] ?? 0);
+        // Aceitar broker_id como string ou número (para estáticos)
+        $broker_id_raw = $_POST['broker_id'] ?? '';
+        if (is_numeric($broker_id_raw)) {
+            $broker_id = intval($broker_id_raw);
+        } else {
+            $broker_id = $broker_id_raw;
+        }
         $nome = trim($_POST['nome'] ?? '');
         $cpf = trim($_POST['cpf'] ?? '');
         $email = trim($_POST['email'] ?? '');
@@ -203,24 +193,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_compra'])) {
         
         // Validar se propriedade e corretor existem
         $property_exists = false;
-        if ($property_id > 0) {
-            $property_check = $pdo->prepare("SELECT id FROM properties WHERE id = ?");
-            $property_check->execute([$property_id]);
-            if ($property_check->fetch()) {
-                $property_exists = true;
-            }
-        }
-
         $broker_exists = false;
-        if ($broker_id > 0) {
-            $broker_check = $pdo->prepare("SELECT b.id FROM brokers b WHERE b.id = ?");
-            $broker_check->execute([$broker_id]);
-            if ($broker_check->fetch()) {
-                $broker_exists = true;
+        if ($property_id > 0) {
+            $property_check = $pdo->prepare("SELECT id, broker_id FROM properties WHERE id = ?");
+            $property_check->execute([$property_id]);
+            $property_row = $property_check->fetch();
+            if ($property_row) {
+                $property_exists = true;
+                // Se o broker_id da propriedade não existe, vamos criar um corretor válido
+                $broker_check = $pdo->prepare("SELECT id FROM brokers WHERE id = ?");
+                $broker_check->execute([$property_row['broker_id']]);
+                if ($broker_check->fetch()) {
+                    $broker_exists = true;
+                    $broker_id = $property_row['broker_id'];
+                } else if (in_array($broker_id, ['joao','maria','pedro'])) {
+                    // Se for estático, força criação
+                    $broker_exists = false;
+                }
             }
         }
-
-        // Se não existem, criar registros temporários para casas estáticas e corretores
+        // Se não existe, criar corretor e imóvel válidos
         if (!$property_exists && $property_id >= 101 && $property_id <= 108) {
             // Buscar dados da casa estática
             $static_property = null;
@@ -231,9 +223,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_compra'])) {
                 }
             }
             if ($static_property) {
-                // Criar corretor temporário se não existir
+                // Criar corretor se não existir
                 if (!$broker_exists && in_array($broker_id, ['joao','maria','pedro'])) {
-                    // Mapear para um user_id existente ou criar um novo user temporário
                     $broker_user_id = null;
                     $broker_name_map = [
                         'joao' => ['first_name' => 'João', 'last_name' => 'borges'],
@@ -241,44 +232,43 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_compra'])) {
                         'pedro' => ['first_name' => 'Pedro', 'last_name' => 'Costa']
                     ];
                     $broker_name = $broker_name_map[$broker_id];
-                    // Tenta encontrar user_id existente
                     $user_stmt = $pdo->prepare("SELECT id FROM users WHERE first_name = ? AND last_name = ? AND user_type = 'broker'");
                     $user_stmt->execute([$broker_name['first_name'], $broker_name['last_name']]);
                     $user_row = $user_stmt->fetch();
                     if ($user_row) {
                         $broker_user_id = $user_row['id'];
                     } else {
-                        // Cria usuário temporário
                         $pdo->prepare("INSERT INTO users (first_name, last_name, email, password, user_type, status, email_verified) VALUES (?, ?, ?, ?, 'broker', 'active', 1)")
                             ->execute([$broker_name['first_name'], $broker_name['last_name'], uniqid($broker_id.'@temp.com'), password_hash('123456', PASSWORD_DEFAULT)]);
                         $broker_user_id = $pdo->lastInsertId();
                     }
-                    // Cria broker temporário
                     $pdo->prepare("INSERT INTO brokers (user_id, license_number, company, specialties, years_experience) VALUES (?, ?, ?, ?, ?)")
                         ->execute([$broker_user_id, uniqid('CRECI-'), 'Imobiliária Elite', json_encode(['Residencial']), 1]);
                     $broker_id_num = $pdo->lastInsertId();
-                    $broker_id = $broker_id_num; // Atualiza broker_id para o ID numérico
+                    $broker_id = $broker_id_num;
                     $broker_exists = true;
                 }
-                // Criar imóvel temporário
-                $pdo->prepare("INSERT INTO properties (id, broker_id, title, description, property_type, transaction_type, price, area_sqm, bedrooms, bathrooms, address, neighborhood, city, state, zip_code, status) VALUES (?, ?, ?, ?, 'house', 'sale', ?, ?, ?, ?, ?, ?, ?, 'RS', '90000-000', 'active')")
-                    ->execute([
-                        $static_property['id'],
-                        $broker_id,
-                        $static_property['title'],
-                        'Imóvel estático criado automaticamente para teste.',
-                        $static_property['price'],
-                        $static_property['area_sqm'],
-                        $static_property['bedrooms'],
-                        $static_property['bathrooms'],
-                        $static_property['address'],
-                        $static_property['neighborhood'],
-                        $static_property['city']
-                    ]);
-                $property_exists = true;
+                // Sempre criar imóvel com broker_id válido para teste
+                if ($broker_id) {
+                    $pdo->prepare("INSERT INTO properties (id, broker_id, title, description, property_type, transaction_type, price, area_sqm, bedrooms, bathrooms, address, neighborhood, city, state, zip_code, status) VALUES (?, ?, ?, ?, 'house', 'sale', ?, ?, ?, ?, ?, ?, ?, 'RS', '90000-000', 'active')")
+                        ->execute([
+                            $static_property['id'],
+                            $broker_id,
+                            $static_property['title'],
+                            'Imóvel estático criado automaticamente para teste.',
+                            $static_property['price'],
+                            $static_property['area_sqm'],
+                            $static_property['bedrooms'],
+                            $static_property['bathrooms'],
+                            $static_property['address'],
+                            $static_property['neighborhood'],
+                            $static_property['city']
+                        ]);
+                    $property_exists = true;
+                    $broker_exists = true;
+                }
             }
         }
-
         // Após criar, validar de novo
         if (!$property_exists) $errors[] = "Propriedade selecionada não está disponível (nem mesmo para teste).";
         if (!$broker_exists) $errors[] = "Corretor selecionado não está disponível (nem mesmo para teste).";
@@ -287,20 +277,57 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_compra'])) {
         if (empty($errors)) {
             try {
                 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                // Montar JSON com todas as informações da solicitação
+                $solicitacao_info = json_encode([
+                    'nome' => $nome,
+                    'cpf' => $cpf,
+                    'email' => $email,
+                    'telefone' => $telefone,
+                    'rg' => $rg,
+                    'endereco' => $endereco,
+                    'profissao' => $profissao,
+                    'renda' => $renda,
+                    'valor_imovel' => $valor_imovel,
+                    'valor_entrada' => $valor_entrada,
+                    'forma_pagamento' => $forma_pagamento,
+                    'observacoes' => $observacoes
+                ], JSON_UNESCAPED_UNICODE);
+
+                // Garantir que o broker existe
+                $brokerCheck = $pdo->prepare("SELECT id FROM brokers WHERE id = ?");
+                $brokerCheck->execute([$broker_id]);
+                if ($brokerCheck->rowCount() == 0) {
+                    // Broker não existe, criar um broker padrão
+                    $pdo->prepare("INSERT INTO brokers (id, name, email) VALUES (?, 'Corretor Padrão', 'corretor@exemplo.com')")->execute([$broker_id]);
+                }
+
+                // Garantir que o property existe e está vinculado ao broker
+                $propertyCheck = $pdo->prepare("SELECT id FROM properties WHERE id = ?");
+                $propertyCheck->execute([$property_id]);
+                if ($propertyCheck->rowCount() == 0) {
+                    // Criar property mínimo para não violar FK
+                    $pdo->prepare("INSERT INTO properties (id, broker_id, title, price) VALUES (?, ?, 'Imóvel Padrão', ?)")
+                        ->execute([$property_id, $broker_id, $valor_imovel]);
+                } else {
+                    // Se já existe, garantir que broker_id está correto
+                    $pdo->prepare("UPDATE properties SET broker_id = ? WHERE id = ?")
+                        ->execute([$broker_id, $property_id]);
+                }
+
                 // Inserir registro de compra
                 $stmt = $pdo->prepare("
                     INSERT INTO property_purchases (
                         property_id, buyer_id, seller_id, broker_id, purchase_price, 
                         down_payment, payment_method, contract_date, status,
-                        buyer_income, buyer_profession, contract_terms, notes
+                        buyer_income, buyer_profession, contract_terms, notes, solicitacao_info
                     ) VALUES (
-                        ?, ?, 1, ?, ?, ?, ?, NOW(), 'pending', ?, ?, ?, ?
+                        ?, ?, 1, ?, ?, ?, ?, NOW(), 'pending', ?, ?, ?, ?, ?
                     )
                 ");
                 $contract_terms = "Processo de compra iniciado através do site. Documentos e detalhes a serem validados na imobiliária.";
                 $notes = "Dados do comprador: Nome: $nome, CPF: $cpf, Email: $email, Telefone: $telefone, Endereço: $endereco" . 
                         ($observacoes ? ", Observações: $observacoes" : "");
-                $stmt->execute([
+                $result = $stmt->execute([
                     $property_id, // property_id
                     $current_user['id'], // buyer_id
                     $broker_id, // broker_id
@@ -310,8 +337,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_compra'])) {
                     $renda, // buyer_income
                     $profissao, // buyer_profession
                     $contract_terms, // contract_terms
-                    $notes // notes
+                    $notes, // notes
+                    $solicitacao_info // solicitacao_info
                 ]);
+                echo '<div style="background:#eee;padding:10px;margin:10px 0;border:1px solid #ccc">';
+                echo '<b>DEBUG:</b><br>Executou INSERT? ' . ($result ? 'SIM' : 'NÃO') . '<br>';
+                echo 'property_id: ' . htmlspecialchars($property_id) . '<br>';
+                echo 'broker_id: ' . htmlspecialchars($broker_id) . '<br>';
+                echo 'buyer_id: ' . htmlspecialchars($current_user['id']) . '<br>';
+                echo 'Dados enviados: <pre>' . htmlspecialchars(print_r([
+                    $property_id,
+                    $current_user['id'],
+                    $broker_id,
+                    $valor_imovel,
+                    $valor_entrada,
+                    $forma_pagamento,
+                    $renda,
+                    $profissao,
+                    $contract_terms,
+                    $notes,
+                    $solicitacao_info
+                ], true)) . '</pre>';
+                echo '</div>';
                 // Mensagem de sucesso
                 $dataComparecer = date('d/m/Y', strtotime('+2 days'));
                 setFlashMessage(
@@ -322,11 +369,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_compra'])) {
                     "<strong>Horário:</strong> Segunda a Sexta das 8h às 18h",
                     "success"
                 );
-                // Redirecionar para evitar reenvio do formulário
-                header("Location: Compra.php");
+                // Redirecionar para a tela inicial após sucesso
+                header('Location: index.php');
                 exit;
             } catch (PDOException $e) {
-                setFlashMessage("Erro ao salvar compra no banco: " . $e->getMessage(), "danger");
+                // Erro interno, não mostrar detalhes ao usuário final
+                setFlashMessage("Erro ao salvar compra. Tente novamente mais tarde.", "danger");
             }
         }
         

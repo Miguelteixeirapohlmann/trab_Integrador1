@@ -386,5 +386,4 @@ $csrf_token = generateCSRFToken();
     <!-- Core theme JS-->
     <script src="js/scripts.js"></script>
 </body>
-</section>
 </html>

@@ -268,9 +268,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_aluguel'])) {
                     "<strong>Horário:</strong> Segunda a Sexta das 8h às 18h",
                     "success"
                 );
-                // Redirecionar para evitar reenvio do formulário
-                header("Location: alugar.php");
-                exit;
+                // Removido o redirecionamento para debug
             } catch (PDOException $e) {
                 setFlashMessage("Erro ao salvar aluguel no banco: " . $e->getMessage(), "danger");
             }

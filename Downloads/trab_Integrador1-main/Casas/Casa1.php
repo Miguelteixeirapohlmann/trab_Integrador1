@@ -32,12 +32,6 @@ $current_user = $auth->getCurrentUser();
         background-color: #000;
         position: relative;
     }
-     #carouselCasa1 .carousel-inner { 
-        height: 400px; 
-        overflow: hidden; 
-        background-color: #000;
-        position: relative;
-    }
     #ButtonEditar .d-flex.gap-0.justify-content-center {
         height: 400px;
         background-color: #000;

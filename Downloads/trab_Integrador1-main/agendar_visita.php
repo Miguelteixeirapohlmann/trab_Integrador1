@@ -111,6 +111,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['agendar_visita'])) {
                 if ($check_stmt->fetch()) {
                     $agendamento_id = uniqid() . '_' . time();
                 }
+
+                // --- Garantir que o corretor existe ---
+                $broker_id = intval($_POST['broker_id'] ?? 0);
+                if ($broker_id > 0) {
+                    $brokerCheck = $pdo->prepare("SELECT id FROM brokers WHERE id = ?");
+                    $brokerCheck->execute([$broker_id]);
+                    if ($brokerCheck->rowCount() == 0) {
+                        $pdo->prepare("INSERT INTO brokers (id, name, email) VALUES (?, 'Corretor Padrão', 'corretor@exemplo.com')")->execute([$broker_id]);
+                    }
+                }
+
+                // --- Garantir que a propriedade existe e está vinculada ao corretor ---
+                $property_id = intval($_POST['property_id'] ?? 0);
+                if ($property_id > 0 && $broker_id > 0) {
+                    $propertyCheck = $pdo->prepare("SELECT id FROM properties WHERE id = ?");
+                    $propertyCheck->execute([$property_id]);
+                    if ($propertyCheck->rowCount() == 0) {
+                        $pdo->prepare("INSERT INTO properties (id, broker_id, title, price) VALUES (?, ?, 'Imóvel Padrão', 0)")
+                            ->execute([$property_id, $broker_id]);
+                    } else {
+                        $pdo->prepare("UPDATE properties SET broker_id = ? WHERE id = ?")
+                            ->execute([$broker_id, $property_id]);
+                    }
+                }
+
                 // Salvar no banco de dados (agora inclui broker_id)
                 try {
                     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -131,6 +156,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['agendar_visita'])) {
                         date('Y-m-d H:i:s'),
                         'agendado'
                     ]);
+                    echo '<div style="background:#eee;padding:10px;margin:10px 0;border:1px solid #ccc">';
+                    echo '<b>DEBUG:</b><br>Executou INSERT? ' . ($result ? 'SIM' : 'NÃO') . '<br>';
+                    echo 'agendamento_id: ' . htmlspecialchars($agendamento_id) . '<br>';
+                    echo 'Dados enviados: <pre>' . htmlspecialchars(print_r([
+                        $agendamento_id,
+                        $nome,
+                        $email,
+                        $telefone,
+                        $casa,
+                        $corretor,
+                        $data,
+                        $horario,
+                        $observacoes,
+                        date('Y-m-d H:i:s'),
+                        'agendado'
+                    ], true)) . '</pre>';
+                    echo '</div>';
                     if ($result) {
                         setFlashMessage('Visita agendada com sucesso! Entraremos em contato para confirmar.', 'success');
                         header('Location: index.php');
